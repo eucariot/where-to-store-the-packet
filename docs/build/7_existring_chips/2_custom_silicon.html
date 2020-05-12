@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Custom silicon &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="custom-silicon">
+<h1>Custom silicon<a class="headerlink" href="#custom-silicon" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Настало время поговорить про вендоров сетевого оборудования, которые всё ещё в состоянии содержать свой гигантский штат R&amp;D.
+Но именно с них когда-то всё и начиналось, рыночных чипов не было, а каждый производитель разрабатывал и изготавливал свои сетевые процессоры и ASIC’и.
+И это сложно сегодня, потому что когда другие могут сосредоточиться только на аппаратной обвязке вокруг чипа и софте, другим приходится выделять ресурсы на фундаментальные разработки. Стоит отдать дань уважения вендорам за это.</p>
+<blockquote>
+<div><p>Занимательный факт. Во время санкционной войны лета 2019 у Huawei был невоображаемый сценарий вылететь с рынка - американская компания Broadcom заморозила поставку ASIC’ов для их линейки CloudEngine.
+Всё, конечно, завершилось хорошо.
+Но почти одновременно с этим вышел модульный коммутатор CE16800 на чипах собственного производства, и обещали пицца-боксы.
+Ясное дело, что занимались они этой разработкой уже довольно давно, наверно, лет 5.
+Однако сей факт намекает на то, что, возможно, не так уж и плоха идея вкладываться в разработку своих чипов.</p>
+</div></blockquote>
+<p>Очевидно, что и у них не по одному типу ASIC’ов, развивающихся планомерно и интегрирующихся во все новые устройства - они делятся по сериям железок, по их ролям. Не забываем и о том, насколько большие компании любят поглощения.</p>
+<p>Я не собираюсь здесь погружаться в детали, перечисляя все их виды и возможности. Пройдёмся только поверхностно по наиболее известным из них.</p>
+<div class="section" id="juniper">
+<h2>Juniper<a class="headerlink" href="#juniper" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В первую очередь это, конечно, легендарный <strong>`ASIC Trio &lt;https://www.juniper.net/us/en/local/pdf/whitepapers/2000331-en.pdf&gt;`_</strong>, который бьётся внутри всех маршрутизаторов MX.
+Марат Бабаян в своё время написал <a class="reference external" href="https://habr.com/ru/post/307696/">прекрасную статью</a> о его работе.</p>
+<p>Внутри их магистральных коробок - <strong>ASIC Express</strong> (ZX, TRITON).
+А датацентровые коммутаторы, вроде QFX 10000, заряжены чипом <strong>Q5</strong>. <strong>Q5</strong> - это маректинговое название, <a class="reference external" href="https://ru.scribd.com/presentation/369686635/04-Elit-Paradise-ATAC-TOI">внутреннее</a> - <strong>Paradise</strong>. При этом часть PFE, стоящая на линейной плате называется - ELIT, а фабричная - ULTIMAT.</p>
+</div>
+<div class="section" id="huawei">
+<h2>Huawei<a class="headerlink" href="#huawei" title="Ссылка на этот заголовок">¶</a></h2>
+<p>У этих ребят тоже давняя история разработки своих чипов.
+Когда-то начиналось с интеловских асиков, потом были эксперименты с чипом Marvell, а потом масть пошла. И новые поколения сетевых процессоров стали появляться один за другим.
+Они отличаются от поколения к поколению, от класса к классу, от серии к серии.
+Но для внешней людей их объединили в две линейки:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Ascend</strong> для датацентров</p></li>
+<li><p><strong>Solar</strong> для провайдеров и операторов</p></li>
+</ul>
+</div></blockquote>
+<p>На самом деле это весьма распространённая практика. Тот же Broadcom:
+Tomahawk3 - известное всем название чипа.
+StrataXGS - семейство чипов (не то чтобы на слуху у каждого)
+BCM56980 - внутреннее название чипа (не понадобится вам, если не собираетесь препарировать SDK).</p>
+</div>
+<div class="section" id="cisco">
+<h2>Cisco<a class="headerlink" href="#cisco" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Можно сказать, что новейшие линейки программируемых чипов это:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Cisco Silicon One</strong>, установленный в линейку <a class="reference external" href="https://www.cisco.com/c/en/us/products/routers/8000-series-routers/index.html#~services">Cisco 8000</a>.</p></li>
+<li><p><strong>UADP</strong> - Unified Access Data Plane - программируемый ASIC для каталист и некоторых нексусов</p></li>
+<li><p><strong>QFP</strong> - Quantum Flow Processor - для ASR и ESP</p></li>
+</ul>
+</div></blockquote>
+<p>А в глубине веков начинается такой, зоопарк, что я просто кину несколько, даже не пытаясь докопаться до глубин:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Sasquatch, Strider - каталисты 29хх и 3ххх</p></li>
+<li><p>K1, K2, K5, K10 - каталисты 4000 и 4500</p></li>
+<li><p>EARL1&gt;EARL8 - ещё разнообразные каталисты и Nexus 7000</p></li>
+<li><p>Monticello - Nexus 3548</p></li>
+<li><p>Big Sur - Nexus 6000</p></li>
+<li><p>F3 - Nexus 7000/7700</p></li>
+<li><p>nPower X1 - сетевой процессор для NCS.</p></li>
+</ul>
+</div></blockquote>
+<p><a class="reference external" href="https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2016/pdf/BRKARC-3467.pdf">Замечательные слайды</a>, кстати, о производстве цискиных чипов и их устройстве.</p>
+<p>И <a class="reference external" href="https://people.ucsc.edu/~warner/Bufs/BRKDCN-3734.pdf">слайды</a> про использование рыночных чипов в нексусах и их (чипов) архитектуру.</p>
+</div>
+<div class="section" id="id5">
+<h2>Отечественная микроэлектроника<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Похвастаться терабитами, увы не можем, но вот есть 88Гб/с L3-коммутатор от «Цифровых решений» с поддержкой 1Гб/с, 10 Гб/с портов на собственном FPGA: <a class="reference external" href="https://dsol.ru/telecommunication/switches/">Феникс-1/10G</a>.
+Обещали на базе этого FPGA потом выпустить ASIC, но чем история закончилась неизвестно.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/7_existring_chips/2_custom_silicon.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Архитектура сетевых устройств &#8212; Где сохранить пакет 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Архитектура сетевых устройств<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">Итак, что такое сетевое устройство?</div>
+<div class="line">Будь то коммутатор, маршрутизатор, файрвол, балансировщик, программный или аппаратный, его задача - доставить пакет со входа на правильный выход, и состоит оно из следующих частей:</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/device_architecture.svg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/device_architecture.svg" src="https://fs.linkmeup.ru/images/articles/buffers/device_architecture.svg" width="800" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Электрический или оптический сигнал, попадая на устройство через входной физический порт, восстанавливается до потока битов, из него вычленяются отдельные Ethernet-кадры, далее на основе заголовков (Ethernet, IP, MPLS итд) (или иногда содержимого) принимается решение о том, в какой выходной порт этот пакет должен быть далее отправлен и с каким набором заголовков. На своём пути от входного к выходному порту пакет ещё проходит через модуль Traffic Manager, где с ним могут происходить следующие вещи: буферизация, полисинг, шейпинг, обработка по приоритетам.</div>
+<div class="line">Это путь самого пакета.</div>
+</div>
+<p>И отдельно от пути пакета - Control Plane Module, который отвечает за то, чтобы путь вообще появился. Это всяческие протоколы маршрутизации, обмена меток и прочее.</p>
+<p>Это компоненты, которые присутствуют всегда и во всех сетевых устройствах.</p>
+<div class="line-block">
+<div class="line">Реализация же этих функций уже зависит от того, о чём именно мы говорим.</div>
+<div class="line">Например, на обычном x86 всю работу, кроме PHY могут взять на себя CPU и оперативка.</div>
+<div class="line">Более типично, что функции канального уровня заберёт на себя NIC - Ethernet, проверка контрольных сумм.</div>
+<div class="line">А можно в компьютер доставить SmartNIC’и, которые аппаратно могут делать, например, туннелирование.</div>
+<div class="line">Но мы не будем сегодня про программные реализации сетевых функций. Поговорим о старых добрых материальных коробках, которым всё равно никуда никогда не деться.</div>
+</div>
+<p>Вообще об этом я уже <a class="reference external" href="https://linkmeup.ru/blog/312.html">писал</a>, поэтому повторяться не буду. Точнее буду, но не сильно. Точнее сильно, но я добавлю здесь ещё смысла.</p>
+<div class="line-block">
+<div class="line">Обычно на каждый блок задач выделяется специализированный чип.</div>
+<div class="line">Так, всем Control Plane’ом занимается всё тот же CPU+память.</div>
+<div class="line">Организация взаимодействия со средой передачи и преобразование битов в сигнал и наоборот - специальные чипы PHY. Почти всегда они реализуются на ASIC.</div>
+<div class="line">Разбор заголовков и поиск пути - Packet Forwarding Engine. Это может быть ASIC, Network Processor, реже FPGA и даже CPU. К ним в помощь идёт или обычная память RAM или специальная CAM/TCAM для хранения таблиц лукапа.</div>
+<div class="line">Traffic Manager - если вынесен отдельно, то опять же - узкоспециализированные ASIC’и и плюс к ним память. Но может быть встроенным в чип коммутации.</div>
+</div>
+<p>Один из вариантов реализации (single-chip устройство):</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/device_architecture_variant.svg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/device_architecture_variant.svg" src="https://fs.linkmeup.ru/images/articles/buffers/device_architecture_variant.svg" width="800" /></a>
+</div>
+</div></blockquote>
+<p>В этой статье сосредоточимся на PFE и TM, которые и могут вносить вариативные задержки в доставку, потому что могут хранить пакеты.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Где сохранить пакет</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/2_network_device_architecture.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

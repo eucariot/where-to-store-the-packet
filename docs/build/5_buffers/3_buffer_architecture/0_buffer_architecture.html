@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Архитектура буферов &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Архитектура буферов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>И вот тут на сцену выходит TM - Traffic Manager, который реализует функции QoS (и некоторые другие).
+Он может быть частью чипа коммутации, а может быть отдельной микросхемой - для нас сейчас важно то, что он заправляет буферами.</p>
+<p>Буфер - это с некоторыми оговорками обычная память, используемая в компьютерах. В ней в определённой ячейке хранится пакет, который чип может извлечь, обратившись по адресу.</p>
+<p>Любой сетевой ASIC или NP обладает некоторым объёмом встроенной (on-chip) памяти (порядка десятков МБ).
+Так называемые Deep-Buffer свитчи имеют ещё внешнюю (off-chip) память, исчисляемую уже гигабайтами.
+И той и другой управляет модуль чипа - MMU.</p>
+<p>В целом для нас пока местонахождение не имеет значения - взглянем на это попозже. Важно то, как имеющейся памятью чип распоряжается, а именно, где и какие очереди он создаёт и какие <a class="reference external" href="https://en.wikipedia.org/wiki/Active_queue_management">AQM</a> использует.</p>
+<p>И тут практикуют:</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_crossbar.html">Crossbar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_shared_buffer.html">Shared Buffer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_oq.html">Output Queueing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_iq.html">Input Queuing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_cioq.html">Combined Input and Output Queueing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_voq.html">Virtual Output Queueing</a></li>
+</ul>
+</div>
+<p><strong>Дальнейшее чтиво:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://people.ucsc.edu/~warner/Bufs/Buffering-WP_August_2017.pdf">An Update on Router Buffering</a></p></li>
+<li><p><a class="reference external" href="https://forums.juniper.net/t5/forums/recentpostspage/post-type/message/category-id/Blogs/user-id/101479?">What is VOQ and why you should care</a></p></li>
+<li><p><a class="reference external" href="https://archive.nanog.org/sites/default/files/wednesday_tutorial_szarecki_packet-buffering.pdf">Strategies of packet buffering inside Routers</a></p></li>
+<li><p><a class="reference external" href="https://www.juniper.net/documentation/en_US/junos/topics/concept/cos-qfx-series-voq-understanding.html">Understanding CoS Virtual Output Queues (VOQs) on QFX10000 Switches</a></p></li>
+<li><p><a class="reference external" href="https://books.google.ru/books?id=kzstoFdvZ2sC&amp;pg=PR8&amp;lpg=PR8&amp;dq=shared+memory+vs+voq&amp;source=bl&amp;ots=mTy-1ifsRK&amp;sig=ACfU3U0DHx37_i_oDKvDJTEh72g6pSW-Ng&amp;hl=ru&amp;sa=X&amp;ved=2ahUKEwjnx9el0LPnAhWHAhAIHUF6CeIQ6AEwCHoECAgQAQ#v=onepage&amp;q=shared%20memory%20vs%20voq&amp;f=false">High Performance Switches and Routers</a> - если у вас есть лишних 14 к₽.</p></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/5_buffers/3_buffer_architecture/0_buffer_architecture.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

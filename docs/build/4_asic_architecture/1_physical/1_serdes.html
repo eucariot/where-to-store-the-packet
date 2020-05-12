@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>SerDes &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="serdes">
+<h1>SerDes<a class="headerlink" href="#serdes" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Если коротко - то это блоки (<a class="reference external" href="https://ru.wikipedia.org/wiki/IP-cores">IP-core</a>) сетевого ASIC’а, которые позволяют получить сигнал с пинов и, наоборот, передать его туда.</p>
+<p>Теперь с этимологией. Аналогично «модему» и «кодеку», ставшим уже такими родными в кириллическом написании, SerDes составлен из двух слов: <strong>Serializer-Deserializer</strong>. Так чего же он сериализует и десериализует?</p>
+<p>Всё дело в скорости работы сетевых чипов. Независимо от их типа (ASIC, NP, CPU) - их частота находится в пределах сотен Мгц - единиц Ггц. А частота передачи данных с порта 10Гб/с - 10 Ггц (100 Гбит/с = 4х25ГГц). Соответственно, каким-то образом нужно понизить частоту внутри чипа. И как раз это достигается тем, что сигнал из пары вводных пинов распараллеливается на множество внутренних линий - десериализуется.
+В обратную сторону - сигнал с нескольких линий нужно сериализовать в пару пинов.</p>
+<p>Блоки SerDes всегда являются составными частями кристалла сетевого чипа.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/serdeses.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/serdeses.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/serdeses.jpg" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
+<p><em>`Источник &lt;https://www.design-reuse.com/news/44362/esilicon-7nm-ip-networking-platform.html&gt;`_.</em></p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/serdes_inside.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/serdes_inside.png" src="https://fs.linkmeup.ru/images/articles/buffers/serdes_inside.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<p><em>`Источник &lt;http://www.trex.fi/2017/Ralf-Korschner-The-March-of-Merchant-Silicon.pdf&gt;`_.</em></p>
+<p>Один SerDes - это 4 пина на пузике асика - два для Tx, два для Rx.
+Скорость одного SerDes’а - величина скачкообразно растущая с годами . Наиболее распространённые сегодня - это 10Гб/с и 28Гб/с. Но в скором будущем датацентровый масс-маркет начнут заполонять устройства с 56Гб/с SerDes и даже со 112Гб/с.</p>
+<p>Выглядит довольно сложным. Для чего же вообще устраивать эту сериальную вакханалию, а не сделать просто пинов по числу реальных линий в чипе?</p>
+<div class="section" id="id1">
+<h2>Зачем?<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Ну, давайте прикинем, спайн-коммутатор с 64х100Гб/с портами несёт под кожухом ASIC ёмкостью 6,4 Тб/с.
+Если каждые 4 пина чипа могут обеспечить 28Гб/с в полном дуплексе, значит, на нём должно быть 64*4*4=1024 пинов.
+Это уже как минимум 32х32 пинов на 40 см^2, не считая питания и земли. И они там сидят довольно плотненько. Легко ли будет кратно нарастить их количество?</p>
+<p>Однако проблема не только и не столько с количеством пинов.
+Тенденция к серийным интерфейсам намечается <a class="reference external" href="https://www.design-reuse.com/articles/10541/multi-gigabit-serdes-the-cornerstone-of-high-speed-serial-interconnects.html">уже давно</a>.
+На смену переферийным параллельным портам пришли серийные (USB на смену параллельному)</p>
+<div class="line-block">
+<div class="line">На смену IDE - SATA (Serial ATA)</div>
+<div class="line">На смену SCSI - SAS (Serial SCSI)</div>
+<div class="line">На смену PCI - PCI Express</div>
+</div>
+<p>Это жжж неспроста. Ведь казалось бы, чем больше проводов, тем больше данных можно передать за единицу времени?
+На самом деле нет - при параллельной передаче с повышением скорости всё острее и острее встают вопросы синхронизации между этими самым проводами. Схемотехники даже связанные дорожки на платах <a class="reference external" href="https://linkmeup.ru/blog/401.html#DIFFPAIRS">проектируют так</a>, чтобы они были максимально одинаковой длины.
+В какой-то момент задача усложнилась настолько, что дальнейшее развитие пошло по увеличению полосы пропускания обычной дифф-пары вместо параллелизма. В частности для 100Гб/с другого варианта просто не существует.</p>
+</div>
+<div class="section" id="id4">
+<h2>Модуляция<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>То, каким образом множество параллельных сигналов укладывается в один, зависит от метода модуляции.
+Для SerDes с пропускной сопособностью 10Гб/с и 28Гб/с используется <strong>NRZ</strong> - <a class="reference external" href="https://en.wikipedia.org/wiki/Non-return-to-zero">Non-Return-to-Zero</a>.
+С ним же <a class="reference external" href="https://www.nextplatform.com/micro-site-content/taking-closer-look-rambus-56-gbps-multi-protocol-serdes-phy/">добились</a> и 56Гб/с. Но всё же стандартом <em>de facto</em> для 56Гб/с и <em>de iure</em> для 112Гб/с является <strong>PAM4</strong> - <a class="reference external" href="https://blogs.cisco.com/sp/pam4-for-400g-optical-interfaces-and-beyond-part-1">4 -level Pulse Amplitude Modulation</a>.
+Есть и <a class="reference external" href="http://www.ieee802.org/3/ad_hoc/ngrates/public/17_05/sun_nea_01a_0517.pdf">ленивые пессимистичные взгляды</a> в сторону PAM8.</p>
+<p>Итого, учитывая современные реалии (NRZ), для того, чтобы запитать данными интерфейс 100Гб/с нужно подвести к нему 4 SerDes’а по 28Гб/с (или 16 дорожек). Отсюда и берётся «лейновость» 100Ж-портов: 4 лейна - это 4 канала по 28Гб/с.</p>
+<p>И это то, что позволяет 1х100Ж порт разбить на 4х25Ж с помощью гидры.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/breakout.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/breakout.png" src="https://fs.linkmeup.ru/images/articles/buffers/breakout.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<p>В случае PAM4 для 100Ж нужно только 2 SerDes’а по 56Гб/с, то есть два лейна.</p>
+</div>
+<div class="section" id="gearbox">
+<h2>GearBox’ы<a class="headerlink" href="#gearbox" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Сложности с переходом на новые методы модуляции заключаются в том, что устройства на разных сторонах должны использовать одинаковые, либо нужно ставить дополнительные конвертеры. То есть просто подключить сотками коммутатор с PAM4 к NRZ не получится.</p>
+<p>Но когда индустрия бросала своих участников, не предлагая им решений? Для того, чтобы устройства с разными модуляциями могли взаимодействовать друг с другом, изобрели коробки передач, которые из малого количество высокоскоростных линий делают много помедленнее и наоборот.
+Так, в новейшие коммутаторы, выпускаемые сегодня, <a class="reference external" href="https://www.marketwatch.com/press-release/broadcoms-industry-leading-pam-4-phy-shipments-surpass-1-million-ports-2018-09-20">ставят дополнительные чипы</a>, чтобы их можно было использовать в сети с более старым оборудованием.</p>
+<p>Использование гирбоксов также упростит вендорам и переход на 400G - не придётся менять ASIC - достаточно заменить/убрать гирбокс.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/4_asic_architecture/1_physical/1_serdes.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

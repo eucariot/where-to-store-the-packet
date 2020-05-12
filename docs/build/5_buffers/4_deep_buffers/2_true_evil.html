@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Большие буферы - добро или зло? &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Большие буферы - добро или зло?<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>В целом это довольно старая дилемма. Подольше похранить или пораньше дропнуть?</p>
+<p>Конечно, всем приложениям хочется lossless low-latency сеть. Даже жирному некрасивому торренту. Но так не бывает и кем-то нужно жертвовать.
+И мы долгое время живём с инертной мыслью , что часть приложений могут потерпеть задержки, а вот терять трафик совсем не хочется. Не в малой степени этому способствовало и то, что потери - это измеримая характеристика с более или менее понятными границами - потерь быть не должно. А что задержка? Вроде можно чётко сказать, что единицы миллисекунд - это хорошо, а секунды - это плохо. А между ними - зона спекуляций. Как оценить влияние вариаций задержки для рядового TCP-трафика?
+Поэтому и спрос на устройства с большими буферами есть - никто не хочет терять трафик.</p>
+<p>А теперь я выскажу не самое популярное мнение - потери - это хорошо.
+Так уж вышло, что один из транспортных протоколов, фиксирует перегрузки, опираясь на потери.
+Дроп в очереди на сетевом устройстве означает, что на нём случился затор - это он не по своему капризу. И будет совсем не лишним, если отправители немного приуменьшат свои congestion window.
+Именно так и работают все классические (и не очень) реализации TCP Congestion Control.
+Соответственно на устройствах с глубокими буферами во время заторов пакеты будут долго копиться, не отбрасываясь. Когда они всё-таки дойдут до получателя и тот их ACKнет, отправитель не только не снизит скорость, но может даже её увеличить, если у него сейчас режим Slow Start или Congestion Avoidance.
+Можно взглянуть и дальше: растущая очередь взвинчивает RTT, что соответственно влечёт за собой увеличение RTO таймеров на отправителях, тем самым замедляя обнаружение потерь.
+То есть сеть лишается своего практически единственного инструмента управления перегрузками.
+И таким образом архитекторы, пытающиеся решить вопрос заторов на сети путём увеличения буферов, усугубляют ситуацию ещё больше.</p>
+<p>Ситуация, описанная выше, называется <strong>bufferbloat</strong> - распухание буфера.
+Википедия иронично замечает:</p>
+<blockquote>
+<div><p>Проект www.bufferbloat.net иронично определил этот термин, как «ухудшение производительности Интернета, вызванное предыдущими попытками её улучшения»</p>
+</div></blockquote>
+<p>Отбросы - санитары сети. Ко всеобщему удивлению, уменьшение очереди до одного пакета зачастую может кардинально улучшить ситуацию, особенно в условиях датацентра (только не сочтите это за дельный совет).</p>
+<blockquote>
+<div><p>Справедливости ради следует заметить, что современные реализации TCP - BBR2, TIMELY ориентируются не только и не столько на потери, сколько на RTT и <a class="reference external" href="https://en.wikipedia.org/wiki/Bandwidth-delay_product">BDP</a>.
+Гугловый QUIC - надстройку над UDP - следует отнести сюда же.</p>
+</div></blockquote>
+<p>Внутри фабрики датацентра RTT ультракороткий - зачастую меньше 1 мс. Это позволяет среагировать на потерю очень быстро и купировать перегрузку в её зачатке.
+Собственно поэтому практически все ASIC’и для датацентровых коммутаторов имеют только крохотную on-chip память.
+Хотя и появилась в последние годы тенденция к глубоких буферам и тут.
+И этому даже находится <a class="reference external" href="https://forums.juniper.net/t5/Enterprise-Cloud-and/Not-all-deep-buffer-switches-are-created-equal/ba-p/318393">объяснение</a>.</p>
+<div class="line-block">
+<div class="line">Особая история на границе датацентра (или на устройствах доступа в сети провайдера или на магистральных сетях).</div>
+<div class="line"><strong>Во-первых</strong>, это места, которые обычно заведомо строятся с переподпиской, поскольку WAN-линки дорогие, что автоматически означает, что ситуации, в которых трафика приходит больше, чем способен переварить интерфейс, ожидаемы. А значит нужна возможность пакеты хранить и обрабатывать их в соответствии с приоритетами. Большие буферы позволяют сгладить всплески.</div>
+<div class="line"><strong>Во-вторых</strong>, обычно приложения настолько чувствительные к задержкам, никто не будет пытаться растягивать на этот сегмент. Например, RoCE или распределённое хранилище. Для чуть менее чувствительных, таких как телефония, в больших буферах выделяется приоритетная очередь.</div>
+<div class="line"><strong>В-третьих</strong>, тут задержки на устройстве всё ещё делают основной вклад в общее время доставки, но уже не настолько драматический.</div>
+</div>
+<p>Итак, устройства с большим объёмом памяти годятся в места где заложена переподписка или могут появиться заторы.</p>
+<p>Что стоит отметить, так это то, что в датацентрах тоже есть ситуации, в которых 16-64 МБ буферов может не хватить, даже несмотря на отсутствие переподписки.
+Два типичных примера - это обработка Big Data и Storage.</p>
+<p><strong>Анализ Big Data</strong>. Кластера Map-Reduce - это сотни и тысячи машин, которые перемалывают параллельно огромные массивы данных по заданию Master-узла, заканчивают примерно одинаково и все разом начинают возвращать ответы на Master-узел. Ситуация называется <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.447.1375&amp;rep=rep1&amp;type=pdf">Incast</a>. Длится она порядка нескольких десятков миллисекунд и потом исчезает.
+On-chip память неспособна вместить эти данные - значит будет много дропов, значит ретрансмиты, значит общее снижение производительности.</p>
+<p><strong>Storage</strong>. Это штука крайне чувствительная к потерям и тоже гоняющая массивные объёмы данных. В случае хранилки тоже лучше не терять ничего. Но обычно она при этом и к задержкам предъявляет строгие требования, поэтому такие приложения обсудим пониже.</p>
+<p>Однако при этом крайне редко они единственные потребители сети в датацентрах, другим приложениям нужна низкая задержка.</p>
+<p>Впрочем, это легко решается выделением очередей QoS с ограничением максимальной доступной глубины. И весь вопрос заключается тогда только в том, готова ли компания заплатить за глубокие буферы, возможно, не использовать их  и поддерживать конфигурацию QoS.</p>
+<p>Но в любой ситуации лучше следовать правилу: <a class="reference external" href="https://www.nextplatform.com/2019/07/23/the-switch-router-war-is-over-and-hyperscalers-won/">use shallow ASIC buffers when you can and use deep buffers when you must</a>.</p>
+<p><strong>Критика глубоких буферов</strong>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://packetpushers.net/aristas-big-buffer-b-s/">Arista’s Big Buffer B.S.</a></p></li>
+<li><p><a class="reference external" href="https://people.ucsc.edu/~warner/Bufs/incast.html">Incast</a></p></li>
+<li><p><a class="reference external" href="http://miercom.com/pdf/reports/20160210.pdf">Speeding Applications in Data Center Networks. The Interaction of Buffer Size and TCP Protocol Handling and its Impact on Data-Mining and Large Enterprise IT Traffic Flows</a></p></li>
+</ul>
+</div></blockquote>
+<p>Кстати, показательная таблица типичных задержек:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/latencies.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/latencies.png" src="https://fs.linkmeup.ru/images/articles/buffers/latencies.png" style="width: 630px;" /></a>
+</div>
+</div></blockquote>
+<p><em>`Источник &lt;https://people.ucsc.edu/~warner/Bufs/Buffering-WP_August_2017.pdf&gt;`_</em>.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/5_buffers/4_deep_buffers/2_true_evil.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

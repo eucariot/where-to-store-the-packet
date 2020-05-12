@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Память и буферы &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Память и буферы<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Ну вот мы и добрались до ниточки, с которой клубок начал распутываться.</p>
+<p>Всё, что было выше, касалось заголовков пакетов - они отделялись и подвергались алгоритмическим экзекуциям в пайплайне.
+А где же прохлаждались их тела всё это время?</p>
+<p>В сетевых чипсетах есть встроенная память (<strong>OCB - On Chip Buffer</strong>) как раз для хранения тел. Её размер в силу физических ограничений очень мал (до 100Мб), но для большинства задач - это разумный компромисс.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png" src="https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png" style="width: 700px;" /></a>
+</div>
+<p>Бывают <a class="reference external" href="https://www.nextplatform.com/2017/09/14/rare-peek-inside-400g-cisco-network-chip/">редкие исключения</a>, где встроенная память имеет больший размер.
+Но всегда были и будут сценарии, в которых нужна память гораздо большего объёма, в этом случае прибегают к использованию внешней относительно чипа коммутации памяти. Такие устройства называются Deep Buffer.
+И о них и вообще о компромиссах мало-много памяти поговорим отдельно.</p>
+</div></blockquote>
+<p>Таким образом на входе в чип парсер отделяет заголовки от тел, первые отдаёт на анализ в блок Match-Action, вторые - складывает в буфер.
+На выходе новые заголовки пришивают к извлечённым обратно телам и отправляют на выход.
+Будучи неоднократно обвинённым при рецензировании этой статьи, чувствую необходимость ещё раз повторить это: внутри чипа коммутации заголовки отделяются от тела пакета. В то время, как изначальные заголовки анализируются, помогают сделать лукап, уничтожаются, формируются новые, тело находится в одном месте физической памяти, не перемещаясь. Даже в тот момент, когда Traffic Manager выстраивает пакеты в очередь согласно их приоритетам, производит их диспетчеризацию и Congestion Avoidance, фактически он работает со внутренними временными заголовками, не двигая пакеты по памяти.</p>
+<p>Управляет доступом к физической памяти <strong>MMU - Memory Management Unit</strong>. Он довольно похож на MMU в компьютерах (по сути является <a class="reference external" href="https://en.wikipedia.org/wiki/Memory_management_unit">им</a>). Программа обращается к указателю, чтобы извлечь данные из памяти, MMU транслирует это в реальный адрес ячейки и возвращает данные.</p>
+<p>MMU занимается размещением пакетов в буферах, их извлечением или отбрасыванием. Он же контролирует разделение памяти на области (dedicated, shared, headroom, voq) и их загрузку.</p>
+<p>За более верхнеуровневое управление очередями и перегрузками отвечает блок <strong>TM - Traffic Manager</strong>.</p>
+<p>Есть два подхода к размещению тел в буферах: <strong>Store-and-Forward</strong> и <strong>Cut-Through</strong>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_sfvsct.html">Store-and-Forward vs Cut-Through</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_congestions.html">Перегрузки: причины и места</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_buffer_architecture/0_buffer_architecture.html">Архитектура буферов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_deep_buffers/0_deep_buffers.html">Shallow vs Deep Buffers</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/5_buffers/0_buffers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

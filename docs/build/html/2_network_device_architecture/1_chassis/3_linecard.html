@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Интерфейсный модуль или линейная карта &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Интерфейсный модуль или линейная карта</a><ul>
+<li><a class="reference internal" href="#id2">Интерфейс</a></li>
+<li><a class="reference internal" href="#phy">PHY</a></li>
+<li><a class="reference internal" href="#mac">MAC</a></li>
+<li><a class="reference internal" href="#fe-forwarding-engine">FE - Forwarding Engine</a></li>
+<li><a class="reference internal" href="#qos-tm-traffic-manager">QoS или TM - Traffic Manager</a></li>
+<li><a class="reference internal" href="#fabric-interface">Fabric Interface</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Интерфейсный модуль или линейная карта</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/2_network_device_architecture/1_chassis/3_linecard.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Интерфейсный модуль или линейная карта<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Это модуль, который несёт на себе физические интерфейсы и FE (чип коммутации) и выполняет функции Forwarding Plane</p>
+<div class="line-block">
+<div class="line">По большому счёту линейнкая карта модульного коммутатора - это тот же самый стоечный коммутатор только в форм-факторе платы.</div>
+<div class="line">Кроме интерфейсов и чипа коммутации в нём так же есть и CPU, и память, и блоки TM итд. Просто вместо обычных аплинков у неё коннекторы в общую шину, ведущие в другие платы, и ещё ей нужно общаться с управляющей платой, чтобы синхронизировать своё состояние.</div>
+<div class="line">Поскольку вся книга посвящена устройству коммутаторов, сильно акцентироваться я в этом месте не буду.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/linecard.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/linecard.png" src="https://fs.linkmeup.ru/images/articles/buffers/linecard.png" style="width: 700px;" /></a>
+</div>
+</div></blockquote>
+<p>Так выглядит линейная карта Cisco:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/j0/k7/6q/j0k76qe4foc99appxtoy89qjd58.jpeg"><img alt="https://habrastorage.org/webt/j0/k7/6q/j0k76qe4foc99appxtoy89qjd58.jpeg" src="https://habrastorage.org/webt/j0/k7/6q/j0k76qe4foc99appxtoy89qjd58.jpeg" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p>Плата состоит из многих компонентов, которые могут быть реализованы как в одном чипе (System-on-Chip), так и на множестве отдельных в зависимости от класса устройства и архитектуры.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/bd/da/lk/bddalkqpkl8dsebhhonu3j59ixe.png"><img alt="https://habrastorage.org/webt/bd/da/lk/bddalkqpkl8dsebhhonu3j59ixe.png" src="https://habrastorage.org/webt/bd/da/lk/bddalkqpkl8dsebhhonu3j59ixe.png" style="width: 1000px;" /></a>
+</div>
+</div></blockquote>
+<p>Основные части линейной карты:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Собственно интерфейс</p></li>
+<li><p>PHY</p></li>
+<li><p>MAC</p></li>
+<li><p>FE - Forwardin Engine (Ingress/Egress)</p></li>
+<li><p>TM - Traffic Manager (QoS)</p></li>
+<li><p>Fabric Interface</p></li>
+</ul>
+</div></blockquote>
+<p>Иногда часть этих компонентов может выноситься на отдельный извлекаемый модуль - <strong>PIC</strong> (Physical Interface Card). Например, на нём могут быть интерфейсы, PHY и MAC.</p>
+<blockquote>
+<div><div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/jz/az/rm/jzazrm1xllwfzby4hyhuq5spgjg.jpeg"><img alt="https://habrastorage.org/webt/jz/az/rm/jzazrm1xllwfzby4hyhuq5spgjg.jpeg" src="https://habrastorage.org/webt/jz/az/rm/jzazrm1xllwfzby4hyhuq5spgjg.jpeg" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Так выглядит Juniper MIC (Modular Interface Card), совмещённый с чипом PIC</span><a class="headerlink" href="#id3" title="Постоянная ссылка на рисунок">¶</a></p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/linecard_details.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/linecard_details.png" src="https://fs.linkmeup.ru/images/articles/buffers/linecard_details.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<div class="section" id="id2">
+<h2>Интерфейс<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Электрический/оптический любого форм-фактора.
+Реализует возможность подключения провода в устройство через стандартный тип порта.</p>
+</div>
+<div class="section" id="phy">
+<h2>PHY<a class="headerlink" href="#phy" title="Ссылка на этот заголовок">¶</a></h2>
+<p>PHY занимается задачами физического уровня:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Конвертация сигнала между средами (оптика-медь), если это нужно</p></li>
+<li><p>Восстановление битов из сигналов и наоборот</p></li>
+<li><p>Коррекция ошибок</p></li>
+<li><p>Синхронизация</p></li>
+</ul>
+</div></blockquote>
+<p>Если интерфейс обычный медный, интегрированный, то чип PHY находится на плате и металлическимм дорожками соединён с самим интерфейсом.
+Если же интерфейс предполагает использование трансивера, то чип PHY обычно находится уже на этом трансивере.</p>
+</div>
+<div class="section" id="mac">
+<h2>MAC<a class="headerlink" href="#mac" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Модуль MAC выполняет задачи канального уровня - Ethernet. Чаще всего является частью FE, но не всегда.</p>
+</div>
+<div class="section" id="fe-forwarding-engine">
+<h2>FE - Forwarding Engine<a class="headerlink" href="#fe-forwarding-engine" title="Ссылка на этот заголовок">¶</a></h2>
+<p>FE реализует все функции, связанные с коммутацией и маршрутизацией:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Запросы к CAM/TCAM</p></li>
+<li><p>Трансформация Soft Table в Hard Table</p></li>
+<li><p>Принятие решения о передаче пакета (ACL, полисинг)</p></li>
+<li><p>Коммутация/Маршрутизация</p></li>
+<li><p>Маркировка приоритетов</p></li>
+<li><p>Зеркалирование</p></li>
+<li><p>Обнаружение протокольных пакетов</p></li>
+<li><p>Обработка сигналов/пакетов от CPU.</p></li>
+</ul>
+</div></blockquote>
+<p>Далее <strong>ВНИМАНИЕ</strong>! Это один из очень важных моментов!</p>
+<div class="line-block">
+<div class="line">Во-первых, FE делится на <strong>Ingress FE</strong> и <strong>Egress FE</strong>. Первый обрабатывает соответственно пакеты на входном тракте, второй - на выходном.</div>
+<div class="line">С одной стороны это разделение терминологическое - пакет пришёл на Ingress FE и далее должен быть отправлен на Egress FE, возможно, другой платы.</div>
+<div class="line">С другой, разделение - зачастую вполне физическое: внутри одного FE чипа живут эти две сущности: Ingress и Egress. Это и логично - ведь плата может быть как точкой входа, так и точкой выхода.</div>
+<div class="line">Во-вторых, именно входной FE входной линейной карты определяет всю дальнейшую судьбу пакета в пределах узла:</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>Вид будущих заголовков</p></li>
+<li><p>Приоритет внутри узла и при передаче вовне</p></li>
+<li><p>Выходной FE и интерфейс</p></li>
+<li><p>Какой именно из физических членов <a class="reference external" href="http://lookmeup.linkmeup.ru/#term443">LAG</a> или <a class="reference external" href="https://linkmeup.ru/blog/482.html">ECMP</a></p></li>
+</ul>
+</div></blockquote>
+<p><em>с небольшой оговоркой, что выходной тракт всё-таки может ещё произвести репликацию пакета или зарезать его по ACL</em></p>
+<p>В-третьих, FE должен идентифицировать протокольные и исключительные пакеты в транзитном трафике и передавать их на CPU.
+Соответственно и получать пакеты (или инструкции) от CPU - тоже его работа.</p>
+<p>Рядом с FE находятся CAM, TCAM и RAM, куда FE обращается в поиске выходного интерфейса и проверки ACL.
+Они хранят Hard Tables.</p>
+<p>Кроме того Ingress FE производит репликацию BUM трафика - он рассылает по одной копии пакета на каждый Egress FE. А Egress FE уже делает столько копий, во сколько интерфейсов нужно отправить</p>
+</div>
+<div class="section" id="qos-tm-traffic-manager">
+<h2>QoS или TM - Traffic Manager<a class="headerlink" href="#qos-tm-traffic-manager" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В одночиповых коммутаторах TM обычно является частью чипа коммутации, в модульных может стоять отдельно.
+Управлению трафиком, памяти и буферам посвящена львиная часть этой книги, поэтому здесь коснусь этого только вскользь.</p>
+<p>Задача TM - выделять очереди, следить за перегрузками и рапоряжаться трафиком таким образом, как того требует дизайн QoS и маркировка пакетов (Congestion Avoidance и Congestion Management). Он же занимается репликацией BUM-трафика.</p>
+</div>
+<div class="section" id="fabric-interface">
+<h2>Fabric Interface<a class="headerlink" href="#fabric-interface" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Чип, который обеспечивает взаимодействие с фабрикой коммутации. Может быть как частью FE, так и самостоятельным.
+Зачастую трафик на фабрику отправляется не как есть, а разбивается на ячейки одинакого размера, чтобы максимально равномерно загрузить все существующие линии. Это, а также передача метаданных - задача данного чипа.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

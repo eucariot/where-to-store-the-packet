@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Логическое устройство &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Логическое устройство<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Типичный сетевой ASIC представляет из себя конвейер, по которому пакет передаётся от входного интерфейса к выходному, а по пути с ним случаются приключения. Английский термин для этого - Pipeline.</p>
+<p>Хотя с виду и не скажешь:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/broadcom_chipset.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/broadcom_chipset.png" src="https://fs.linkmeup.ru/images/articles/buffers/broadcom_chipset.png" style="width: 600px;" /></a>
+</div>
+</div></blockquote>
+<p>В самом общем виде Pipeline выглядит так:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/pipeline.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/pipeline.png" src="https://fs.linkmeup.ru/images/articles/buffers/pipeline.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p><em>`Источник &lt;https://platformlab.stanford.edu/Seminar%20Talks/programming_line_rate_switches.pdf&gt;`_</em>.</p>
+<p>Пакет проходит через все стадии как минимум один раз, но для реализации сложных действий, вроде дополнительной инкапсуляции (VXLAN), может отправиться повторно.</p>
+<div class="section" id="parser">
+<h2>Parser<a class="headerlink" href="#parser" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Сначала на вход попадает пакет с неизвестным набором заголовков.
+Парсер разбирает все заголовки, отделяя их от собственно данных.
+Если это L2-коммутатор, то его заинтересует только заголовки Ethernet и VLAN.
+Если это MPLS-коммутатор, он заглянет в MPLS заголовки.
+Для L3 соответственно IPv4 и IPv6.
+Если это VXLAN-терминатор, ему понадобится UDP и собственно заголовок VXLAN.
+Для целей ECMP и ACL, парсер заглянет в UDP/TCP.</p>
+<p>Строго говоря, на какие заголовки и какие поля в них надо смотреть, определяет фантазия разработчика.
+Сколько заголовков забрать? Как правило парсер вынимает фиксированное для чипа значение байтов от пакета и разделывает уже их. И это значение является одним из <a class="reference external" href="https://fs.linkmeup.ru/images/articles/buffers/crazyencap.jpg">ограничений чипа</a>.</p>
+<p>Почему парсинг заголовков задача нетривиальная рассказывается в совместном исследовании Стэнфорда и Майкрософта: <a class="reference external" href="http://klamath.stanford.edu/~nickm/papers/ancs48-gibb.pdf">Design Principles for Packet Parsers</a>.</p>
+</div>
+<div class="section" id="pre-ingress-processing">
+<h2>Pre-Ingress processing<a class="headerlink" href="#pre-ingress-processing" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Иногда логически выделяют этот блок, который совершает действия, не являющиеся ни парсингом, ни как таковым лукапом - он кладет пакет в нужный VRF, ставит внутренний Traffic Class итд.</p>
+</div>
+<div class="section" id="ingress-match-action">
+<h2>Ingress Match-Action<a class="headerlink" href="#ingress-match-action" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Когда парсер, разобрался с чем он имеет дело, он передаёт заголовки дальше - в модули Match-Action.
+Здесь происходит lookup. Для L2 поищем MAC’и, для L3 - прошерстим FIB, для MPLS - просмотрим в LFIB.
+И здесь же принимается решение, что с пакетом делать дальше: доложить CPU, пропустить/дропнуть, побалансировать, в какой порт отправить, какие заголовки навесить, с каким приоритетом внутри чипа обработать, полисить ли/шейпить ли его итд.</p>
+<p>Собственно действие записано в той же таблице, в которой происходит lookup.</p>
+<p>Это если коротко.
+А если чуть подлиннее, то:</p>
+<div class="section" id="l2-short-pipeline">
+<h3>L2 short pipeline<a class="headerlink" href="#l2-short-pipeline" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Приходящий L2-пакет всегда ассоциируется с VLAN. Тег VLAN проверяется через <strong>VLAN Lookup Table</strong>.
+Если VLAN lookup успешен, просматриваются таблицы: <strong>VLAN STP</strong>, <strong>VLAN Port Bitmap</strong>, <strong>Port Filtering Mode</strong> (PFM).
+Если же тег неверный, то пакет сбрасывается (или нет).
+После пакет проходит стандартную обработку: запомнить SRC MAC, посмотреть в таблице DST MAC, - но при этом могут быть применены дополнительные флаги, например, отправить на CPU unknown sender.</p>
+</div>
+<div class="section" id="l3-short-pipeline">
+<h3>L3 short pipeline<a class="headerlink" href="#l3-short-pipeline" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Если DST MAC является MAC’ом самого устройства, то процессинг передается в L3 модуль.
+Следующий шаг - Destination Lookup. Сначала используется <strong>L3 Table Lookup</strong>, в этой таблице как правило directly attached хосты.
+Если адрес найден, то выдается index в <strong>L3 Interface Table</strong>, в котором выходной порт, MAC, VLAN.
+Если же в L3 table не найден адрес, то делается LPM поиск (Longest Prefix Match). Результат такого поиска - index в L3 Table Lookup таблице, который должен использоваться для форвардинга. После удачного поиска, чип поменяет SA/DA/VID пакета (L2), посчитает FCS, поменяет TTL и IP checksum.</p>
+</div>
+</div>
+<div class="section" id="traffic-manager-mmu">
+<h2>Traffic Manager + MMU<a class="headerlink" href="#traffic-manager-mmu" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Может также называться Buffer Manager.
+В этом блоке происходят следующие операции:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Постановка пакетов в очередь</p></li>
+<li><p>Их хранение (буферизация)</p></li>
+<li><p>Контроль перегрузок</p></li>
+<li><p>Диспетчеризация</p></li>
+<li><p>Репликация</p></li>
+</ul>
+</div></blockquote>
+<p>Он состоит из двух частей - MMU и TM. Первый отвечает за управление памятью и буферами, второй - за QoS и мультикаст.</p>
+<p><strong>MMU</strong> - Memory Management Unit - компонент чипа, который управляет физической памятью.
+Одна из его функций аналогична MMU (блоку управления памятью) обычного компьютера - доступ приложений к физической памяти и её защита.
+Но список его обязанностей гораздо шире, поскольку заточен он на работу именно с пакетами. Он отслеживает как память распределяется между интерфейсами и насколько она занята в каждый момент времени, можно ли поместить пакет в буфер, если да, то в какой, как разбить его на более мелкие ячейки, ну и, конечно, как его оттуда забрать.</p>
+<p><strong>TM</strong> - Traffic Manager - решает более высокоуровневые задачи - выделение очередей, помещение в них трафика, диспетчеризация, шейпинг, полисинг, управление перегрузками. В общем, всё, что относится к QoS, а так же к мультикасту.</p>
+<blockquote>
+<div><p>С мультикастом история, право, интересная (как всегда). Репликацией мультикастовых пакетов занимается блок TM. В модульных устройствах это происходит в два этапа: сначала на входном чипе создаётся столько копий, сколько выходных чипов должны получить этот пакет, а затем на выходных чипах ещё столько копий, сколько портов на этой плате должны его получить. Делается это для того, чтобы лишними копиями не загружать фабрику.
+Любопытный момент с буферизацией и контролем перегрузок: входной чип должен учитывать занятость выходного порта, прежде, чем отправлять пакет, потому что именно входная плата управляет ` &lt;#VOQ»&gt;VOQ&gt;`_. Поскольку Traffic Manager оперирует не самими пакетами, а по сути информацией о них, то ему необязательно делать сразу копий по числу выходных портов, а достаточно записать об этом информацию в VOQ.</p>
+</div></blockquote>
+<p>MMU - это не совсем часть TM - это, скорее, два взаимодействующих друг с другом блока.</p>
+<p>Память и буферизация на сетевых устройствах - это настолько масштабная тема, что ей я посвятил отдельную статью, которая выйдет на nag.ru прямо следом за этой. В ней мы разберёмся с устройством и архитектурой памяти, видами и расположением буферов, арбитражем и поднимем самый горячий вопрос современности - что лучше: большие и маленькие буферы.</p>
+<p>В разговорах о буферах связка TM+MMU - одни из важнейших блоков ASIC’а (или внешний чип), поэтому к ним мы ещё вернёмся позже.</p>
+</div>
+<div class="section" id="egress-match-action">
+<h2>Egress Match-Action<a class="headerlink" href="#egress-match-action" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Далее над заголовками пакетов могут быть совершены дополнительные акты - например, выходной ACL, туннельные инкапсуляции, сбор статистики итд.</p>
+</div>
+<div class="section" id="deparser">
+<h2>Deparser<a class="headerlink" href="#deparser" title="Ссылка на этот заголовок">¶</a></h2>
+<p>К этому моменту на основе результатов обработки в блоках Match-Action сформирован список новых заголовков, и он может воссоединиться с телом  пакета.
+Сам пакет теперь готов в последний путь внутри этого чипа, чтобы выйти через выходной интерфейс.</p>
+<p>Кроме того, здесь может собираться дополнительная статистика о длине пакетов и сообщаться блоку TM и зеркалироваться исходящий трафик.</p>
+<p>Вышеуказанные стадии могут быть выполнены в пределах одного чипа, а могут быть и разнесены на разные.
+Так, в случае single-chip-коробки - все они скомпонованы в один кусочек силикона, площадью с фотку на документы.
+На модульных коробках Parser и Ingress Match-Action - это входной чип коммутации, Egress Match-Action и Deparser - выходной, TM стоит отдельно между чипом коммутации и фабрикой, и может быть разделён на Ingress и Egress. Кроме того в модульных устройствах могут существовать ещё и отдельные чипы Fabric Interface, которые разбивают пакеты на ячейки одного размера и отправляют в фабрику.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/4_asic_architecture/2_logical.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,29 @@
+Общая шина
+==========
+
+  Общая шина (она же Back Plane, она же Midplane) устройства, связывающая друг с другом все модули.
+  Обычно, это просто батарея медных контактов без каких-либо микросхем.
+
+    .. figure:: https://habrastorage.org/webt/kv/cx/y6/kvcxy61vgosd22rmcw4wzgw7ueo.png           
+           :width: 600
+           :align: center
+
+    .. figure:: https://habrastorage.org/webt/ko/zg/zk/kozgzkt1yxd0efcripwptbo1sds.jpeg           
+           :width: 800
+           :align: center
+
+           Так выглядит задняя часть платы, которая вставляется в шину
+
+    .. figure:: https://habrastorage.org/webt/iu/kv/j4/iukvj4wu8s52hhqkxa-fr80amo4.jpeg           
+           :width: 800
+           :align: center
+
+           Так выглядит общая шина Juniper
+
+    .. figure:: https://habrastorage.org/webt/bv/tc/2d/bvtc2di8lfy4zjdgyyfwpcwwjmi.jpeg           
+           :width: 800
+           :align: center
+
+           Так выглядит общая шина Huawei
+
+           Вот эти две полоски посередине, набитые медными контактами - слоты для фабрик коммутации.

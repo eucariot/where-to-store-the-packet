@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Архитектура модульных устройств &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Архитектура модульных устройств</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Архитектура модульных устройств</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/2_network_device_architecture/1_chassis/0_chassis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Архитектура модульных устройств<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>В сетях датацентров долгое время правили огромные монстры размером со стойку - модульные коммутаторы с высокой плотностью портов.
+Сегодня они уступают место многоуровневым IP-фабрикам, собранным из одноюнитовых одночиповых коробок.
+Но такие шкафы никуда не уходят с роли бордеров и из сетей операторов. Поэтому мы разберём и их устройство.
+Тем более, что некоторые вещи будут актуальны и для коммутаторов попроще.</p>
+<p>Для этой модели возьмём модульное шасси, состоящее из общей шины, интерфейсных и управляющих модулей и фабрики коммутации.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/2g/_v/c8/2g_vc8ownepow27e2spbnzi0m18.png"><img alt="https://habrastorage.org/webt/2g/_v/c8/2g_vc8ownepow27e2spbnzi0m18.png" src="https://habrastorage.org/webt/2g/_v/c8/2g_vc8ownepow27e2spbnzi0m18.png" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_backplane.html">Общая шина</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_control_unit.html">Управляющий модуль</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_linecard.html">Интерфейсный модуль или линейная карта</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3_linecard.html#id2">Интерфейс</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_linecard.html#phy">PHY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_linecard.html#mac">MAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_linecard.html#fe-forwarding-engine">FE - Forwarding Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_linecard.html#qos-tm-traffic-manager">QoS или TM - Traffic Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_linecard.html#fabric-interface">Fabric Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_fabriccard.html">Фабрика коммутации</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

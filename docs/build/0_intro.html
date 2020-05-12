@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Где сохранить пакет? &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Где сохранить пакет?<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Самый мощный сетевой чип сегодня умеет обрабатывать 25 600 000 000 000 бит за одну секунду. 30 миллиардов транзисторов должны провернуть уйму работы, доставляя биты со входного интерфейса на выходной. Новые типы интерфейсов, увеличивающиеся скорости, утончающиеся техпроцессы, новые функции - бросают ежедневные вызовы инженерам, разработчикам, производителям. У меня давно уже был праздный интерес к аппаратной начинке сетевых коробок, а в этот раз я решил поковыряться отвёрткой ещё глубже и, сняв крышечку с сетевых микросхем, взглянуть на Pipeline»ы да SerDes»ы. Как вы уже, вероятно, поняли, в этой статье будет запредельно много сленга, англицизмов и слов на английском, потому что переводить их на русский неблагодарно, а порой и кощунственно.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/kdpv_buffer.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/kdpv_buffer.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/kdpv_buffer.jpg" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p>Но знаете, какая мысль действительно не даёт мне покоя всю дорогу? Как вся эта сложнейшая конструкция: миллиарды транзисторов, размером около десятка нанометров, напечатанных на пластине размером с большую печеньку, которая полдюжиной тысяч ног припаяна к многослойной плате, напичканной мириадами других микрочипов, сопротивлений и конденсаторов и являющейся частью многоюнитовой модульной коробки, управляемой операционной системой, состоящей из сотен прошивок для разных чипов, инструкций по работе с ними, реализаций стандартизированных и проприетарных протоколов и механизмов поддержания жизнедеятельности многочисленных вентиляторов, блоков питания, линейных карт, фабрик коммутации, интерфейсов, процессоров, памяти - вообще хоть как-то работает, а тем более работает настолько стабильно в течение многих лет. Настоятельно рекомендую ознакомиться с <a class="reference external" href="https://linkmeup.ru/blog/312.html">14-м выпуском СДСМ</a>  перед тем, как приступить к чтению.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_glossary.html">Терминология</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_network_device_architecture.html">Архитектура сетевых устройств</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_chipset_types/0_chipset_types.html">Типов-Чипов</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3_chipset_types/0_chipset_types.html#id3">Компромиссы: скорость, функциональность, гибкость, цена</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_asic_architecture/0_asic_architecture.html">Архитектура сетевых ASIC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4_asic_architecture/1_physical/0_physical.html">Физическое устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_asic_architecture/2_logical.html">Логическое устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_asic_architecture/3_pipeline.html">Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_buffers/0_buffers.html">Память и буферы</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/1_sfvsct.html">Store-and-Forward vs Cut-Through</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/2_congestions.html">Перегрузки: причины и места</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/3_buffer_architecture/0_buffer_architecture.html">Архитектура буферов</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/4_deep_buffers/0_deep_buffers.html">Shallow vs Deep Buffers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_llll.html">Low-latency lossless сети</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6_llll.html#ecn-based">ECN-Based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_llll.html#bandwidth-delay-product-based">Bandwidth-Delay Product Based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_llll.html#rtt-based">RTT-BASED</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_existring_chips/0_existring_chips.html">Существующие чипы</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html">Commodity/Merchant Silicon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_existring_chips/2_custom_silicon.html">Custom silicon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_existring_chips/3_merchant_vs_custom.html">Merchant vs Custom</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_outro.html">Заключение</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8_outro.html#id2">Полезные ссылки</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8_outro.html#id5">Заключение</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8_outro.html#id8">Спасибы</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/0_intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

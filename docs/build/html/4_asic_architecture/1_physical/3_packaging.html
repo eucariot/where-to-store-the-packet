@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Packaging и Advanced Packaging &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Packaging и Advanced Packaging</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Packaging и Advanced Packaging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/4_asic_architecture/1_physical/3_packaging.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="packaging-advanced-packaging">
+<h1>Packaging и Advanced Packaging<a class="headerlink" href="#packaging-advanced-packaging" title="Ссылка на этот заголовок">¶</a></h1>
+<p><strong>Packaging</strong> (корпусирование) - это процесс упаковки кристалла в корпус, который защитит его от физических повреждений и коррозии.</p>
+<blockquote>
+<div><div class="figure align-center" id="id14">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/packaging_fanout.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/packaging_fanout.png" src="https://fs.linkmeup.ru/images/articles/buffers/packaging_fanout.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Корпусированный набор чипов.</span><a class="headerlink" href="#id14" title="Постоянная ссылка на рисунок">¶</a></p>
+<div class="legend">
+<p><a class="reference external" href="http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>Я честно предпринял попытку разобраться в этом вопросе, но уже на втором часе чтения стало понятно, что, если хоть немного глубже общих понятий погружаться, то это будет требовать ещё одной статьи такого же размера, чтобы не прослыть дилетантом.</p>
+<p>Когда-то давно, внутри одной микросхемы на плате был один кристалл.
+Даже не так - когда-то давно в микросхеме было несколько полупроводниковых элементов.</p>
+<blockquote>
+<div><div class="figure align-center" id="id15">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/first_ic.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/first_ic.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/first_ic.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">Прототип первой интегральной схемы. Джэк Килби.</span><a class="headerlink" href="#id15" title="Постоянная ссылка на рисунок">¶</a></p>
+<div class="legend">
+<p><a class="reference external" href="https://jessalapulapu.wordpress.com/2015/07/29/history-of-transistors-2/amp/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>Нужно две микросхемы - ставим их рядом, соединяем дорожками.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/ics.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/ics.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/ics.jpg" style="width: 600px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://ru.wikipedia.org/wiki/Печатная_плата">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>Нужно много-много микросхем - делаем большие платы или собираем платы в несколько слоёв.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/2_layers.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/2_layers.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/2_layers.jpg" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p>Со временем транзисторы становились меньше, а микросхемы сложнее - внутри одного кристалла могли совмещаться несколько логических блоков - это были первые SoC - System On Chip - ЦПУ+Память+какие-нибудь специфические задачи. Но сильно много туда всё равно не засунешь.</p>
+<blockquote>
+<div><div class="figure align-center" id="id16">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/soc.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/soc.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/soc.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">SoC Apple A6.</span><a class="headerlink" href="#id16" title="Постоянная ссылка на рисунок">¶</a></p>
+<div class="legend">
+<p><a class="reference external" href="https://arstechnica.com/gadgets/2013/04/the-pc-inside-your-phone-a-guide-to-the-system-on-a-chip/2/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>Потом научились, нарезав вафли на отдельные кристаллы, каждый из них запаковывать в отдельный пластиковый пакет, ставить один на другой и корпусировать вместе.
+Толщина таких бутербродов получалась большой - заметно больше, чем толщина ядра.</p>
+<p>Что сделало возможными семимиллиметровые телефоны - так это <a class="reference external" href="https://en.wikipedia.org/wiki/Wafer-level_packaging">Wafer-Level Packaging</a> (<strong>WLP</strong>) или ещё это называют <strong>Advanced Packaging</strong> - технологии, позволяющие на одной вафле делать несколько микросхем и связывать их друг с другом.
+Сюда относятся: 2D, <a class="reference external" href="https://semiengineering.com/knowledge_centers/packaging/advanced-packaging/2-5d-ic/">2.5D</a>, <a class="reference external" href="https://semiengineering.com/knowledge_centers/packaging/advanced-packaging/3d-ics/">3D</a>, <a class="reference external" href="https://semiengineering.com/knowledge_centers/packaging/advanced-packaging/fan-outs/">Fan-Out</a>, 2.1D итд.</p>
+<blockquote>
+<div><div class="figure align-center" id="id17">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chip_diversity.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_diversity.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_diversity.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Неполное многообразие способов компоновки.</span><a class="headerlink" href="#id17" title="Постоянная ссылка на рисунок">¶</a></p>
+<div class="legend">
+<p><a class="reference external" href="http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>Каждый отдельный чип называется <strong>чиплетом</strong> (<strong>chiplet</strong>).
+Отличаются технологии Advanced Packaging’а друг от друга расположением чиплетов (рядом или один на другом), наличием и отсутствием <a class="reference external" href="https://en.wikipedia.org/wiki/Interposer">интерпозера</a>, материалом интерпозера (кремний, стекло, органика), видом электрических связей между кристаллами (металлические дорожки или <a class="reference external" href="https://en.wikipedia.org/wiki/Through-silicon_via">TSV</a>) и массой других.
+Суть их всех в том, что такая более плотная компоновка позволяет уменьшить размер, увеличить количество шин передачи данных, а соответственно и пропускную способность, значительно сократить энергопотребление и тепловыделение, отказавшись от длинных металлических дорожек.</p>
+<p>Зачем я вообще в это решил копнуть? Во-первых, теперь немного понятнее становится что такое co-packged optics из предыдущего параграфа - это чиплет, реализующий оптический интерфейс, упакованный по одной из этих схем внутрь чипсета с ASIC’ом.
+А, во-вторых, дальше я буду рассказывать о памяти и буферах. Также я скажу о том, что каждый коммутационный ASIC обладает небольшим объёмом встроенной памяти - On-Chip Buffer.
+Она является составной частью асика коммутации.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png" src="https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png" style="width: 600px;" /></a>
+</div>
+</div></blockquote>
+<p>Однако в некоторых случаях в помощь к ней добавляют объёмную внешнюю память, в которой пакеты будут храниться, если они не помещаются во встроенную. И пока это была какая-нибудь GDDR5, вынесенная отдельно на печатной плате в виде самостоятельного чипа, всё было понятно.</p>
+<blockquote>
+<div><div class="figure align-center" id="id18">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/gddr5.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/gddr5.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/gddr5.jpg" style="width: 540px;" /></a>
+<p class="caption"><span class="caption-text">Своего родного сетевого не нашлось, но вот тут карточка от Энвидии с вынесенными GDDR5.</span><a class="headerlink" href="#id18" title="Постоянная ссылка на рисунок">¶</a></p>
+</div>
+</div></blockquote>
+<p>Но сегодня, с появлением WLP, когда под одной крышкой собраны и логика и память, границы начинают размываться. Некоторые вендоры спекулируют тем, что внешняя память co-packaged с коммутационным ASIC’ом, и утверждают, что она On-Chip.</p>
+<p>Так, например, выглядит 2.5D корпусирование, где один чиплет соединён с другим через кремниевый интерпозер:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/25d.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/25d.png" src="https://fs.linkmeup.ru/images/articles/buffers/25d.png" style="width: 800px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>2.5D - это развитие классического подхода 2D. Оно всё ещё требует дорогостоящего выхода за пределы чиплета и прохода по длинным металлическим дорожкам. И кроме того обладает сравнительно невысокой пропускной способностью, ограничивающей максимальную скорость, на которой может работать чип в условиях, близких к перегрузкам.</p>
+<p>Другой вариант - это уже 3D WLP:</p>
+<blockquote>
+<div><div class="figure align-center" id="id19">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/3d_3d.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/3d_3d.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/3d_3d.jpg" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">Ну красивая же картинка? Я просто не удержался от того, чтобы вставить её.</span><a class="headerlink" href="#id19" title="Постоянная ссылка на рисунок">¶</a></p>
+<div class="legend">
+<p><a class="reference external" href="https://habr.com/ru/post/379709/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>Вот «более настоящая» схема устройства чипа Broadcom Jericho2. Здесь несколько чиплетов памяти HBM стекированы один на другой по технологии 3D, а сам чип коммутации с этим блоком внешней памяти взаимодействует через интерпозер.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png" src="https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<dl>
+<dt>А вот совсем уж настоящее фото чипсета Juniper ZX EXPRESS, совмещающего память и ASIC под одной крышкой:</dt><dd><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/zx_asic.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/zx_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/zx_asic.png" style="width: 500px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://senetsy.ru/upload/juniper-summit-2019/New_in_Routing_and_%20Switching_Andrey_Pinaev_Juniper.pdf">Источник</a></p>
+</div>
+</div>
+</dd>
+</dl>
+<p><strong>HBM - High Bandwidth Memory</strong> - как раз и является High Bandwidth благодаря очень широким шинам взаимодействия между плотно скомпонованными чиплетами.</p>
+<p>Расположенные друг над другом они соединены через <strong>TSV</strong> - <strong>Through-Silicon Via</strong> - это микроскопические проходные отверстия в кристаллах, залитые металлом (например, вольфрамом), которые позволяют чипам общаться друг с другом. Они значительно короче линий в интерпозере, что позволяет их сделать гораздо более эффективными.</p>
+<blockquote>
+<div><div class="figure align-center" id="id20">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/tsvs.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/tsvs.png" src="https://fs.linkmeup.ru/images/articles/buffers/tsvs.png" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-text">TSV.</span><a class="headerlink" href="#id20" title="Постоянная ссылка на рисунок">¶</a></p>
+<div class="legend">
+<p><a class="reference external" href="http://chipworksrealchips.blogspot.com/2014/10/?m=1">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>HBM весьма уверенно пробивает себе дорогу сегодня в мир Deep-Buffer!!! коробок.</p>
+<p>Кстати по такой же 3D-технологии корпусирования была создана память <strong>HMC</strong> - <strong>Hybrid Memory Cube</strong>. Это бутерброд из склееных друг с другом плашек DRAM, пронизанных TSV.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/hmc.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/hmc.png" src="https://fs.linkmeup.ru/images/articles/buffers/hmc.png" style="width: 800px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://habr.com/ru/post/333556/?fl=ru">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>HMC - это коммерческая память производства Micron, от которой ныне отказались в пользу HBM и GDDR6.</p>
+<p>Считать ли такую компоновку действительно On-Chip или нет - вопрос открытый, но складывается мнение, что в будущем необходимая от ASIC’а скорость коммутации будет расти всё равно быстрее, чем пропускная способность интерфейса до пусть даже лежащего плотно на ней чиплета HBM.</p>
+<div class="line-block">
+<div class="line">В чуть более узком, коммутационном смысле, под чиплетами могут иметься в виду составные части сетевых чипсетов, в которых высокая пропускная способность достигается не более производительным кристаллом, а набором нескольких менее производительных чиплетов, соединённых друг с другом через внутреннюю фабрику.</div>
+<div class="line">Бродком, кажется, считает это малодушием, продолжая изготавливать свои ультра-производительные чипы на монолитном кристалле.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/bcm_vs_chiplets.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/bcm_vs_chiplets.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/bcm_vs_chiplets.jpg" style="width: 600px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://www.nextplatform.com/2019/12/12/broadcom-launches-another-tomahawk-into-the-datacenter/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p><strong>Дальнейшее чтиво:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://www.mccoycomponents.com/blog/view/understanding-chiplet-in-one-article">Understanding chiplet in one article</a></p></li>
+<li><p><a class="reference external" href="https://beta.electronicproducts.com/Packaging_and_Hardware/Device_Packaging/Advanced_packaging_five_trends_to_watch_in_2017.aspx#">Advanced packaging: five trends to watch in 2017</a></p></li>
+<li><p><a class="reference external" href="http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf">Fan Out – Simple to Complex</a></p></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

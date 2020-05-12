@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Low-latency lossless сети &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Low-latency lossless сети</a><ul>
+<li><a class="reference internal" href="#ecn-based">ECN-Based</a></li>
+<li><a class="reference internal" href="#bandwidth-delay-product-based">Bandwidth-Delay Product Based</a></li>
+<li><a class="reference internal" href="#rtt-based">RTT-BASED</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Low-latency lossless сети</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/6_llll.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="low-latency-lossless">
+<h1>Low-latency lossless сети<a class="headerlink" href="#low-latency-lossless" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="line-block">
+<div class="line">С развитием RoCE, RDMA, nVME over Fabric к сети стали появляться другие, неслыханные доселе требования: и каждый пакет ценен и времени терять нельзя. Одновременно. И хуже того, мы хотим по максимуму утилизировать имеющиеся линки, чтобы они не простаивали.</div>
+<div class="line">И все требования оправданы - осуждать их мы здесь не будем.</div>
+</div>
+<p>Так что же можно сделать? На самом деле, как я уже говорил выше, условия сети датацентра хороши тем, что информация о перегрузке очень быстро доносится до отправителей. Поэтому и реакция на потерянный пакет не заставит себя долго ждать.</p>
+<div class="line-block">
+<div class="line">Но что если нам не отбрасывать пакет, а каким-то другим способом сообщить отправителю, что нужно замедлиться?</div>
+<div class="line">Здесь есть несколько конкурирующих подходов.</div>
+</div>
+<div class="line-block">
+<div class="line">ECN-Based</div>
+<div class="line">Bandwidth-Delay Product Based</div>
+<div class="line">RTT-BASED</div>
+</div>
+<div class="section" id="ecn-based">
+<h2>ECN-Based<a class="headerlink" href="#ecn-based" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Транзитное устройство, говтовящееся испытать перегрузку, явным образом сообщает отправителям о том, что нужно охладить свою страсть.</p>
+<p>Прозорливые инженеры заложили в IP целых 8 бит под QoS, и только 6 мы задействовали под DSCP, а 2 бита были зарезервированы для целей <strong>ECN - Explicit Congestion Notification</strong>.</p>
+<p>Надолго забытый механизм сегодня извлекают из ящика стола, сдувают с него пыль, и вставляют в шкатулку, на которой нацарапано или <a class="reference external" href="https://tools.ietf.org/html/rfc8257">DCTCP</a></p>
+<div class="line-block">
+<div class="line">Транзитное устройство при заполнении буфера больше, чем до определённого порога, выставляет в заголовках IP обрабатываемых пакетов бит CE (Congestion Encountered) и отправляет пакет дальше.</div>
+<div class="line">Получатель, увидев в пришедшем пакете этот флаг, сообщает отправителю о перегрузке и о том, что нужно снизить скорость.</div>
+</div>
+<p>Классический TCP может обнаружить только уже существующую перегрузку, а DCTCP, используя ECN, узнаёт о том, что она только приближается, и пробует её избежать.</p>
+<p>Есть и другие реализации TCP, поддерживающие ECN, например, HTCP.</p>
+<div class="line-block">
+<div class="line">Нюанс с ECN-based Congestion Control механизмами в том, что до поры до времени они ничего не знают о надвигающейся перегрузке, а потом должен пройти ещё целый RTT, чтобы отправитель узнал, что какое-то транзитное устройство к ней близко. | К тому времени, как отправители начнут снижать скорость, перегрузка уже может или рассосаться или наоборот дойти до уровня, когда начнутся дропы.</div>
+</div>
+</div>
+<div class="section" id="bandwidth-delay-product-based">
+<h2>Bandwidth-Delay Product Based<a class="headerlink" href="#bandwidth-delay-product-based" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Другие реализации замеряют эффективную полосу сети совместно с RTT, то есть сколько можно ещё напихать в трубу до того, как это создаст затор и увеличит задержку.</p>
+<p>Примерами таких протоколов являются <a class="reference external" href="https://habr.com/ru/post/322430/">BBR</a> и <a class="reference external" href="https://www.hamilton.ie/net/draft-leith-tcp-htcp-00.txt">H-TCP</a>.</p>
+</div>
+<div class="section" id="rtt-based">
+<h2>RTT-BASED<a class="headerlink" href="#rtt-based" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="line-block">
+<div class="line">В конце концов есть элегантные механизмы, которые замеряют время прохода трафика туда-обратно.</div>
+<div class="line">Идея провальная для MAN/WAN-сегментов, и, честно говоря, при попытке программной вычисления RTT тоже.</div>
+<div class="line">TIMELY от Google с аппаратным offload’ом вычисления RTT один из наиболее удачных примеров.</div>
+</div>
+<p>На самом деле, если бы не видео с прекрасной девушкой, рассказывающей про технические детали TIMELY, не знаю даже стал ли бы я упоминать про него. Наслаждайтесь, но берегите уши: <a class="reference external" href="https://dl.acm.org/action/downloadSupplement?doi=10.1145%2F2829988.2787510&amp;file=p537-mittal.webm&amp;download=true">TIMELY: RTT-based Congestion Control for the Datacenter</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

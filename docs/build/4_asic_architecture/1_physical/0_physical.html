@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Физическое устройство &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Физическое устройство<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Итак, для успешной коммутации пакета нужны следующие блоки:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Парсер заголовков (Parser)</p></li>
+<li><p>Лукап (Match): FIB/LFIB, Nexthop-группы, ARP Adjacencies, IPv6 ND Tables, ACL итд</p></li>
+<li><p>Блоки преобразований (Action)</p></li>
+<li><p>Блок управления памятью (TM/MMU)</p></li>
+<li><p>Сборщик пакета (Deparser)</p></li>
+<li><p>SerDes</p></li>
+<li><p>Память для буферизации пакетов</p></li>
+<li><p>Блок, реализующий MAC</p></li>
+<li><p>Чип PHY</p></li>
+<li><p>Физические порты/трансиверы</p></li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/device_architecture_full.svg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/device_architecture_full.svg" src="https://fs.linkmeup.ru/images/articles/buffers/device_architecture_full.svg" width="800" /></a>
+</div>
+</div></blockquote>
+<p>Крупными мазками: оптический или электрический сигнал попадает на порт (<strong>Rx</strong>), тот его передаёт на <strong>PHY</strong>. Модуль PHY реализует функции физического уровня и передаёт биты на входные пины PFE, где сигнал блоками <strong>SerDes</strong> преобразуется в удобоваримый для чипа вид. Блок <strong>MAC</strong> из потока битов восстанавливает Ethernet-кадр и передаёт его <strong>парсеру</strong>. Парсер отделяет необходимые ему заголовки и передаёт их на анализ следующему блоку <strong>Match/Action</strong>. Тот их исследует и применяет нужные действия - отправить на правильный порт, на CPU, энкапсулировать, дропнуть итд. Тело пакета всё это время хранилось в <strong>буферах</strong>, управляемых <strong>MMU</strong>, и теперь пришло время <strong>Traffic Manager’у</strong> проводить все обряды QoS. И потом процесс раскручивается в обратную сторону. Снова <strong>Match/Action</strong>. Потом собрать пакет с новыми заголовками (<strong>Deparser</strong>), преобразовать кадр в поток битов (<strong>MAC</strong>), сериализовать (<strong>SerDes</strong>), осуществить действия физического уровня (<strong>PHY</strong>) и передать через выходной порт (<strong>Tx</strong>) в среду.</p>
+<p>В простейшем случае вообще почти все блоки являются частью одного монолитного кристалла кремния. То есть они - продукт одного процесса печати на вафле.</p>
+<p>Отдельные, составляющие чип компоненты, реализующие законченный набор функций, называются <a class="reference external" href="https://ru.wikipedia.org/wiki/IP-cores">IP-core</a> (не тот, что ты мог подумать, сетевой инженер!). То есть SerDes, MAC, TM - это всё отдельные IP-core. Зачастую они производятся сторонними компаниями, специализирующимися конкретно на данных компонентах, а потом встраиваются в микросхему. Особенно это касается SerDes - сложнейшей детали, в которую вендоры сетевых чипов не готовы вкладывать силы R&amp;D. Один из крупных производителей SerDes - <a class="reference external" href="https://www.inphi.com/products/optical-phy/">Inphi</a>.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/monolitic_asic.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/monolitic_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/monolitic_asic.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p><em>`Источник &lt;http://www.trex.fi/2017/Ralf-Korschner-The-March-of-Merchant-Silicon.pdf&gt;`_.</em></p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/rosetta.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/rosetta.png" src="https://fs.linkmeup.ru/images/articles/buffers/rosetta.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<p><em>Монолитный чип Rosetta. `Источник &lt;https://fuse.wikichip.org/news/3293/inside-rosetta-the-engine-behind-crays-slingshot-exascale-era-interconnect/&gt;`_.</em></p>
+<p>Другой распространённый вариант: в одном чипе сочетать несколько разных кристаллов с интерконнектом между ними.
+Так, например, память HBM коммерческого производства выносится за пределы кристалла сетевого ASIC:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/monolit_asic.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/monolit_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/monolit_asic.png" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
+<p>Под крышкой одного производительного чипа могут быть собраны несколько, так называемых, менее производительных чиплетов (chiplet), которые, объединённые в фабрику, дают бо́льшую пропускную способность:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chiplets.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chiplets.png" src="https://fs.linkmeup.ru/images/articles/buffers/chiplets.png" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
+<p>Для некоторых решений рядовая практика - вообще все ресурсы выносить за пределы сетевого ASIC’а:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/off_chip_resources.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/off_chip_resources.png" src="https://fs.linkmeup.ru/images/articles/buffers/off_chip_resources.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p>В случае Juniper, кстати, их Trio - это не один ASIC - это их набор, каждый из которого реализует свои функции.</p>
+<p>Но как бы ни был устроен сам чип, ему нужно общаться с миром.
+И поэтому на животике у него есть несколько тысяч пинов:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/pins.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/pins.png" src="https://fs.linkmeup.ru/images/articles/buffers/pins.png" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
+<p>Одни пины нужны для того, чтобы подключить к чипу интерфейсы.
+Другие - чтобы подключиться к внешней памяти (CAM/TCAM/RAM), если она есть.
+Третьи - к фабрике коммутации, если коробка модульная.</p>
+<p>Два пина образуют <a class="reference external" href="https://linkmeup.ru/blog/401.html#DIFFPAIRS">дифференциальную пару</a> для передачи данных в одном направлении. То есть две пары пинов нужны для полнодуплексной передачи.</p>
+<p>Вот так оно потом выглядит в программах для проектирования (для случая на порядок более простой микросхемы):</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/designing_card.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/designing_card.png" src="https://fs.linkmeup.ru/images/articles/buffers/designing_card.png" style="width: 700px;" /></a>
+</div>
+</div></blockquote>
+<p><em>`Источник &lt;https://linkmeup.ru/blog/401.html&gt;`_.</em></p>
+<p>Теперь пришло время разобраться с тем, что же такое загадочный SerDes. Нет, это не ножки на микросхеме.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_serdes.html">SerDes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_phy.html">PHY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_packaging.html">Packaging и Advanced Packaging</a></li>
+</ul>
+</div>
+<p>Ну а потом от вещей мирских перейдём к тому, сколько кругов пакет проходит в чипе.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/4_asic_architecture/1_physical/0_physical.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

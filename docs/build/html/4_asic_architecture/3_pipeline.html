@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pipeline &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Pipeline</a><ul>
+<li><a class="reference internal" href="#programmable-pipeline">Programmable Pipeline</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/4_asic_architecture/3_pipeline.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pipeline">
+<h1>Pipeline<a class="headerlink" href="#pipeline" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Пайплайном называется весь процесс доставки пакета от парсера до депарсера.
+Что хорошо - можно делать несколько Match-Action подряд, например, отлукапив сначала Ethernet, потом IP, потом ещё и TCP для <a class="reference external" href="https://linkmeup.ru/blog/482.html">ECMP</a>.</p>
+<p>Что плохо - число этих действий строго ограничено - ASIC вещь достаточно детерминированная.
+Это ведёт к тому, что некоторые вещи становятся аппаратно невозможны. К примеру, на старых Trident’ах нельзя было сделать и VXLAN и IP lookup последовательно для одного пакета. Или в другой ситуации коробка у меня не могла снять метку, сделать рекурсивный IP-lookup и навесить две новые метки.</p>
+<p>Однако у таких трудностей есть как минимум три решения:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Второй чип. Тогда можно и разнести невозможные прежде операции на два этапа. И история знает такие решения.</p></li>
+<li><p>Рециркуляция. Многие чипы позволяют закольцевать выход чипа на вход и прогнать пакет дважды. Тогда на второй итерации ему можно задать уже другой набор Match-Action. Но за это придётся заплатить - удвоенной задержкой и уменьшенной полосой пропускания чипа. А ещё можно упереться и в пропускную способность самого рециркулятора.</p></li>
+<li><p>Купить другой чип… Другой коммутатор… Поменять работу…</p></li>
+</ol>
+</div></blockquote>
+<div class="section" id="programmable-pipeline">
+<h2>Programmable Pipeline<a class="headerlink" href="#programmable-pipeline" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В большинстве современных коммутаторов конвейер обработки пакетов запечён производителем в софт (если не в кремний) - он фиксирован и может быть изменён только вендором чипсета.</p>
+<blockquote>
+<div><p>Не путать с Programmable ASIC. Программируемые микросхемы - уже давно реальность. Многие сетевые чипы - это ASIC с возможность программирования. Но эта возможность есть только у производителя микросхемы.
+Порграммируемый конвейер же - это возможность изменять логику работы чипа в определённых пределах, которую предоставляет производитель микросхемы покупателям.</p>
+</div></blockquote>
+<p>Не так давно появился Barefoot Tofino, у которого полностью программируемый Pipeline - с ним можно задавать совершенно любые условия для парсера, поля для Match и действия для Action - хоть калькулятор пишите, или распределённое хранилище на кластере коммутаторов.</p>
+<p>На сегодняшний день выпускать сетевую микросхему на рынок без возможности программирования Pipeline’а, становиться плохим тоном.
+Так, последние чипы Broadcom тоже уже <a class="reference external" href="https://www.broadcom.com/blog/trident4-and-jericho2-offer-programmability-at-scale">программируемы</a>.</p>
+<p>Не то чтобы теперь каждый домовой оператор кинется переписывать себе пайплайны, нанимая студентов для разработки под <a class="reference external" href="https://www.hotchips.org/wp-content/uploads/hc_archives/hc29/HC29.20-Tutorials-Pub/HC29.20.1-P4-Soft-Net-Pub/HC29.21.100-P4-Tutorial.pdf">P4</a> или <a class="reference external" href="https://nplang.org/">NPL</a>, но это возможность, которая позволяет вендорам железа и крупным потребителям вроде гугла быть гораздо более гибкими.
+Так, например, если в вашей сети все линки p2p, то зачем вам  Ethernet? тратить на него такты ASIC’а ещё - просто выкидываем его.</p>
+<p>Правда «можно всё запрограммировать» превращается в наших реалиях «придётся всё запрограммировать». На сегодняшний день готовых конструктивных блоков, вроде парсинга Ethernet, IP, подсчёта статистики итд - не существует - всё с нуля.
+Если не использовать вендорские бинари, то весь Pipeline <strong>придётся</strong> написать самому. А если использовать, то ничего за пределами SDK не запрограммируешь.</p>
+<p>Но на большинстве современных коммутаторов всё ещё фиксированный конвейер, который выглядит примерно так:</p>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/single_pipeline_block.png" src="https://fs.linkmeup.ru/images/articles/buffers/single_pipeline_block.png" />
+</div>
+</div></blockquote>
+<p><strong>Дальнейшее чтиво:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Cisco всё ещё делает классную документацию, а презентации с Cisco Live - кладезь технических сокровищ. Например, они рассказывают о бродкомовских чипах больше, чем сам Бродком (если, конечно, вы не подписали NDA кровью): <a class="reference external" href="https://people.ucsc.edu/~warner/Bufs/BRKDCN-3734.pdf">Cisco Nexus 3000 Switch Architecture</a></p></li>
+<li><p>Вот у P4 есть неплохое описание конвейера и его программируемости: <a class="reference external" href="https://www.hotchips.org/wp-content/uploads/hc_archives/hc29/HC29.20-Tutorials-Pub/HC29.20.1-P4-Soft-Net-Pub/HC29.21.100-P4-Tutorial.pdf">P4 Tutorial, Hot Chips 2017</a>.</p></li>
+<li><p>Более фундаментальное и низкоуровневое описание <strong>RMT</strong> - Reconfigurable Match Tables, необходимых для возможности программирования: Forwarding Metamorphosis: <a class="reference external" href="https://www2.cs.duke.edu/courses/fall19/compsci514/papers/rmt-sigcomm2013.pdf">Fast Programmable Match-Action Processing in Hardware for SDN</a>.</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

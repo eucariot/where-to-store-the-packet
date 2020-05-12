@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Терминология &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Терминология<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Задача этого параграфа не объять все непонятные слова, употребляемые в статье, а лишь внести некую ясность в неразбериху русско-английских терминов.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Чип коммутации</strong>, <strong>сетевой процессор</strong>, <strong>(Packet) Forwarding Engine</strong>, <strong>PFE</strong> - микросхема, способная коммутировать пакет из входа в нужный выход с нужным набором заголовков.</p></li>
+<li><p><strong>Pins</strong>, <strong>пины</strong>, <strong>ножки</strong> - металлические контакты на микросхеме для соединения с основанием.</p></li>
+<li><p><strong>Data Path</strong> - путь внутри устройства (или чипа), по которому передвигается пользовательский трафик.</p></li>
+<li><p><strong>Lookup</strong> или <strong>лукап</strong> или <strong>поиск</strong> - поиск адресата в таблицах (FIB, LFIB, ARP Adjacencies, IPv6 ND Table итд.)</p></li>
+<li><p><strong>Pipeline</strong> или <strong>конвейер</strong> - набор действий, которые происходят с пакетом по мере его продвижения от входа в чип до выхода из него.</p></li>
+<li><p><strong>Single-chip</strong>, <strong>одночиповый</strong> - устройство, внутри которого только один чип.</p></li>
+<li><p><strong>Fixed</strong>, <strong>фиксированный</strong>, <strong>pizza-box</strong> - немодульный коммутатор. Обычно внутри него нет фабрик коммутации. Часто эти термины используются как синоним Single-chip, хотя это не совсем верно - внутри может стоять два (back-to-back) чипа или даже больше.</p></li>
+<li><p><strong>Сериализация/Десериализация</strong> - процесс перевода данных из параллельного низкоскоростного интерфейса (МГц) в</p></li>
+</ul>
+<p>последовательный высокоскоростной (ГГц) и наоборот. Например, из чипа в интерфейс или из чипа в фабрику.
+* <strong>Память</strong> - физическая микросхема для хранения.
+* <strong>Буфер</strong> - некий участок памяти, выделенный для хранения пакетов. <em>Здесь и далее в производных словах, таких как «буферов», ударение на «У»</em>.
+* <strong>Очередь</strong> - абстракция над буфером, позволяющая <strong>виртуально</strong> выстраивать пакеты в упорядоченную очередь. Фактически в памяти они, конечно, хранятся «как попало».
+* <strong>OCB</strong> - On-Chip Buffer - память, встроенная в чип.
+* <strong>Programmable ASIC</strong> - ASIC, логику работы которого можно изменить путём перепрошивки.
+* <strong>Programmable Pipeline</strong> - чип с возможностью для сторонних компаний программировать конкретные части ASIC в ограниченных пределах с помощью предоставляемого вендором компилятора.
+* <strong>Packaging</strong> - упаковка нескольких систем/модуль, под одной крышкой на одном основании, связанных через кремниевый мост-интерпозер. Например, совмещение ASIC и внешней памяти или ASIC и оптического трансивера.</p>
+</div></blockquote>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/1_glossary.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

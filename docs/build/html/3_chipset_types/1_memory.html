@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Чипы памяти &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Чипы памяти</a><ul>
+<li><a class="reference internal" href="#ram-random-access-memory">RAM - Random Access Memory</a></li>
+<li><a class="reference internal" href="#cam-content-addressable-memory">CAM - Content-Addressable Memory</a></li>
+<li><a class="reference internal" href="#tcam-ternary-content-addressable-memory">TCAM - Ternary Content-Addressable Memory</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Чипы памяти</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/3_chipset_types/1_memory.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Чипы памяти<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>У микросхем памяти широкое применение в сетевых устройствах.</p>
+<div class="line-block">
+<div class="line">Они нужны для Control Plane: стоят рядом с CPU, хранят инструкции процессора и просчитанные таблицы маршуртизации, коммутации, меток итд - это обычная RAM-память.</div>
+<div class="line">На модульных железках они нужны для этих целей и на управляющих и на линейных картах. А состояние таблиц синхронизируется между ними.</div>
+</div>
+<p>Это не те таблицы, которыми пользуется чип коммутации - они слишком медленные, поэтому отдельная память устанавливается для хранения так называемых Hard Tables - таблиц для Forwardig Plane. Soft Tables из обычной памяти преобразются в Hard Tables.</p>
+<p>Для быстрого поиска по таблицам (за константное время) были изобретены специальные виды памяти: CAM и TCAM.</p>
+<p>Различного рода память нужна для буферизации пакетов на входе и на выходе из устройства, и для их хранения, пока обрабатываются заголовки. Это RAM, который может быть в формате GDDR-5/6, HMC, HBM/2.</p>
+<p>Ниже мы взглянем на них чуть подробнее.</p>
+<div class="section" id="ram-random-access-memory">
+<h2>RAM - Random Access Memory<a class="headerlink" href="#ram-random-access-memory" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Классическая оперативная память - куда без неё?</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/ram.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/ram.png" src="https://fs.linkmeup.ru/images/articles/buffers/ram.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Мы ей адрес ячейки - она нам содержимое.</div>
+<div class="line">В ней хранятся, так называемые <strong>Soft Tables</strong> (программные таблицы) - таблицы маршрутизации, меток, MAC-адресов.</div>
+<div class="line">Когда вы выполняете команду <em>«show ip route»</em>, запрос идёт именно в оперативку к Soft Tables.</div>
+<div class="line">CPU работает именно с оперативной памятью - когда он посчитал маршрут, или построил LSP - результат записывается в неё. А уже оттуда изменения синхронизируются в <strong>Hard Tables</strong> в RAM/CAM/TCAM.</div>
+<div class="line">Кроме того, периодически происходит синхронизация всего содержимого всех таблиц на случай, если вдруг по какой-то причине инкрементальные изменения не спустились корректно.</div>
+<div class="line">Soft Tables не может быть непосредственно использован для передачи данных, потому что слишком медленно - обращение к оперативке идёт через ЦПУ и требуется алгоритмический поиск, затратный по времени. <em>С оговоркой на NFV</em>.</div>
+</div>
+<p>Второй немаловажный компонент сетевого устройства, реализованный на RAM - это очереди: входные, выходные, интерфейсные.
+Пока пакет ожидает своего черёда на обработку, обрабатывается в чипе или ожидает своей отправки, он томится в RAM.</p>
+<p>Эта память может быть на кристалле чипа коммутации, может быть под одной с ним крышкой, а может и просто находиться неподалёку на плате.</p>
+<p>Типы этой памяти меняются в зависимости от задач: SDRAM, DDR, GDDR5, GDDR6, HMC, HBM.</p>
+<p>К вопросу о RAM я ещё неоднократно вернусь ниже в секции «Packaging и Advanced Packaging» и вся глава «Память и буферы» посвящена этому.</p>
+</div>
+<div class="section" id="cam-content-addressable-memory">
+<h2>CAM - Content-Addressable Memory<a class="headerlink" href="#cam-content-addressable-memory" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="line-block">
+<div class="line">Это особо-хитрый вид памяти.</div>
+<div class="line">Вы ей - значение, а она вам - адрес ячейки.</div>
+<div class="line">Content-Addressable означает, что адресация базируется на значениях (содержимом).</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cam.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cam.png" src="https://fs.linkmeup.ru/images/articles/buffers/cam.png" style="width: 700px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Значением, например, может быть, например DMAC. CAM прогоняет DMAC по всем своим записям и находит совпадение. В результате CAM выдаст адрес ячейки в классической RAM, где хранится номер выходного интерфейса. Дальше устройство обращается к этой ячейке и отправляет кадр, куда положено.</div>
+<div class="line">Для достижения максимальной скорости CAM и RAM располагаются очень близко друг к другу.</div>
+</div>
+<blockquote>
+<div><p>Не путать данную RAM с RAM, содержащей Soft Tables, описанной выше - это разные компоненты, расположенные в разных местах.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cam_logic.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cam_logic.png" src="https://fs.linkmeup.ru/images/articles/buffers/cam_logic.png" style="width: 1000px;" /></a>
+</div>
+</div></blockquote>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Прелесть CAM в том, что она возвращает результат за фиксированное время, не зависящее от количества и размера записей в таблице - О(1), выражаясь в терминах сложностей алгоритмов.</div>
+<div class="line">Достигается это за счёт того, что значение сравнивается <strong>одновременно</strong> со всеми записями. Одновременно! А не перебором.</div>
+</div>
+<div class="line-block">
+<div class="line">На входе каждой ячейки хранения в CAM стоят сравнивающие элементы (мне очень нравится термин компараторы), которые могут выдавать 0 (разомкнуто) или 1 (замкнуто) в зависимости от того, что на них поступило и что записано.</div>
+<div class="line">В сравнивающих элементах записаны как раз искомые значения.</div>
+<div class="line">Когда нужно найти запись в таблице, соответствующую определённому значению, это значение прогоняется одновременно через ВСЕ сравнивающие элементы. Буквально, электрический импульс, несущий значения, попадает на все элементы, благодаря тому, что они подключены параллельно. Каждый из них выполняет очень простое действие, выдавая для каждого бита 1, если биты совпали, и 0, если нет, то есть замыкая и размыкая контакт. Таким образом та ячейка, адресом которой является искомое значение, замыкает всю цепь, электрический сигнал проходит и запитывает её.</div>
+</div>
+<p>Вот архитектура такой памяти:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cam_scheme.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cam_scheme.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/cam_scheme.jpg" style="width: 700px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0141933113001348">Источник</a>.</p>
+</div>
+</div>
+</div></blockquote>
+<p>Вот пример работы</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cam_example.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cam_example.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/cam_example.jpg" style="width: 700px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="http://www.eecg.toronto.edu/~roman/teaching/1388/2004/finalProj/2004_ECE1388_FP_www/LRU_Cache/">Источник</a>.</p>
+</div>
+</div>
+</div></blockquote>
+<dl>
+<dt>А это схема реализации:</dt><dd><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cam_storage_cell.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cam_storage_cell.png" src="https://fs.linkmeup.ru/images/articles/buffers/cam_storage_cell.png" style="width: 700px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://www.pagiamtzis.com/cam/camintro/">Источник</a>.</p>
+</div>
+</div>
+</dd>
+</dl>
+<p>Это чем-то похоже на пару ключ-замок. Только ключ с правильной геометрией может поставить штифты замка в правильные положения и провернуть цилиндр.
+Вот только у нас много копий одного ключа и много разных конфигураций замков. И мы вставляем их все одновременно и пытаемся провернуть, а нужное значение лежит за той дверью, замок которой ключ откроет.</p>
+<p>Для гибкого использования CAM мы берём не непосредственно значения из полей заголовков, а вычисляем их хэш.
+Хэш-функция используется для следующих целей:</p>
+<blockquote>
+<div><p>#. Длина результата значительно меньше, чем у входных значений. Так пространство MAC-адресов длиной 48 бит можно отобразить в 16-ибитовое значение, тем самым в 2^32 раза уменьшив длину значений, которые нужно сравнивать, и соответственно, размер CAM.
+Основная идея хэш-функции в том, что результат её выполнения для одинаковых входных данных всегда будет одинаков (например, как остаток от деления одного числа на другое - это пример элементарной хэш функции).
+#. Результат её выполнения на всём пространстве входных значений - это ± плоскость - все значения равновероятны. Это важно для снижения вероятности конфликта хэшей, когда два значения дают одинаковый результат.
+Конфликт хэшей, кстати, весьма любопытная проблема, которая описана в <a class="reference external" href="https://ru.wikipedia.org/wiki/Парадокс_дней_рождения">парадоксе дней рождения</a>. Рекомендую почитать <a class="reference external" href="https://www.juniper.net/uk/en/training/jnbooks/distinguished-engineering/hardware-defined-networking/">Hardware Defined Networking</a> Брайна Петерсена, где помимо всего прочего он описывает механизмы избежания конфликта хэшей.
+#. Независимо от длины исходных аргументов, результат будет всегда одной длины. То есть на вход можно подать сложное сочетание аргументов, например, DMAC+EtherType, и для хранения не потребуется выделять более сложную структуру памяти.</p>
+</div></blockquote>
+<p>Именно хэш закодирован в сравнивающие элементы. Именно хэш искомого значения будет сравниваться с ними.
+По принципу CAM схож с хэш-таблицами в программировании, только реализованными на чипах.</p>
+<p>В этот принцип отлично укладывается также MPLS-коммутация, почему MPLS и сватали в своё время на IP.</p>
+<p>Например:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Пришёл самый первый Ethernet-кадр на порт коммутатора.</p></li>
+<li><p>Коммутатор извлёк ` &lt;<a class="reference external" href="http://lookmeup.linkmeup.ru/#term605">http://lookmeup.linkmeup.ru/#term605</a>»&gt;SMAC&gt;`_, вычислил его хэш.</p></li>
+<li><p>Данный хэш он записал в сравнивающие элементы CAM, номер интерфейса откуда пришёл кадр в RAM, а в саму ячейку CAM адрес ячейки в RAM.</p></li>
+<li><p>Выполнил рассылку изначального кадра во все порты.</p></li>
+<li><p>Повторил пп. 1-5 ….</p></li>
+<li><p>Заполнена вся таблица MAC-адресов.</p></li>
+<li><p>Приходит Ethernet-кадр. Коммутатор сначала проверяет, известен ли ему данный <a class="reference external" href="http://lookmeup.linkmeup.ru/#term605">SMAC</a> (сравнивает хэш адреса с записанными хэшами в CAM) и, если нет, сохраняет.</p></li>
+<li><p>Извлекает <a class="reference external" href="http://lookmeup.linkmeup.ru/#term606">DMAC</a>, считает его хэш.</p></li>
+<li><p>Данный хэш он прогоняет через все сравнивающие элементы CAM и находит единственное совпадение.</p></li>
+<li><p>Узнаёт номер порта, отправляет туда изначальный  кадр.</p></li>
+</ol>
+</div></blockquote>
+<p><strong>Резюме:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Ячейки CAM адресуются хэшами.</p></li>
+<li><p>Ячейки CAM содержат (обычно) адрес ячейки в обычной памяти (RAM), потому что хранить конечную информацию - дорого.</p></li>
+<li><p>Каждая ячейка CAM имеет на входе сравнивающий элемент, который сравнивает искомое значение с хэш-адресом. От этого размер и стоимость CAM значительно больше, чем RAM.</p></li>
+<li><p>Проверка совпадения происходит <strong>одновременно</strong> во всех записях, отчего CAM дюже греется, зато выдаёт результат за константное время.</p></li>
+<li><p>CAM+RAM хранят <strong>Hard Tables</strong> (аппаратные таблицы), к которым обращается чип коммутации.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tcam-ternary-content-addressable-memory">
+<h2>TCAM - Ternary Content-Addressable Memory<a class="headerlink" href="#tcam-ternary-content-addressable-memory" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="line-block">
+<div class="line">Возвращаемся к вопросу, что не так с IP.</div>
+<div class="line">Если мы возьмём описанный выше CAM, то на любой <a class="reference external" href="http://lookmeup.linkmeup.ru/#term53">DIP</a> он очень редко сможет вернуть 1 во всех битах.</div>
+<div class="line">Дело в том, что DIP - это всегда один единственный адрес, а маршруты в таблице маршрутизации - это подсеть или даже агрегация более мелких маршрутов. Поэтому полного совпадения быть почти не может - кроме случая, когда есть маршрут /32.</div>
+<div class="line">Перед разработчиками чипов стояло два вопроса:</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>Как это в принципе реализовать?</p></li>
+<li><p>Как из нескольких подходящих маршрутов выбрать лучший (с длиннейшей маской)?</p></li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/tcam.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/tcam.png" src="https://fs.linkmeup.ru/images/articles/buffers/tcam.png" style="width: 1000px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Ответом стал TCAM, в котором <strong>«T»</strong> означает «троичный»». Помимо <strong>0</strong> и <strong>1</strong> вводится ещё одно значение <strong>Х</strong> - «не важно» (CAM иногда называют BCAM - Binary, поскольку там значения два - 0 и 1).</div>
+<div class="line">Тогда результатом поиска нужной записи в таблице коммутации будет содержимое той ячейки, где самая длинная цепочка 1 и самая короткая «не важно».</div>
+<div class="line">Например, пакет адресован на DIP 10.10.10.10.</div>
+<div class="line">В Таблице Маршрутизации у нас следующие маршруты:</div>
+</div>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">0</span>.0.0.0/0
+<span class="m">10</span>.10.10.8/29
+<span class="m">10</span>.10.0.0/16
+<span class="m">10</span>.8.0.0/13
+Другие
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">В сравнивающие элементы TCAM записываются биты маршрута, если в маске стоит 1, и «не важно», если 0.</div>
+<div class="line">При поиске нужной записи TCAM, как и CAM, прогоняет искомое значение одновременно по всем ячейкам. Результатом будет последовательность 0, 1 и «не важно».</div>
+<div class="line">Только те записи, которые вернули последовательность единиц, за которыми следуют «не важно» участвуют в следующем этапе селекции.</div>
+<div class="line">Далее из всех результатов выбирается тот, где самая длинная последовательность единиц - так реализуется правило Longest prefix match.</div>
+<div class="line">Очевидно, что мы-то своим зорким взглядом, сразу увидели, что это будет маршрут 10.10.10.8/29.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/tcam_example.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/tcam_example.png" src="https://fs.linkmeup.ru/images/articles/buffers/tcam_example.png" style="width: 1000px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="http://thenetworksherpa.com/tcam-in-the-forwarding-engine/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Решение на грани гениальности, за которое пришлось заплатить большую цену. Из-за очень высокой плотности транзисторов (у каждой ячейки их свой набор, а ячеек должны быть миллионы) они греются не меньше любого CPU - нужно решать вопрос отвода тепла.</div>
+<div class="line">Кроме того, их производство стоит очень дорого, и не будет лукавством сказать, что стоимость сетевого оборудования и раньше и сейчас определяется именно наличием и объёмом TCAM.</div>
+</div>
+<div class="line-block">
+<div class="line">Внимательный читатель обратил внимание на вопрос хэш-функций - ведь она преобразует изначальный аргумент во что-то совершенно непохожее на исходник, как же мы будем сравнивать 0, 1 и длины? Ответ: хэш функция здесь не используется. Описанный выше алгоритм - это сильное упрощения реальной процедуры, за деталями этого любознательного читателя отправлю к той же книге <a class="reference external" href="https://www.juniper.net/uk/en/training/jnbooks/distinguished-engineering/hardware-defined-networking/">Hardware Defined Networking</a>.</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

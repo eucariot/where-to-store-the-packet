@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Low-latency lossless сети &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="low-latency-lossless">
+<h1>Low-latency lossless сети<a class="headerlink" href="#low-latency-lossless" title="Ссылка на этот заголовок">¶</a></h1>
+<p>С развитием RoCE, RDMA, nVME over Fabric к сети стали появляться другие, неслыханные доселе требования: и каждый пакет ценен и времени терять нельзя. Одновременно. И хуже того, мы хотим по максимуму утилизировать имеющиеся линки, чтобы они не простаивали.
+И все требования оправданы - осуждать их мы здесь не будем.</p>
+<p>Так что же можно сделать? На самом деле, как я уже говорил выше, условия сети датацентра хороши тем, что информация о перегрузке очень быстро доносится до отправителей. Поэтому и реакция на потерянный пакет не заставит себя долго ждать.</p>
+<p>Но что если нам не отбрасывать пакет, а каким-то другим способом сообщить отправителю, что нужно замедлиться?
+Здесь есть несколько конкурирующих подходов.</p>
+<p>ECN-Based
+Bandwidth-Delay Product Based
+RTT-BASED</p>
+<div class="section" id="ecn-based">
+<h2>ECN-Based<a class="headerlink" href="#ecn-based" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Транзитное устройство, говтовящееся испытать перегрузку, явным образом сообщает отправителям о том, что нужно охладить свою страсть.</p>
+<p>Прозорливые инженеры заложили в IP целых 8 бит под QoS, и только 6 мы задействовали под DSCP, а 2 бита были зарезервированы для целей <strong>ECN - Explicit Congestion Notification</strong>.</p>
+<p>Надолго забытый механизм сегодня извлекают из ящика стола, сдувают с него пыль, и вставляют в шкатулку, на которой нацарапано или <a class="reference external" href="https://tools.ietf.org/html/rfc8257">DCTCP</a></p>
+<p>Транзитное устройство при заполнении буфера больше, чем до определённого порога, выставляет в заголовках IP обрабатываемых пакетов бит CE (Congestion Encountered) и отправляет пакет дальше.
+Получатель, увидев в пришедшем пакете этот флаг, сообщает отправителю о перегрузке и о том, что нужно снизить скорость.</p>
+<p>Классический TCP может обнаружить только уже существующую перегрузку, а DCTCP, используя ECN, узнаёт о том, что она только приближается, и пробует её избежать.</p>
+<p>Есть и другие реализации TCP, поддерживающие ECN, например, HTCP.</p>
+<p>Нюанс с ECN-based Congestion Control механизмами в том, что до поры до времени они ничего не знают о надвигающейся перегрузке, а потом должен пройти ещё целый RTT, чтобы отправитель узнал, что какое-то транзитное устройство к ней близко. К тому времени, как отправители начнут снижать скорость, перегрузка уже может или рассосаться или наоборот дойти до уровня, когда начнутся дропы.</p>
+</div>
+<div class="section" id="bandwidth-delay-product-based">
+<h2>Bandwidth-Delay Product Based<a class="headerlink" href="#bandwidth-delay-product-based" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Другие реализации замеряют эффективную полосу сети совместно с RTT, то есть сколько можно ещё напихать в трубу до того, как это создаст затор и увеличит задержку.</p>
+<p>Примерами таких протоколов являются <a class="reference external" href="https://habr.com/ru/post/322430/">BBR</a> и <a class="reference external" href="https://www.hamilton.ie/net/draft-leith-tcp-htcp-00.txt">H-TCP</a>.</p>
+</div>
+<div class="section" id="rtt-based">
+<h2>RTT-BASED<a class="headerlink" href="#rtt-based" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В конце концов есть элегантные механизмы, которые замеряют время прохода трафика туда-обратно.
+Идея провальная для MAN/WAN-сегментов, и, честно говоря, при попытке программной вычисления RTT тоже.
+TIMELY от Google с аппаратным offload’ом вычисления RTT один из наиболее удачных примеров.</p>
+<p>На самом деле, если бы не видео с прекрасной девушкой, рассказывающей про технические детали TIMELY, не знаю даже стал ли бы я упоминать про него. Наслаждайтесь, но берегите уши: <a class="reference external" href="https://dl.acm.org/action/downloadSupplement?doi=10.1145%2F2829988.2787510&amp;file=p537-mittal.webm&amp;download=true">TIMELY: RTT-based Congestion Control for the Datacenter</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/6_llll.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

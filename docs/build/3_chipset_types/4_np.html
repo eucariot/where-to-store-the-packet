@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>NP - Network Processor &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="np-network-processor">
+<h1>NP - Network Processor<a class="headerlink" href="#np-network-processor" title="Ссылка на этот заголовок">¶</a></h1>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chip_np.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_np.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_np.png" style="width: 500px;" /></a>
+</div>
+<ul class="simple">
+<li><p>Отличная гибкость</p></li>
+<li><p>Отличная функциональность</p></li>
+<li><p>Цена весьма высокая</p></li>
+<li><p>Производительность весьма высокая</p></li>
+</ul>
+</div></blockquote>
+<p>NP или <strong>NPU</strong> - Network Processor Unit.</p>
+<p>Идея в том, что это почти CPU, который однако заточен под сетевые задачи и изготавливается специально под них.
+Он, как и CPU, обычно состоит из нескольких ядер, каждое из которых отвечает за свой сегмент. Для изменения логики так же достаточно переписать код приложения.
+NP позволяет делать более сложные штуки - например выполнять циклы (чего лишены ASIC и FPGA), делать NAT, почти любые инкапсуляции, пушить и попать условно произвольное число меток итд.
+Долгое время NP позиционировался, как серебряная пуля для всех сетевых приложений.
+Но производительность уступает ASIC’ам и FPGA.</p>
+<p>Большим преимуществом является то, что писать программы для NP можно на С. Это значительно ускоряет процесс, кроме того, где-то можно переиспользовать код.</p>
+<p>Область применения: маршрутизаторы агрегации и ядра.</p>
+<blockquote>
+<div><p>Впрочем, не без исключений: например Smart-NIC Netronome в начале своего пути <a class="reference external" href="https://www.netronome.com/timeline/">испльзовал Intel IXP</a>.</p>
+</div></blockquote>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/3_chipset_types/4_np.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

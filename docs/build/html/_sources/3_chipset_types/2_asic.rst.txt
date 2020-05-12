@@ -1,0 +1,30 @@
+ASIC
+====
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/chip_asic.png           
+           :width: 500
+           :align: center
+
+    * Околонулевая гибкость
+    * Ограниченная функциональность
+    * Низкая цена
+    * Ультравысокая производительность
+
+| Идея в том, что инструкции закодированы аппаратно в виде транзисторов. 
+| Сначала очень долго пишется код, реализующий логику, на специальном языке программирования, вроде Verilog, далее он преобразуется в интегральную схему, отлаживается, проверяется и отправляется в тираж. После этого поменять что-то в логике чипа можно, только произведя новый чип.
+| Каждый пакет обрабатывается, просто прогоняясь по конвейеру из транзисторов, совершающих заранее определённые действия. Это называется Pipeline.
+
+Область применения: почти любые коммутаторы и многие маршрутизаторы.
+
+    Впрочем, не без исключений: Juniper в своей линейке маршрутизаторов MX многие годы использует `ASIC Trio <https://habr.com/post/307696/>`_.
+
+    | Вообще по книге об MX: PFE это блок ASIC'ов:
+    | PFEs are made of several ASICs, which may be grouped into four categories:
+
+        * Routing ASICs: LU or XL Chips. LU stands for Lookup Unit and XL is a more powerful (X) version.
+        * Forwarding ASICs: MQ or XM Chips. MQ stands for Memory and Queuing, and XM is a more powerful (X) version.
+        * Enhanced Class of Service (CoS) ASICs: QX or XQ Chips. Again, XQ is a more powerful version.
+        * Interface Adaptation ASICs: IX (only on certain low-speed GE MICs) and XF (only on MPC3E)  
+
+| Речь здесь о классических ASIC - **Applicaton Specific** Integrated Circuit - статических кусках кремния с аппаратной логикой.
+| Последние лет 10 в области сетевых микросхем произошёл сдвиг в направлении программируемых ASIC'ов, о которых чуть позже.

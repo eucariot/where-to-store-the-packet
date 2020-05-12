@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>ASIC &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="asic">
+<h1>ASIC<a class="headerlink" href="#asic" title="Ссылка на этот заголовок">¶</a></h1>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chip_asic.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_asic.png" style="width: 500px;" /></a>
+</div>
+<ul class="simple">
+<li><p>Околонулевая гибкость</p></li>
+<li><p>Ограниченная функциональность</p></li>
+<li><p>Низкая цена</p></li>
+<li><p>Ультравысокая производительность</p></li>
+</ul>
+</div></blockquote>
+<p>Идея в том, что инструкции закодированы аппаратно в виде транзисторов.
+Сначала очень долго пишется код, реализующий логику, на специальном языке программирования, вроде Verilog, далее он преобразуется в интегральную схему, отлаживается, проверяется и отправляется в тираж. После этого поменять что-то в логике чипа можно, только произведя новый чип.
+Каждый пакет обрабатывается, просто прогоняясь по конвейеру из транзисторов, совершающих заранее определённые действия. Это называется Pipeline.</p>
+<p>Область применения: почти любые коммутаторы и многие маршрутизаторы.</p>
+<blockquote>
+<div><p>Впрочем, не без исключений: Juniper в своей линейке маршрутизаторов MX многие годы использует <a class="reference external" href="https://habr.com/post/307696/">ASIC Trio</a>.</p>
+<p>Вообще по книге об MX: PFE это блок ASIC’ов:
+PFEs are made of several ASICs, which may be grouped into four categories:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Routing ASICs: LU or XL Chips. LU stands for Lookup Unit and XL is a more powerful (X) version.</p></li>
+<li><p>Forwarding ASICs: MQ or XM Chips. MQ stands for Memory and Queuing, and XM is a more powerful (X) version.</p></li>
+<li><p>Enhanced Class of Service (CoS) ASICs: QX or XQ Chips. Again, XQ is a more powerful version.</p></li>
+<li><p>Interface Adaptation ASICs: IX (only on certain low-speed GE MICs) and XF (only on MPC3E)</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>Речь здесь о классических ASIC - <strong>Applicaton Specific</strong> Integrated Circuit - статических кусках кремния с аппаратной логикой.
+Последние лет 10 в области сетевых микросхем произошёл сдвиг в направлении программируемых ASIC’ов, о которых чуть позже.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/3_chipset_types/2_asic.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

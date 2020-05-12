@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Перегрузки: причины и места &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Перегрузки: причины и места</a><ul>
+<li><a class="reference internal" href="#id2">Причины перегрузок</a></li>
+<li><a class="reference internal" href="#id3">Места возникновения перегрузок</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Перегрузки: причины и места</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/5_buffers/2_congestions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Перегрузки: причины и места<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="line-block">
+<div class="line">Буфер нужен на сетевом устройстве не только для того, чтобы похранить тело пакета, пока его заголовки перевариваются в кишках чипа.</div>
+<div class="line">Как минимум нужно сгладить поток пакетов до скорости выходного интерфейса. Грубо говоря, пока один пакет сериализуется для передачи в интерфейс, второму нужно где-то подождать.</div>
+<div class="line">Для этой задачи обычно хватит совсем небольшой FIFO очереди.</div>
+<div class="line">Другая важнейшая сетевая задача - перегрузки (congestion). Если в один интерфейс одновременно сваливается много пакетов, их тоже нужно сохранить.</div>
+</div>
+<div class="line-block">
+<div class="line">Причём перегрузки - это наша повседневная легитимная реальность, а не что-то крайне редкое, что нужно перетерпеть и станет попроще.</div>
+<div class="line">Во времена коммутации каналов такой проблемы не стояло - для любой общающейся пары всегда было зарезервировано строго необходимое количество ресурсов.</div>
+<div class="line">Сегодня совершенно законно на порт может прийти больше трафика, чем тот готов сиюминутно пропустить.</div>
+</div>
+<div class="section" id="id2">
+<h2>Причины перегрузок<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="line-block">
+<div class="line">Самая простая - из высокоскоростного интерфейса трафик должен слиться в более низкоскоростной - из <strong>10G в 1</strong>, например.</div>
+<div class="line">Другая причина, очень распространённая в сетях крупных ДЦ, особенно в тех, где развёрнуты кластеры Map-Reduce - это <strong>Incast</strong>. Это ситуация, в которой одна машина отправляет запрос на десятки/сотни/тысячи, а те все разом начинают отвечать, и пакеты стопорятся на узком интерфейсе в сторону машины-инициатора.</div>
+<div class="line">Более общий случай - трафик с нескольких входящих портов должен влиться в один исходящий - <strong>Backpressure</strong>.</div>
+<div class="line">Прочие типы всплесков трафика, которые ещё называют бёрстовыми или просто бёрстами (<strong>Bursts</strong>).</div>
+</div>
+<div class="line-block">
+<div class="line">Поэтому однозначно нужно побольше памяти для буферизации. Но фактически это место, где пакеты обрастают задержкой.</div>
+<div class="line">Так на заре 1G буферизация вызывала массу головной боли у трейдеров, чьи приложения получали свой бесценный трафик с задержкой и джиттером.</div>
+</div>
+<p>И поэтому тут уже недостаточно везде FIFO. Это задача, во благо которой трудится <a class="reference external" href="https://linkmeup.ru/blog/365.html">QoS</a>.</p>
+<div class="line-block">
+<div class="line">Если случилась конгестия, то нужно иметь возможность требовательный к задержкам трафик, пропустить первым, чувствительный к потерям - не дропнуть, а наименее ценным пожертвовать.</div>
+<div class="line">Ещё нужно уметь пополисить и пошейпить.</div>
+</div>
+<p>Но в каком месте располагать эту память и где реализовывать QoS?</p>
+</div>
+<div class="section" id="id3">
+<h2>Места возникновения перегрузок<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Их по большому счёту 4:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>на входном чипе</strong> - если со стороны интерфейсов на него поступает больше, чем он способен обработать.</p></li>
+<li><p><strong>на фабрике коммутации</strong> (если коробка модульная) - если линейные карты пытаются отправить на фабрику больше, чем она способна обработать.</p></li>
+<li><p><strong>на выходной линейной карте</strong>, если фабрика пытается передать на линейную карту больше, чем её чип способен обработать</p></li>
+<li><p><strong>на выходном интерфейсе</strong> - если чип шлёт в интерфейс больше, чем тот способен сериализовать.</p></li>
+</ol>
+<div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/congestion_points.png" src="https://fs.linkmeup.ru/images/articles/buffers/congestion_points.png" />
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Но никто не хочет бороться с перегрузками в четырёх местах.</div>
+<div class="line">Поэтому обычно</div>
+<div class="line">А) Чип делают такой производительности, чтобы он смог обработать весь трафик, даже если тот начал одновременно поступать со всех портов на этой линейной карте. Поэтому для устройства со 128 портами 100Гб/с используется чип с производительностью 12,8Тб/с.</div>
+<div class="line">Очевидно бывают и исключения. Тогда или имеем непредсказуемые потери, или (чаще) невозможность использовать часть портов.</div>
+<div class="line">Б) Фабрику так же делают без переподписки, чтобы она могла провернуть весь трафик, который пытаются в неё передать все линейные карты, даже если они делают это одновременно на полной скорости. Таким образом не нужно буферизировать трафик и перед отправкой на фабрику. Более того, её приходится делать не просто равной сумме пропускных способностей входных/выходных интерфейсов, а больше - там ведь помимо самих пакетов передаются ещё метаданные.</div>
+<div class="line">В) Управление перегрузками на выходном чипе и выходном интерфейсе сводят в одно место.</div>
+</div>
+<blockquote>
+<div><div class="line-block">
+<div class="line">На самом деле фабрика без передподиски (или неблокируемая) - это та ещё спекуляция, к которой нередко прибегают маркетологи.</div>
+<div class="line">Для некоторых сценариев, например, CIOQ даже со speedup фабрики в пару раз от необходимого есть строгие результаты, показывающие, при каких условиях она будет неблокируемой.</div>
+<div class="line">Можно почитать у достопочтенных выпускников MIT и Стэнфорда: <a class="reference external" href="http://yuba.stanford.edu/~nickm/papers/CSL-TR-97-738.pdf">On the speedup required for combined input and output queued switching</a>.</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

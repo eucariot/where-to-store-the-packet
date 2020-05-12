@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Чипы коммутации &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Чипы коммутации</a><ul>
+<li><a class="reference internal" href="#cpu-central-processing-unit">CPU — Central Processing Unit</a><ul>
+<li><a class="reference internal" href="#cpu">Программная маршрутизация на CPU</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#asic-application-specific-integrated-circuit">ASIC — Application Specific Integrated Circuit</a></li>
+<li><a class="reference internal" href="#fpga-field-programmable-gate-array">FPGA — Field Programmable Gate Array</a></li>
+<li><a class="reference internal" href="#np-network-processor">NP - Network Processor</a></li>
+<li><a class="reference internal" href="#programmable-asic">Programmable ASIC</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Чипы коммутации</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/3_chipset_types/1_logic.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Чипы коммутации<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="cpu-central-processing-unit">
+<h2>CPU — Central Processing Unit<a class="headerlink" href="#cpu-central-processing-unit" title="Ссылка на этот заголовок">¶</a></h2>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_cpu.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_cpu.png" />
+</div>
+<ul class="simple">
+<li><p>Неограниченная гибкость</p></li>
+<li><p>Неограниченная функциональность</p></li>
+<li><p>Приемлемая цена</p></li>
+<li><p>Полный провал по производительности</p></li>
+</ul>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Идея в том, что всё управляется кодом. Инструкции записываются в оперативную память. Для обработки каждого пакета потребуется сходить много раз из CPU в RAM.</div>
+<div class="line">С другой стороны для изменения логики работы достаточно переписать программу. Обновления CPU не требуется.</div>
+</div>
+<div class="line-block">
+<div class="line">Область применения: домашние и SOHO маршрутизаторы, устройства уровня доступа, файрволы, DPI итд.</div>
+<div class="line">Например, абсолютно все рутеры Mikrotik используют CPU для маршрутизации пакетов.</div>
+<div class="line">Иными словами CPU годится там, где не гонимся за ультраскоростями, а важен широкий набор функций и невысокая цена.</div>
+</div>
+<blockquote>
+<div><p>Впрочем, не без исключений: бывают, что и большие штуки коммутируют в CPU.</p>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><strong>Важное замечание</strong>: CPU является необходимой частью любого сетевого устройства, потому что берёт на себя задачи Control Plane. А это автоматически означает, что ему придётся работать с протокольным трафиком: OSPF, BGP, LDP, LLDP итд. Кроме того, есть exception трафик - когда у пакета TTL истёк или когда у него стоит бит Router Alert. Ещё CPU нужно самому генерировать трафик тех же протоколов - Self-generated.</div>
+<div class="line">Можно ли считать это участием в коммутации? Скорее да, чем нет.</div>
+</div>
+<div class="section" id="cpu">
+<h3>Программная маршрутизация на CPU<a class="headerlink" href="#cpu" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="line-block">
+<div class="line">Для последнего десятилетия характерна тенденция к маршрутизации в софте. Для всех сетевых функций предлагаются программные альтернативы. Отсюда и DMA, DPDK, VPP, SR-IOV, которые и правда позволяют творить невиданные прежде вещи.</div>
+<div class="line">Более того, современные CPU обладают дополнительными блоками инструкций. У Intel это <strong>SSE</strong> - <a class="reference external" href="https://ru.wikipedia.org/wiki/SSE">Streaming SIMD Extensions</a>, позволяющие значительно ускорить обработку трафика.</div>
+<div class="line">Тут обычные CPU уже заходят в зону NP (Network Processor) - процессоров, которые можно программировать на языках высокого уровня вроде C, и обладающих большим набором спец. инструкций для работы с сетевым трафиком.</div>
+<div class="line">Одним из узких мест современных процессоров ещё является шина доступа - PCIe. В один процессор сейчас более-менее можно загнать 100 с небольшим Гбит/с.</div>
+</div>
+<p>Но как бы производители программных решений ни продвигали идею, что «все можно сделать в софте», однако скорости выше 500 Гбит/с пока что можно достигать только с помощью специализированных асиков.</p>
+<p>И давайте ещё прикинем.
+Выдержка с сайта про VPP:</p>
+<blockquote>
+<div><p>Recent testing of FD.io release 17.04 shows impressive gains in performance on Intel’s newest platform when switching and routing layer 2⁄3 traffic. With the prior generation Intel® Xeon® Processor E7-8890v3, FD.io testing showed aggregate forwarding rate of 480 Gbps (200 Mpps) for 4-Socket machine (using 4 of E7-8890v3 CPU configuration); however, the same FD.io tests run on two 2-Socket blades (e.g. a modern 2RU server) with the new Intel® Xeon® Platinum 8168 CPUs (using four of 8168 CPUs in two by two-socket configuration), within the same power budget, show increase of forwarding rate to 948 Gbps (400 Mpps) benefiting from the PCIe bandwidth increase of the new CPUs, and the overall decrease in cycles-per-packet due to CPU micro-architecture improvements.</p>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Xeon E7-8890v3: Рекомендуемая цена $7174.</div>
+<div class="line">4 проца по 18 ядер = 72 ядра = 480 Gbps (200 Mpps)</div>
+<div class="line">$28696 только за процы</div>
+</div>
+<div class="line-block">
+<div class="line">Xeon Platinum 8168. Рекомендуемая цена% $5890.</div>
+<div class="line">2 проца по 24 ядра = 48 ядер = 948 Gbps (400 Mpps)</div>
+<div class="line">$11780 только за процы</div>
+</div>
+<p>Без обвязки. А ещё кушать электричества он будет как голодный шакал. Не самый дешёвый получится рутер. Зато гибкий.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="asic-application-specific-integrated-circuit">
+<h2>ASIC — Application Specific Integrated Circuit<a class="headerlink" href="#asic-application-specific-integrated-circuit" title="Ссылка на этот заголовок">¶</a></h2>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_asic.png" />
+</div>
+<ul class="simple">
+<li><p>Околонулевая гибкость</p></li>
+<li><p>Ограниченная функциональность</p></li>
+<li><p>Низкая цена</p></li>
+<li><p>Ультравысокая производительность</p></li>
+</ul>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Идея в том, что инструкции закодированы аппаратно в виде транзисторов.</div>
+<div class="line">Сначала очень долго пишется код, реализующий логику, на специальном языке программирования, вроде Verilog, далее он преобразуется в интегральную схему, отлаживается, проверяется и отправляется в тираж. После этого поменять что-то в логике чипа можно, только произведя новый чип.</div>
+<div class="line">Каждый пакет обрабатывается, просто прогоняясь по конвейеру из транзисторов, совершающих заранее определённые действия. Это называется Pipeline.</div>
+</div>
+<p>Область применения: почти любые коммутаторы и многие маршрутизаторы.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Впрочем, не без исключений: Juniper в своей линейке маршрутизаторов MX многие годы использует <a class="reference external" href="https://habr.com/post/307696/">ASIC Trio</a>.</div>
+<div class="line">Который, кстати, согласно книге об MX является на самом деле набором ASIC’ов:</div>
+</div>
+<p>PFEs are made of several ASICs, which may be grouped into four categories:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Routing ASICs: LU or XL Chips. LU stands for Lookup Unit and XL is a more powerful (X) version.</p></li>
+<li><p>Forwarding ASICs: MQ or XM Chips. MQ stands for Memory and Queuing, and XM is a more powerful (X) version.</p></li>
+<li><p>Enhanced Class of Service (CoS) ASICs: QX or XQ Chips. Again, XQ is a more powerful version.</p></li>
+<li><p>Interface Adaptation ASICs: IX (only on certain low-speed GE MICs) and XF (only on MPC3E)</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Речь здесь о классических ASIC - <strong>Applicaton Specific</strong> Integrated Circuit - статических кусках кремния с аппаратной логикой.</div>
+<div class="line">Последние лет 10 в области сетевых микросхем произошёл сдвиг в направлении программируемых ASIC’ов, о которых чуть позже.</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="fpga-field-programmable-gate-array">
+<h2>FPGA — Field Programmable Gate Array<a class="headerlink" href="#fpga-field-programmable-gate-array" title="Ссылка на этот заголовок">¶</a></h2>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/chips_fpga.png" src="https://fs.linkmeup.ru/images/articles/buffers/chips_fpga.png" />
+</div>
+</div></blockquote>
+<p>Русский термин - <strong>ПЛИС</strong> - Программируемая Логическая Интегральная Схема.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Вполне удовлетворительная гибкость</p></li>
+<li><p>Вполне удовлетворительная функциональность</p></li>
+<li><p>Цена успешного полёта Апполона до Луны и обратно</p></li>
+<li><p>Отличная производительность</p></li>
+</ul>
+</div></blockquote>
+<div class="line-block">
+<div class="line">В отличие от ASIC’ов, где на транзисторах реализованы сами функциональные блоки, в FPGA транзисторами реализуются базовые строительные блоки - регистры, память, LUTы. Из которых потом <strong>можно</strong> создавать нужные функциональные блоки.</div>
+<div class="line">Что это даёт?</div>
+<div class="line">А то, что FPGA полностью программируемый - логику работы блоков, из которых он состоит, можно поменять. Для этого потребуется обновить прошивку чипа, что менее удобно, чем загрузить программу в CPU, но гораздо удобнее, чем перепаять ASIC.</div>
+<div class="line">Так, если поддержка какой-то функции (условный Geneve) не была заложена изначально, её всегда можно добавить потом новой прошивкой.</div>
+</div>
+<p>Однако за такую программируемость приходится дорого платить.</p>
+<p>Область применения: POC или низкоскоростные решения для энтерпрайз-сегмента.</p>
+<blockquote>
+<div><p>Впрочем, не без исключений: собеседовался я как-то раз в контору, в которой модульную коробку для операторов собирали полностью на FPGA, включая фабрику.</p>
+<p>У этого даже есть основания: задолго до появления Programmable ASIC’ов на FPGA можно было делать любую обработку пакетов. И даже через несколько лет после производства плисину легко перепрошить и получить поддержку новой функции.</p>
+<div class="line-block">
+<div class="line">Автору неизвестны вендоры, которые бы на ПЛИС сделали PFE на скорости более 100 Гбит/с, по всей видимости, потому что частная компания не обладает для этого достаточным капиталом.</div>
+<div class="line">Но для рынка энтерпрайз такие решения могут <a class="reference external" href="https://www.ethernitynet.com/products/socs/network-co-processors/">подойти</a> <a class="reference external" href="https://www.arrivetechnologies.com/ipcorecarrierethernet">вполне</a>.</div>
+</div>
+<p>Однако, я слышал, что в процессе разработки ASIC возможен такой подход, когда сначала разрабатывается FPGA, программируется нужным образом, тестируется, а потом с неё делают слепок для производства ASIC. Но пруфов нет.</p>
+</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="np-network-processor">
+<h2>NP - Network Processor<a class="headerlink" href="#np-network-processor" title="Ссылка на этот заголовок">¶</a></h2>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_np.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_np.png" />
+</div>
+<ul class="simple">
+<li><p>Отличная гибкость</p></li>
+<li><p>Отличная функциональность</p></li>
+<li><p>Цена весьма высокая</p></li>
+<li><p>Производительность весьма высокая</p></li>
+</ul>
+</div></blockquote>
+<p>NP или <strong>NPU</strong> - Network Processor Unit.</p>
+<div class="line-block">
+<div class="line">Идея в том, что это почти CPU, который однако заточен под сетевые задачи и изготавливается специально под них.</div>
+<div class="line">Он, как и CPU, обычно состоит из нескольких ядер, каждое из которых отвечает за свой сегмент. Для изменения логики так же достаточно переписать код приложения.</div>
+<div class="line">NP позволяет делать более сложные штуки - например выполнять циклы (чего лишены ASIC и FPGA), делать NAT, почти любые инкапсуляции, пушить и попать условно произвольное число меток итд.</div>
+<div class="line">Долгое время NP позиционировался, как серебряная пуля для всех сетевых приложений.</div>
+<div class="line">Но производительность уступает ASIC’ам и FPGA.</div>
+</div>
+<p>Большим преимуществом является то, что писать программы для NP можно на С. Это значительно ускоряет процесс, кроме того, где-то можно переиспользовать код.</p>
+<p>Область применения: маршрутизаторы агрегации и ядра.</p>
+<blockquote>
+<div><p>Впрочем, не без исключений: например Smart-NIC Netronome в начале своего пути <a class="reference external" href="https://www.netronome.com/timeline/">использовал Intel IXP</a>.</p>
+</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="programmable-asic">
+<h2>Programmable ASIC<a class="headerlink" href="#programmable-asic" title="Ссылка на этот заголовок">¶</a></h2>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_programmable_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_programmable_asic.png" />
+</div>
+<ul class="simple">
+<li><p>Приемлемая гибкость</p></li>
+<li><p>Ограниченная функциональность</p></li>
+<li><p>Низкая цена</p></li>
+<li><p>Ультравысокая производительность.</p></li>
+</ul>
+</div></blockquote>
+<div class="line-block">
+<div class="line">А вот это уже настоящая серебряная пуля последнего десятилетия.</div>
+<div class="line">«Почему бы нам не взять ASIC и сделать его немножечко программируемым?» - таким вопросом, видимо, задались разработчики и выдали замечательную вещь, которую циска в своём треугольнике поместила в самую середину, хотя это и не совсем так, потому что производительность программируемого ASIC’а такая же, как и у обычного. Им удалось вырваться из 2D.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/programmable_asic.png" src="https://fs.linkmeup.ru/images/articles/buffers/programmable_asic.png" />
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Область применения: коммутаторы, маршрутизаторы.</div>
+<div class="line">Большинство датацентровых коммутаторов и некоторые маршрутизаторы уровня границы ДЦ работают на программируемых асиках.</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

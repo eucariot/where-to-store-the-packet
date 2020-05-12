@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RAM - Random Access Memory &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">RAM - Random Access Memory</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>RAM - Random Access Memory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/3_chipset_types/7_memory/1_ram.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ram-random-access-memory">
+<h1>RAM - Random Access Memory<a class="headerlink" href="#ram-random-access-memory" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Классическая оперативная память - куда без неё?</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/rf/nh/-i/rfnh-i2fin7nwsmd015hik3olve.png"><img alt="https://habrastorage.org/webt/rf/nh/-i/rfnh-i2fin7nwsmd015hik3olve.png" src="https://habrastorage.org/webt/rf/nh/-i/rfnh-i2fin7nwsmd015hik3olve.png" style="width: 1000px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Мы ей адрес ячейки - она нам содержимое.</div>
+<div class="line">В ней хранятся, так называемые <strong>Soft Tables</strong> (программные таблицы) - таблицы маршрутизации, меток, MAC-адресов.</div>
+<div class="line">Когда вы выполняете команду <em>«show ip route»</em>, запрос идёт именно в оперативку к Soft Tables.</div>
+<div class="line">CPU работает именно с оперативной памятью - когда он посчитал маршрут, или построил LSP - результат записывается в неё. А уже оттуда изменения синхронизируются в <strong>Hard Tables</strong> в RAM/CAM/TCAM.</div>
+<div class="line">Кроме того, периодически происходит синхронизация всего содержимого всех таблиц на случай, если вдруг по какой-то причине инкрементальные изменения не спустились корректно.</div>
+<div class="line">Soft Tables не может быть непосредственно использован для передачи данных, потому что слишком медленно - обращение к оперативке идёт через ЦПУ и требуется алгоритмический поиск, затратный по времени. <em>С оговоркой на NFV</em>.</div>
+</div>
+<p>Второй немаловажный компонент сетевого устройства, реализованный на RAM - это очереди: входные, выходные, интерфейсные.
+Пока пакет ожидает своего черёда на обработку, обрабатывается в чипе или ожидает своей отправки, он томится в RAM.</p>
+<p>Эта память может быть на кристалле чипа коммутации, может быть под одной с ним крышкой, а может и просто находиться неподалёку на плате.</p>
+<p>Типы этой памяти меняются в зависимости от задач: SDRAM, DDR, GDDR5, GDDR6, HMC, HBM.</p>
+<p>К вопросу о RAM я ещё неоднократно вернусь ниже в секции «Packaging и Advanced Packaging» и вся глава «Память и буферы» посвящена этому.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

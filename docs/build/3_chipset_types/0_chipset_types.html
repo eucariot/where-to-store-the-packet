@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Типов-Чипов &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Типов-Чипов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Было очень страшно начинать эту статью, потому что чипов чудовищное многообразие и простого короткого ответа на вопрос, какой выбрать - нет. Речь и про типы, и про изготовителей, и про серии, и про характеристики.
+Ниже я попытаюсь разложить все эти штуки на составляющие детали.</p>
+<p>А начнём с типов чипов. Дальнейшая часть этой главы в некоторой степени повторит материал упомянутой выше <a class="reference external" href="https://linkmeup.ru/blog/312.html#CHIPS">статьи из цикла СДСМ</a>.</p>
+<div class="section" id="id3">
+<h2>Компромиссы: скорость, функциональность, гибкость, цена<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В IT всё есть компромисс. Всегда приходится чем-то жертвовать во благо другого.</p>
+<p>Вот классический цискин треугольник про компромиссы:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/tradeoffs.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/tradeoffs.png" src="https://fs.linkmeup.ru/images/articles/buffers/tradeoffs.png" style="width: 600px;" /></a>
+</div>
+</div></blockquote>
+<p><em>Здесь не хватает ещё NP и Programmable ASIC. `Источник &lt;https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2016/pdf/BRKARC-3467.pdf&gt;`_.</em></p>
+<p>Вендоры всегда балансируют в периметре этого треугольника.</p>
+<p>Нельзя сделать CPU, проворачивающий через себя 25 Тб/с.
+Нельзя сделать универсальный ASIC - зачастую они могут быть аппаратно ограничены по функциям (например, <strong>или</strong> VXLAN Lookup <strong>или</strong> IP).
+Нельзя сделать дешёвый FPGA.</p>
+<p>Кроме того при таком количестве портов, сегодня вступают в игру энергопотребление, место в стойке, тепловыделение и, конечно, цена.</p>
+<p>Итак, на сегодняшний день существуют следующие типы чипов, которые могут быть использованы в качестве пакетных процессоров:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_cpu.html">CPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_asic.html">ASIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_fpga.html">FPGA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_np.html">NP - Network Processor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_programmable_asic.html">Programmable ASIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_dc_chipsets.html">Чипы для датацентровых коммутаторов</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/3_chipset_types/0_chipset_types.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

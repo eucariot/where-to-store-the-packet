@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Архитектура буферов &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Архитектура буферов</a><ul>
+<li><a class="reference internal" href="#crossbar">Crossbar</a></li>
+<li><a class="reference internal" href="#shared-buffer">Shared Buffer</a><ul>
+<li><a class="reference internal" href="#dedicated-shared">Dedicated + Shared</a></li>
+<li><a class="reference internal" href="#headroom-buffers">Headroom buffers</a></li>
+<li><a class="reference internal" href="#admission-control">Admission Control</a></li>
+<li><a class="reference internal" href="#alpha">Alpha</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#output-queueing">Output Queueing</a></li>
+<li><a class="reference internal" href="#input-queuing">Input Queuing</a></li>
+<li><a class="reference internal" href="#combined-input-and-output-queueing">Combined Input and Output Queueing</a></li>
+<li><a class="reference internal" href="#virtual-output-queueing">Virtual Output Queueing</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Архитектура буферов</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/5_buffers/3_buffer_architecture.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Архитектура буферов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>И вот тут на сцену выходит TM - Traffic Manager, который реализует функции QoS (и некоторые другие).
+Он может быть частью чипа коммутации, а может быть отдельной микросхемой - для нас сейчас важно то, что он заправляет буферами.</p>
+<p>Буфер - это с некоторыми оговорками обычная память, используемая в компьютерах. В ней в определённой ячейке хранится пакет, который чип может извлечь, обратившись по адресу.</p>
+<p>Любой сетевой ASIC или NP обладает некоторым объёмом встроенной (on-chip) памяти (порядка десятков МБ).
+Так называемые Deep-Buffer свитчи имеют ещё внешнюю (off-chip) память, исчисляемую уже гигабайтами.
+И той и другой управляет модуль чипа - MMU.</p>
+<p>В целом для нас пока местонахождение не имеет значения - взглянем на это попозже. Важно то, как имеющейся памятью чип распоряжается, а именно, где и какие очереди он создаёт и какие <a class="reference external" href="https://en.wikipedia.org/wiki/Active_queue_management">AQM</a> использует.</p>
+<p>И тут практикуют:</p>
+<div class="toctree-wrapper compound">
+</div>
+<hr class="docutils" />
+<div class="section" id="crossbar">
+<h2>Crossbar<a class="headerlink" href="#crossbar" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Идея в том, чтобы для каждой пары (входной интерфейс - выходной интерфейс) выделить аппаратный буфер.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/crossbar.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/crossbar.png" src="https://fs.linkmeup.ru/images/articles/buffers/crossbar.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<p>Это, скорее, умозрительный эксперимент, потому что в плане сложности, стоимости реализации и эффективности это проигрышный вариант.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="shared-buffer">
+<h2>Shared Buffer<a class="headerlink" href="#shared-buffer" title="Ссылка на этот заголовок">¶</a></h2>
+<p>По числу существующих в мире коробок этот вариант, однозначно, на первом месте.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/shared_buffer.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/shared_buffer.png" src="https://fs.linkmeup.ru/images/articles/buffers/shared_buffer.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<p>Используется Shared Buffer на немодульных устройствах без фабрики коммутации, в которых установлен один чип (обычно, но может быть больше).</p>
+<div class="line-block">
+<div class="line">Аппаратно - это память (обычно SRAM), встроенная прямо в чип - она так и называется <strong>on-chip</strong> (OCB). Много туда не засунешь, поэтому объём до 100 МБ.</div>
+<div class="line">Зачастую это единственная память, которая в одночиповых устройствах используется для буферизации.</div>
+<div class="line">Пусть, однако, эта кажущаяся простота не вводит вас в заблуждение - для того, чтобы в десятки мегабайтов поместить трафик сотни портов 100Гб/с, да ещё и обеспечить отсутствие потерь, за ними должны скрываться годы разработок и нетривиальная архитектура.</div>
+<div class="line">А так оно и есть - я чуть ниже неглубоко вас окуну.</div>
+</div>
+<p>Итак, есть соблазн эту память взять и просто равномерно разделить между всеми портами. Такой статический дизайн имеет право на жизнь, но сводит на нет возможность динамически абсорбировать всплески трафика.</p>
+<p>Гораздо более привлекательным выглядит следующий вариант:</p>
+<div class="section" id="dedicated-shared">
+<h3>Dedicated + Shared<a class="headerlink" href="#dedicated-shared" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="line-block">
+<div class="line">Из доступной памяти каждому порту выделяется определённая небольшая часть - это <strong>Dedicated Buffer</strong>. За каждым портом кусочек памяти законодательно закреплён и не может быть использован другими портами. То есть при любых обстоятельствах у порта будет свой защищённый кусочек. Минимальный размер Dedicated Buffer где-то настраивается, где-то нет. Но лучше без основательного понимания в дефолты не лезть.</div>
+<div class="line">Доля каждого порта в абсолютных цифрах очень маленькая - порядка единиц кБ.</div>
+<div class="line">Гарантируемый минимум выделяется для хранения как входящих пакетов, так и выходящих.</div>
+</div>
+<div class="line-block">
+<div class="line">Остальная часть памяти как раз общая - <strong>Shared Buffer</strong> - может быть использована любым портом по мере необходимости. Из неё динамически выделяются куски для тех интерфейсов, которые испытывают перегрузку.</div>
+<div class="line">Например, если чип пытается на один из интерфейсов передать больше трафика, чем тот способен отправлять в единицу времени, то эти пакеты сначала заполняют выделенный для этого порта буфер, а когда он заканчивается, автоматически начинают складываться в динамически выделенный буфер из общей памяти. Как только все пакеты обработаны, память освобождается.</div>
+<div class="line">Под общий буфер может быть отдано 100% той памяти, что осталась после вычитания из неё выделенных для портов кусочков (Dedicated). Но она так же может быть перераспределена - за счёт общего буфера можно увеличить выделенные. Так, если выделить 80% под Shared, то оставшиеся 20% равномерно распределятся по Dedicated.</div>
+</div>
+<p>Наличие Shared Buffer’а решает огромную проблему, позволяя сглаживать всплески трафика, когда перегрузку испытывает один или несколько интерфейсов.</p>
+<div class="line-block">
+<div class="line">Однако вместе с тем за общую память начинаются соревноваться разные порты одновременно. И серьёзная перегрузка на одном порту может вызвать потери на другом, которому нужно было всего лишь несколько килобайтов общей памяти, чтобы не дропнуть пакет.</div>
+<div class="line">Одним из способов облегчить эту ситуацию является увеличение выделенных буферов за счёт уменьшения общего.</div>
+<div class="line">Но это всегда зона компромиссных решений - сокращая размер общей памяти, мы уменьшаем и объёмы всплесков, которые чип может сгладить.</div>
+<div class="line">Кроме того Lossless трафик требует к себе ещё более щепетильного отношения.</div>
+</div>
+<p>Поэтому зачастую, помимо Dedicated и Shared буферов, резервируют ещё <strong>Headroom buffers</strong>.</p>
+</div>
+<div class="section" id="headroom-buffers">
+<h3>Headroom buffers<a class="headerlink" href="#headroom-buffers" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="line-block">
+<div class="line">Это последний способ сохранить пакеты, когда даже общий буфер уже забит. Естественно, он тоже отрезается от общей памяти, поэтому на первый взгляд выглядит не очень логичным откусить от общей памяти кусок, назвать его по-другому и сказать, мол, мы всё оптимизировали.</div>
+<div class="line">На самом деле Headroom буферы решают довольно специфическую задачу - помочь lossless приложениям с <strong>PFC</strong> - <a class="reference external" href="https://www.juniper.net/documentation/en_US/junos/topics/concept/cos-qfx-series-congestion-notification-understanding.html#jd0e554">Priority-based Flow Control</a>.</div>
+</div>
+<div class="line-block">
+<div class="line">PFC - это механизм Ethernet Pause, который умеет притормаживать не всю отправку, а только по конкретным приоритетам Ethernet CoS.</div>
+<div class="line">Например, два приложения на отправителе: RoCE и репликация БД. Первое - чувствительная к задержкам и потерям вещь, второе - массивные данные.</div>
+<div class="line">Коммутатор, заметив заполнение общего буфера, отправляет Pause для более низкого приоритета, тем самым притормаживая репликацию, но не RoCE.</div>
+<div class="line">Задача буфера Headroom здесь в том, чтобы сохранить in-flight пакеты приоритетной очереди (те, что сейчас в кабеле), пока Pause летит к отправителю с просьбой притормозить.</div>
+</div>
+<p>То есть пакеты репликации начнут дропаться, когда заполнится общий буфер, а пакеты RoCE будут складываться в Headroom.</p>
+<blockquote>
+<div><p>Помимо lossless headroom бывает и headroom для обычного трафика, чтобы помочь сохранить более приоритетный. Но это на домашнее задание.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/buffer_types.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/buffer_types.png" src="https://fs.linkmeup.ru/images/articles/buffers/buffer_types.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">При наступлении перегрузки буферы будут задействованы в следующем порядке.</div>
+<div class="line">Для входящего best-effort трафика:</div>
+</div>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Dedicated buffers</p></li>
+<li><p>Shared buffers</p></li>
+</ol>
+</div></blockquote>
+<p>Для входящего lossless трафика:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Dedicated buffers</p></li>
+<li><p>Shared buffers</p></li>
+<li><p>Lossless headroom buffers</p></li>
+</ol>
+</div></blockquote>
+<p>Для всего исходящего трафика:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Dedicated buffers</p></li>
+<li><p>Shared buffers</p></li>
+</ol>
+</div></blockquote>
+<p>Разумеется, описанное выше лишь частный пример, и от вендора к вендору ситуация может различаться (разительно).</p>
+<p>Например бродкомовские чипы (как минимум Trident и Tomahawk) имеют внутреннее разделение памяти по группам портов. Общая память делится на порт-группы по 4-8 портов, которые имеют свой собственный кусочек общего буфера. Порты из одной группы, соответственно буферизируют пакеты только в своём кусочке памяти и не могут занимать другие. Это тоже один из способов снизить влияние перегруженных портов друг на друга. Такой подход иногда называют <strong>Segregated Buffer</strong>.</p>
+</div>
+<div class="section" id="admission-control">
+<h3>Admission Control<a class="headerlink" href="#admission-control" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Admission Control - входной контроль - механизм, который следит за тем, можно ли пакет записывать в буфер. Он не является специфичным для Shared-буферов, просто в рамках статьи - это лучшее место, чтобы о нём рассказать.</p>
+<div class="line-block">
+<div class="line">Формально Admission Control делится на Ingress и Egress.</div>
+<div class="line">Задача <strong>Ingress Admission Control</strong> - во-первых, вообще убедиться, что в буфере есть место, а, во-вторых, обеспечить справедливое использование памяти.</div>
+<div class="line">Это означает, что у каждого порта и очереди всегда должен быть гарантированный минимальный буфер. А ещё несколько входных портов не оккупируют целиком весь буфер, записывая в него всё новые и новые пакеты.</div>
+</div>
+<p>Задача <strong>Egress Admission Control</strong> - помочь чипу абсорбировать всплески, не допустив того, чтобы один или несколько выходных портов забили целиком весь буфер, получая всё новые и новые пакеты с кучи входных портов.</p>
+<p>В случае Shared Buffer оба механизма срабатывают в момент первичного помещения пакета в буфер. То есть никакой двойной буферизации и проверки не происходит.</p>
+<div class="line-block">
+<div class="line">Как именно понять, сколько буфера занято конкретным портом/очередью и главное, сколько ещё можно ему выдать?</div>
+<div class="line">Это может быть статический порог, одинаковый для всех портов, а может быть и динамически меняющийся, регулируемый параметром <strong>Alpha</strong>.</div>
+</div>
+</div>
+<div class="section" id="alpha">
+<h3>Alpha<a class="headerlink" href="#alpha" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Итак, почти во всех современных чипах память распределяется динамически на основе информации о том, сколько общей памяти вообще свободно и сколько ещё можно выделить для данного порта/очереди.</p>
+<p>На самом деле минимальной единицей аккаунтинга является не порт/очередь, а регион (в терминологии Мелланокс). Регион - это кортеж: <em>(входной порт, Priority Group на входном порту, выходной порт, Traffic Class на выходном порту)</em>.</p>
+<div class="line-block">
+<div class="line">Каждому региону назначается динамический порог, сколько памяти он может под себя подмять. При его превышении, очевидно, пакеты начинают дропаться, чтобы не влиять на другие регионы.</div>
+<div class="line">Этот порог вычисляется по формуле, множителями которой являются объём свободной на данный момент памяти и параметр <strong>alpha</strong>, специфичный для региона и настраиваемый:</div>
+</div>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Threshold <span class="o">[</span>Bytes<span class="o">]</span> <span class="o">=</span> alpha * free_buffer <span class="o">[</span>Bytes<span class="o">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Его значение варьируется от 1/128 до примерно 8 с шагом х2. Чем больше эта цифра, тем больший объём свободной памяти доступен региону.</div>
+<div class="line">Например, если на коммутаторе 32 региона, то:</div>
+<div class="line">при alpha=1/64 каждому региону будет доступна 1/64 часть свободной памяти, и даже при максимальной утилизации они все смогут использовать только половину буфера.</div>
+<div class="line">при alpha=1/32 вся память равномерно распределится между регионами, ни один из них не сможет влиять на другие, а при полной утилизации 100% памяти будет занято.</div>
+<div class="line">при alpha=1/16 каждый регион может претендовать на больший объём памяти. И если все регионы разом начнут потреблять место, то им всем не хватит, потому что памяти потребовалось бы 200%. То есть это своего рода переподписка, позволяющая сглаживать всплески.</div>
+</div>
+<p><em>Предполагаем тут, что значение alpha одинаково для всех регионов, хотя оно может быть настроено отдельно для каждого.</em></p>
+<div class="line-block">
+<div class="line">При получении каждого пакета, механизм Admission Control вычисляет актуальный порог для региона, которому принадлежит пакет. Если порог меньше размера пакета, тот отбрасывается.</div>
+<div class="line">Если же больше, то он помещается в буфер и уже не будет отброшен никогда, даже если регион исчерпал все лимиты. Объём свободной памяти уменьшается на размер пакета.</div>
+<div class="line">Это происходит для каждого приходящего на чип пакета.</div>
+</div>
+<p>Написанное выше об Admission Control и Alpha может быть справедливо не только для Shared Buffers, но и для других архитектур, например, VoQ.</p>
+<p><strong>Дальнейшее чтиво:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Если в жизни не хватает страданий: <a class="reference external" href="https://montazeri.iut.ac.ir/sites/montazeri.iut.ac.ir/files/file_pubwdet/32083_0.pdf">Design and Implementation of a Shared Memory Switch Fabric</a></p></li>
+<li><p><a class="reference external" href="https://community.mellanox.com/s/article/understanding-the-alpha-parameter-in-the-buffer-configuration-of-mellanox-spectrum-switches">Understanding the Alpha Parameter in the Buffer Configuration of Mellanox Spectrum Switches</a></p></li>
+<li><p>Programming Guide’ы коммерческих микросхем (NDA кровью, помним, да?).</p></li>
+</ul>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Crossbar и Shared Buffer - это архитектуры, которые могут использоваться для устройств фиксированной конфигурации (возможно, даже multi-chip), но не подходят для модульных.</div>
+<div class="line">Взглянем же теперь на них.</div>
+</div>
+<div class="line-block">
+<div class="line">Дело в том, что они состоят из нескольких линейных карт, каждая из которых несёт как минимум один самостоятельный чип коммутации.</div>
+<div class="line">И этот чип, будь то ASIC, NP или даже CPU не может в своей внутренней памяти динамически выделять буферы для тысяч очередей выходных интерфейсов - кишка тонка.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/modular_chassis.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/modular_chassis.png" src="https://fs.linkmeup.ru/images/articles/buffers/modular_chassis.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<p>Далее поговорим про архитектуры памяти для модульных шасси.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="output-queueing">
+<h2>Output Queueing<a class="headerlink" href="#output-queueing" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="line-block">
+<div class="line">Наиболее логичным кажется буферизировать пакеты как можно ближе к месту возможного затора - около выходных интерфейсов.</div>
+<div class="line">Кому как не выходному чипу знать о здоровье своих подопечных интерфейсов, обслуживать по несколько QoS очередей для каждого и бороться с перегрузками?</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/oq.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/oq.png" src="https://fs.linkmeup.ru/images/articles/buffers/oq.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">И это правда так.</div>
+<div class="line">Но есть одна фундаментальная проблема - в случае перегрузок пакеты будут приходить на Egress PFE, чтобы умирать. Они проделают весь огромный путь от входного интерфейса через фабрику коммутации до выходного буфера через фабрику для того, чтобы узнать, что мест нет и быть печально дропнутыми.</div>
+<div class="line">Это бессмысленная и бесполезная утилизация полосы пропускания фабрики.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/drop.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/drop.png" src="https://fs.linkmeup.ru/images/articles/buffers/drop.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">И вот уже вырисовывается следующая логичная мысль - выбросить пакет нужно как можно раньше.</div>
+<div class="line">Как было бы здорово, если бы мы могли это сделать на входной плате.</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="input-queuing">
+<h2>Input Queuing<a class="headerlink" href="#input-queuing" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Более удачным вариантом оказывается буферизировать пакеты на входной плате после лукапа, когда уже становится понятно, куда пакет слать. Если выходной интерфейс заведомо занят, то и смысла гнать камикадзе на фабрику нет.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/iq.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/iq.png" src="https://fs.linkmeup.ru/images/articles/buffers/iq.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<p>Постойте! Как же входной чип узнает, что выходной интерфейс не занят?</p>
+<div class="line-block">
+<div class="line">С точки зрения Data Plane никакой обратной связи, от выходного чипа входному, очевидно, нет. Распространение между ними информации, необходимой для лукапа (некстхопы, интерфейсы, заголовки) производится средствами медленного Control Plane - тоже не подойдёт.</div>
+<div class="line">Так вот для сигнализации такой информации между линейными платами появляется арбитр. У разных вендоров он может быть реализован по-разному, но суть его в следующем - входной чип регулярно запрашивает у выходного разрешение на отправку нового блока данных. И пока он его не получит - держит пакеты в своём буфере, не отправляя их в фабрику.</div>
+<div class="line">Соответственно выходной чип, получив такой запрос, смотрит на утилизацию выходного интерфейса и решает, готов ли он принять пакет. Если да - отправляет разрешение (<strong>Grant</strong>).</div>
+<div class="line">Это на первый взгляд контринтуитивное поведение - каковы же накладные расходы на такой арбитраж, насколько это увеличивает задержки, если на отправку пакета данных нужно дождаться RTT в пределах коробки - пока запрос улетит на выходной чип, пока тот обработает, пока ответ вернётся назад.</div>
+<div class="line">Тут некоторые платформы оптимизируют: request/grant’ы присобачиваются к data-пакетам piggyback’ом.</div>
+<div class="line">Итога вместо data1 → request2 → data2 → request3 получается data1+request2 → data2+request3.</div>
+<div class="line">В любом случае тут для меня начинается область магического искусства, но вендоры эту революцию успели совершить и есть масса платформ, на которых арбитр прекрасно со своей задачей справляется.</div>
+<div class="line">Хотя обычно он применяется не для Input Queueing в описанном виде.</div>
+<div class="line">Дело в том, что эффективность Input Queueing не очень высокая - очень часто придётся ждать, пока интерфейс освободится. Эх, прям вспоминается старый добрый Ethernet CSMA/CD.</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="combined-input-and-output-queueing">
+<h2>Combined Input and Output Queueing<a class="headerlink" href="#combined-input-and-output-queueing" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Гораздо выгоднее в этом плане разрешить буферизацию и на выходе.
+Тогда арбитр будет проверять не занятость интерфейса, а степень заполненности выходного буфера - вероятность, что в нём есть место, гораздо выше.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cioq.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cioq.png" src="https://fs.linkmeup.ru/images/articles/buffers/cioq.png" style="width: 700px;" /></a>
+</div>
+</div></blockquote>
+<p>Но такие вещи не даются даром. Очевидно, это и увеличенная цена из-за необходимости реализовывать дважды буферизацию, и увеличенные задержки - даже в отсутствие заторов этот процесс не бесплатный по времени.</p>
+<p>Кроме того, для обеспечения QoS придётся хоть какой-то минимум его функций реализовывать в двух местах, что опять же скажется на цене продукта</p>
+<p>Но у CIOQ (как и у IQ) есть фундаментальный недостаток, заставивший в своё время немало поломать голову лучшим умам - <strong>Head of Line Blocking</strong>.</p>
+<p>Представьте себе ситуацию: однополосная дорога, перекрёсток, машине нужно повернуть налево, сквозь встречный поток. Она останавливается, и ждёт, когда появится окно для поворота. А за ней стоит 17 машин, которым нужно проехать прямо. Им не мешает встречный поток, но им мешает машина, которая хочет повернуть налево.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/hlob.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/hlob.png" src="https://fs.linkmeup.ru/images/articles/buffers/hlob.png" style="width: 500px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://www.cisco.com/c/dam/global/hr_hr/assets/ciscoconnect/2013/pdfs/Anatomy_of_Core_Network_Elements_Josef_Ungerman.pdf">Источник</a>.</p>
+</div>
+</div>
+</div></blockquote>
+<p>Этот избитый пример иллюстрирует ситуацию HoLB. Входной буфер - один на всех. И если всего лишь один выходной интерфейс начинает испытывать затор, он блокирует полностью очередь отправки на выходном чипе, поскольку один пакет в начале этой очереди не получает разрешение на отправку на фабрику.</p>
+<p>Трагическая история, как в реальной жизни, так и на сетевом оборудовании.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="virtual-output-queueing">
+<h2>Virtual Output Queueing<a class="headerlink" href="#virtual-output-queueing" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Как можно исправить эту дорожную ситуацию? Например, сделав три полосы - одна налево, другая прямо, третья направо.</p>
+<div class="line-block">
+<div class="line">Ровно то же самое сделали разработчики сетевого оборудования.</div>
+<div class="line">Они взяли входной буфер побольше и подробили его на множество очередей.</div>
+<div class="line">Для каждого выходного интерфейса они создали по 8 очередей на каждом чипе коммутации. То есть перенесли все задачи по обеспечению QoS на входной чип. На выходном же при этом остаётся самая базовая FIFO очередь, в которой никогда не будет заторов, потому что их контроль взял себя входной чип.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/voq.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/voq.png" src="https://fs.linkmeup.ru/images/articles/buffers/voq.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Если взять грубо коробку со 100 интерфейсами, то на каждой плате в буферах нужно будет выделить 800 очередей.</div>
+<div class="line">Если в коробке всего 10 линейных карт, то общее число очередей на ней будет 100*8*10 = 8000.</div>
+</div>
+<div class="line-block">
+<div class="line">Однако V в VOQ означает виртуальный, не потому, что они как бы выходные, но на самом деле находятся на входных платах, а потому что Output Queue для каждого выходного интерфейса распределён между всеми линейными картами. То есть сумма 10и физических очередей для одного интерфейса на 10 чипах составляет 1 виртуальную.</div>
+<div class="line">Собственно из-за распределённого характера этой виртуальной очереди от арбитра и здесь избавиться не получится - разным входным чипам всё же нужно знать, состояние выходной очереди. Поэтому даже несмотря на то, что выходная очередь - это FIFO, выходной чип всё ещё должен давать добро на отправку трафика.</div>
+</div>
+<p>Кстати, что касается трафика, который должен вернуться в интерфейс той же карты, на которую он пришёл изначально, то здесь никаких исключений - он томится в VOQ, пока чип не даст добро переложить его в выходную очередь. С тем только отличием, что пакет не будет отправляться на фабрику. Поэтому перед лицом перегрузок все равны.</p>
+<p>На сегодняшний день подавляющее большинство модульных сетевых устройств используют архитектуру VOQ.</p>
+<p><strong>Дальнейшее чтиво:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://people.ucsc.edu/~warner/Bufs/Buffering-WP_August_2017.pdf">An Update on Router Buffering</a></p></li>
+<li><p><a class="reference external" href="https://forums.juniper.net/t5/forums/recentpostspage/post-type/message/category-id/Blogs/user-id/101479?">What is VOQ and why you should care</a></p></li>
+<li><p><a class="reference external" href="https://archive.nanog.org/sites/default/files/wednesday_tutorial_szarecki_packet-buffering.pdf">Strategies of packet buffering inside Routers</a></p></li>
+<li><p><a class="reference external" href="https://www.juniper.net/documentation/en_US/junos/topics/concept/cos-qfx-series-voq-understanding.html">Understanding CoS Virtual Output Queues (VOQs) on QFX10000 Switches</a></p></li>
+<li><p><a class="reference external" href="https://books.google.ru/books?id=kzstoFdvZ2sC&amp;pg=PR8&amp;lpg=PR8&amp;dq=shared+memory+vs+voq&amp;source=bl&amp;ots=mTy-1ifsRK&amp;sig=ACfU3U0DHx37_i_oDKvDJTEh72g6pSW-Ng&amp;hl=ru&amp;sa=X&amp;ved=2ahUKEwjnx9el0LPnAhWHAhAIHUF6CeIQ6AEwCHoECAgQAQ#v=onepage&amp;q=shared%20memory%20vs%20voq&amp;f=false">High Performance Switches and Routers</a> - если у вас есть лишних 14 к₽.</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

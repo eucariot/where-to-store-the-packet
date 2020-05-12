@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Чипы для датацентровых коммутаторов &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Чипы для датацентровых коммутаторов</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Чипы для датацентровых коммутаторов</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/3_chipset_types/1_dc_chipsets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Чипы для датацентровых коммутаторов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Чтобы упростить себе жизнь, я продолжу далее разговор только об ASIC’ах под датацентровые коммутаторы, не пытаясь обнять Джабба Хатта.</p>
+<div class="line-block">
+<div class="line">До недавних пор на этой ниве пахал только Broadcom со своей оружейной палатой: Tomahawk и Trident - и израильскими городами: Qumran, Jericho итд.</div>
+<div class="line">Выбор - особо не разбежишься - ну или разрабатывать своё (как делают Huawei, Juniper и Cisco)</div>
+</div>
+<p>Сегодня конкуренцию ему пытаются составить Mellanox со своими собственными чипами Spectrum (ныне уже Nvidia), Innovium Teralynx, Barefoot Tophino (ныне Intel). Своим появлением эти компании раскачивают рынок и провоцируют среди вендоров тренд на переход от внутренних разработок к готовым чипам их производства.</p>
+<p>Мы в конце книги взглянем на их модельные ряды, но пока давайте обсудим, чем же чипы характеризуются и могут отличаться друг от друга.</p>
+<p>А для этого надо понять, какие они задачи решают.</p>
+<p>В <a class="reference external" href="https://linkmeup.ru/blog/480.html">датацентровых сетях</a> есть три основных типа устройств:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/adsm/2/fabric.png"><img alt="https://fs.linkmeup.ru/images/adsm/2/fabric.png" src="https://fs.linkmeup.ru/images/adsm/2/fabric.png" style="width: 600px;" /></a>
+</div>
+</div></blockquote>
+<p><strong>Spine</strong> - сравнительно простая железка, требующая самый минимум функций - её задача просто молотить трафик. Очень много и очень быстро. Зачастую это просто IP-маршрутизация. Но бывают и топологии, в которых Spine играет чуть более важную роль (VXLAN anycast gateway). Но обычная практика - держать конфигурацию спайнов максимально простой.</p>
+<p><strong>Leaf</strong> - чуть более требователен к функциям. Может терминировать на себе VXLAN или другие оверлеи. Здесь могут реализовываться политики QoS и ACL. Зато не нужна такая большая пропускная способность, как для спайнов. Кроме того, в некоторых сценариях (VXLAN) leaf знает о сервисах за подключенными машинами (клиентских сетях, контейнерах), соответственно, ему нужно больше ресурсов FIB для хранения этой инфорации.</p>
+<p><strong>Edge-leaf</strong> - это устройства границы сети ДЦ и здесь уже фантазия ограничивается только свободой мысли сетевых архитекторов - MPLS, RSVP-TE, Segment Routing, всевозможные VPN’ы. При этом наименее требовательны к производительности.</p>
+<p>На каждом устройстве, соответственно, разные требования к возможностям чипов - как по пропускной способности, так и по набору функций и по количеству ресурсов для хранения чего-либо.</p>
+<div class="line-block">
+<div class="line">И надо сказать, вендоры чипов и железа добились тут поразительных успехов.</div>
+<div class="line">Типичный спайн сегодня - это 64-128 100GE портов на 2-4 юнита с энергопотреблением около 400 Вт. И ценой порядка пары десятков тысяч долларов.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/nexus3k.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/nexus3k.png" src="https://fs.linkmeup.ru/images/articles/buffers/nexus3k.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Производителям чипов приходится нелегко не только из-за попыток найти золотую середину, но и из-за возрастающих скоростей передачи данных и конкуренции.</div>
+<div class="line">Средняя скорость аплинков с торов сегодня 200-800 Гб/с. Чтобы собрать минимально рабочую сеть ДЦ, нужны спайны с пропускной способностью 3,2 Тб/с.</div>
+</div>
+<p>Всё более и более производительные чипы нужно выпускать уже примерно каждые полтора-два года.</p>
+<blockquote>
+<div><div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/timeline.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/timeline.png" src="https://fs.linkmeup.ru/images/articles/buffers/timeline.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Актуализированная мной картинка из <a class="reference external" href="https://youtu.be/Ti3t9OAZL3g?t=2496">видео PP</a>.</span><a class="headerlink" href="#id3" title="Постоянная ссылка на рисунок">¶</a></p>
+</div>
+</div></blockquote>
+<p>Конкурирующие производители чипов идут ноздря в ноздрю - почти одновременно у всех (Broadcom, Mellanox, Innovium, Barefoot) выходят микросхемы с почти идентичными характеристиками, а вслед за ними и коммутаторы с ними.</p>
+<p>Ещё одним компромиссным вопросом является размер буфера, но об этом мы поговорим попозже.</p>
+<div class="line-block">
+<div class="line">Помимо скорости и обязательных функций по маршрутизации и оверлеям, есть ещё много менее заметных вещей, которые ожидают потребители.</div>
+<div class="line">Мы про них говорить сегодня не будем, но не упомянуть было бы ошибкой.</div>
+</div>
+<div class="line-block">
+<div class="line">Это, например, <strong>телеметрия</strong> в реальном времени: наблюдать за утилизацией буферов, видеть бёрсты, дампы отброшенных пакетов, профиль трафика по размерам и типам пакетов.</div>
+<div class="line">Кроме того, сегодня набирает популярность <strong>INT</strong> - <a class="reference external" href="https://www.opencompute.org/files/INT-In-Band-Network-Telemetry-A-Powerful-Analytics-Framework-for-your-Data-Center-OCP-Final3.pdf">Inband Network Telemetry</a>.</div>
+</div>
+<p>Для многих незаметно, но уже почти жизненно важно, начинает работать <strong>динамическая балансировка трафика</strong>: чип отслеживает потоки (flows) и дробит их на флоулеты (flowlets) - короткие куски трафика одного потока, разделённые между собой паузой в несколько миллисекунд. Эти флоулеты он может динамически распределять по разным путям (ECMP или членам LAG), чтобы обеспечить более равномерную балансировку. Особенно важно это для Elephant Flows, оккупирующих один интерфейс.</p>
+<p>Пользователям всё чаще хочется иметь возможность <strong>управлять распределением буфера</strong>, ну а <strong>перераспределение</strong> ресурсов FIB - это уже функциональность, отсутствие которой будет вызывать вопросы.</p>
+<p>В условиях датацентров <a class="reference external" href="https://linkmeup.ru/blog/482.html">ECMP и балансировка силами сети</a> - это воздух, вендорам нужно обеспечить нужное количество как <strong>ECMP-групп</strong>, так и общее <strong>количество Next-hop’ов</strong>.</p>
+<div class="line-block">
+<div class="line">Поэтому нет одного чипа или тем более SoC, решающего сразу все задачи.</div>
+<div class="line">Под каждую роль разработаны свои чипы. Одни из них ориентированы на пропускную способность, другие на широкую функциональность, третьи на низкие задержки.</div>
+</div>
+<p>Посочувствуем же бедным вендорам и будем выбирать долларом.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

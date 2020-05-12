@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>CPU &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cpu">
+<h1>CPU<a class="headerlink" href="#cpu" title="Ссылка на этот заголовок">¶</a></h1>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chip_cpu.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chip_cpu.png" src="https://fs.linkmeup.ru/images/articles/buffers/chip_cpu.png" style="width: 500px;" /></a>
+</div>
+<ul class="simple">
+<li><p>Неограниченная гибкость</p></li>
+<li><p>Неограниченная функциональность</p></li>
+<li><p>Приемлемая цена</p></li>
+<li><p>Полный провал по производительности</p></li>
+</ul>
+</div></blockquote>
+<p>Идея в том, что всё управляется кодом. Инструкции записываются в оперативную память. Для обработки каждого пакета потребуется сходить много раз из CPU в RAM.
+С другой стороны для изменения логики работы достаточно переписать программу. Обновления CPU не требуется.</p>
+<p>Область применения: домашние и SOHO маршрутизаторы, устройства уровня доступа, файрволы, DPI итд.
+Например, абсолютно все рутеры Mikrotik используют CPU для маршрутизации пакетов.
+Иными словами CPU годится там, где не гонимся за ультраскоростями, а важен широкий набор функций и невысокая цена.</p>
+<blockquote>
+<div><p>Впрочем, не без исключений: бывают, что и большие штуки коммутируют в CPU.</p>
+</div></blockquote>
+<p><strong>Важное замечание</strong>: CPU является необходимой частью любого сетевого устройства, потому что берёт на себя задачи Control Plane. А это автоматически означает, что ему придётся работать с протокольным трафиком: OSPF, BGP, LDP, LLDP итд. Кроме того, есть exception трафик - когда у пакета TTL истёк или когда у него стоит бит Router Alert. Ещё CPU нужно самому генерировать трафик тех же протоколов - Self-generated.
+Можно ли считать это участием в коммутации? Скорее да, чем нет.</p>
+<div class="section" id="id1">
+<h2>Программная маршрутизация на CPU<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для последнего десятилетия характерна тенденция к маршрутизации в софте. Для всех сетевых функций предлагаются программные альтернативы. Отсюда и DMA, DPDK, VPP, SR-IOV, которые и правда позволяют творить невиданные прежде вещи.
+Более того, современные CPU обладают дополнительными блоками инструкций. У Intel это <strong>SSE</strong> - <a class="reference external" href="https://ru.wikipedia.org/wiki/SSE">Streaming SIMD Extensions</a>, позволяющие значительно ускорить обработку трафика.
+Тут обычные CPU уже заходят в зону NP (Network Processor) - процессоров, которые можно программировать на языках высокого уровня вроде C, и обладающих большим набором спец. инструкций для работы с сетевым трафиком.
+Одним из узких мест современных процессоров ещё является шина доступа - PCIe. В один процессор сейчас более-менее можно загнать 100 с небольшим Гбит/с.</p>
+<p>Но как бы производители программных решений ни продвигали идею, что «все можно сделать в софте», однако скорости выше 500 Гбит/с пока что можно достигать только с помощью специализированных асиков.</p>
+<p>И давайте ещё прикинем.
+Выдержка с сайта про VPP:</p>
+<blockquote>
+<div><p>Recent testing of FD.io release 17.04 shows impressive gains in performance on Intel’s newest platform when switching and routing layer 2⁄3 traffic. With the prior generation Intel® Xeon® Processor E7-8890v3, FD.io testing showed aggregate forwarding rate of 480 Gbps (200 Mpps) for 4-Socket machine (using 4 of E7-8890v3 CPU configuration); however, the same FD.io tests run on two 2-Socket blades (e.g. a modern 2RU server) with the new Intel® Xeon® Platinum 8168 CPUs (using four of 8168 CPUs in two by two-socket configuration), within the same power budget, show increase of forwarding rate to 948 Gbps (400 Mpps) benefiting from the PCIe bandwidth increase of the new CPUs, and the overall decrease in cycles-per-packet due to CPU micro-architecture improvements.</p>
+</div></blockquote>
+<p>Xeon E7-8890v3: Рекомендуемая цена $7174.
+4 проца по 18 ядер = 72 ядра = 480 Gbps (200 Mpps)
+$28696 только за процы</p>
+<p>Xeon Platinum 8168. Рекомендуемая цена% $5890.
+2 проца по 24 ядра = 48 ядер = 948 Gbps (400 Mpps)
+$11780 только за процы</p>
+<p>Без обвязки. А ещё кушать электричества он будет как голодный шакал. Не самый дешёвый получится рутер. Зато гибкий.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/3_chipset_types/1_cpu.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

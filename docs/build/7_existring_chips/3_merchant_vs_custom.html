@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Merchant vs Custom &#8212; документация Where to store packets 1.0</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="merchant-vs-custom">
+<h1>Merchant vs Custom<a class="headerlink" href="#merchant-vs-custom" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Несмотря на всё вышеперечисленное, вендоры, конечно же, используют рыночные чипы. Те же Nexus (3xxx) или NCS5500 используют бродкомовские, инновиумские и барефутовские чипы.
+Juniper QFX5xxx и Huawei Cloud Engine - бродкомовские.</p>
+<div class="section" id="id1">
+<h2>За<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Что заставляет их использовать рыночные вместо собственных?
+Ну тупо проще взять готовенькое, впаять в плату и продать. Пресловутый Time To Market - хотя и с оговорками.
+Экономия ресурсов на разработке такой сложной штуки, как микросхема по технологии 7нм с производительностью 25,6 Тб/с.
+Компания, которая сосредоточена на разработке только чипов, развивает их гораздо быстрее как в плане производительности, так и функциональности.
+Кто-то уже постарался и собрал информацию о том, какие функции нужны клиентам и все их реализовал</p>
+</div>
+<div class="section" id="id2">
+<h2>Против<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В таком случае, что вендоров заставляет делать свои чипы, раз всё так хорошо?</p>
+<p>А вот и оговорки с TTM - внести изменения в свой ASIC и выпустить следующую исправленную версию - проще и быстрее, чем запускать бюрократический маховик большой сторонней компании.</p>
+<p>Кроме того до недавних пор не существовало программируемых рыночных чипов - вендору нужно было полагаться на фиксированный пайплайн или весьма урезанный SDK, предоставляемый поставщиком.
+И производители сетевого оборудования сами начали учиться это делать, чтобы новые функции внедрять не перепаиванием асиков, а релизом новой версии софта.</p>
+<p>Кроме того, едва ли бродком возьмётся за реализацию проприетарных протоколов или других функций, которые нужны одному покупателю - это же массовый рынок.</p>
+<p>Никуда не спрятать вопрос безопасности. Тут своё родное - знаешь каждую закладочку.</p>
+<p>Не всегда может устроить реализация QoS на рыночных чипах. На своих можно замутить любые мутки.</p>
+<p>Свой SDK - свои разработчики, которые его поправят. Чужой SDK - чужие баги, давайте сдавать, решать, тестировать - времени требуется значительно больше.</p>
+<p>В общем, хорошо, что мы находимся сейчас в ситуации высококонкурентного рынка, и мы каждые полтора-два года можем получать ещё более мощные коммутаторы по ещё более низким ценам.</p>
+<p>Ну а если вдруг вам надоели все эти наши Клозы и масс-маркет-силиконы, и душа просит чего-то совсем экзотического, то вот почитайте, как строятся <a class="reference external" href="https://fuse.wikichip.org/news/3293/inside-rosetta-the-engine-behind-crays-slingshot-exascale-era-interconnect/">суперкомпьютеры для High Performance Computing’а</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Where to store packets</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, eucariot.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/7_existring_chips/3_merchant_vs_custom.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

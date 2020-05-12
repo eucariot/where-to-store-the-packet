@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Фабрика коммутации &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Фабрика коммутации</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Фабрика коммутации</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/2_network_device_architecture/1_chassis/4_fabriccard.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Фабрика коммутации<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Если мы возьмём Hi-End маршрутизатор операторского класса, то обычно в нём может насчитываться до двух десятков интерфейсных плат, в каждой из которых установлен как минимум один чип коммутации FE. Каждый чип коммутации смотрит частью своих ног в сторону интерфейсов, а частью в сторону задней шины. И ног там предостаточно, потому что медная среда имеет свой предел по пропускной способности - нам не хватит одного-двух выходов.</p>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://habrastorage.org/webt/8d/48/tu/8d48tuqoxldivpeahf6tqebubzu.png" src="https://habrastorage.org/webt/8d/48/tu/8d48tuqoxldivpeahf6tqebubzu.png" />
+</div>
+</div></blockquote>
+<p>Как связать друг с другом два чипа коммутации? Ну просто же:</p>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://habrastorage.org/webt/jq/wb/y1/jqwby1d1zaug5nssjn3ngjgdq8m.png" src="https://habrastorage.org/webt/jq/wb/y1/jqwby1d1zaug5nssjn3ngjgdq8m.png" />
+</div>
+</div></blockquote>
+<p>Как связать друг с другом три чипа? Ну, наверное, как-то так?</p>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://habrastorage.org/webt/df/pa/v-/dfpav--s8_hkn9-9wuha87g9kbo.png" src="https://habrastorage.org/webt/df/pa/v-/dfpav--s8_hkn9-9wuha87g9kbo.png" />
+</div>
+</div></blockquote>
+<p>Как связать 8?</p>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://habrastorage.org/webt/kc/cd/ze/kccdzeml2g5gfo15qx4ueanhto4.png" src="https://habrastorage.org/webt/kc/cd/ze/kccdzeml2g5gfo15qx4ueanhto4.png" />
+</div>
+</div></blockquote>
+<p>Уверены? Ничего не смущает?</p>
+<div class="line-block">
+<div class="line">Пропускная способность системы из 8 чипов остаётся той же, что и у пары - ведь каждый раз мы уменьшаем количество ног для связи.</div>
+<div class="line">Второй момент, как нам вообще создать полносвязную топологию, если чипов, допустим, 16, и каждый из них имеет по 32 контакта? 16*15/2 пучков кабелей по 32 жилы в каждом?</div>
+</div>
+<div class="line-block">
+<div class="line">Эта проблема была адресована неблокирующимся сетям Клоза или сетям без переподписки.</div>
+<div class="line">У нас есть входные коммутационные элементы (Ingress FE), выходные (Egress FE) и транзитные. Задача транзитных - связать входные с выходными. Любой входной связан с любым выходным через транзитный.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/w-/g9/wn/w-g9wn1w4rbfbdwwpgpixpsbmro.png"><img alt="https://habrastorage.org/webt/w-/g9/wn/w-g9wn1w4rbfbdwwpgpixpsbmro.png" src="https://habrastorage.org/webt/w-/g9/wn/w-g9wn1w4rbfbdwwpgpixpsbmro.png" style="width: 600px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Входные и выходные не связаны друг с другом напрямую, транзитные также не имеют связи.</div>
+<div class="line">Нужно больше входных и выходных коммутационных элементов - добавляем транзитных. Нужно ещё больше? Добавляем новый каскад транзитных:</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://habrastorage.org/webt/ij/lf/q8/ijlfq8wvq-mq4aiwww5-rla6rsy.png" src="https://habrastorage.org/webt/ij/lf/q8/ijlfq8wvq-mq4aiwww5-rla6rsy.png" />
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Вот этим и напичканы платы коммутации в современных маршрутизаторах - очень тупые ASIC, которые только и умеют, что быстро перекладывать пакеты со входа на выход.</div>
+<div class="line">Плата коммутации подключается к задней шине и имеет связность со всеми другими платами.</div>
+<div class="line">Обычно они работают в режиме N+1 - то есть все разделяют нагрузку, но при выходе из строя одной платы, оставшиеся берут всё на себя.</div>
+<div class="line">Кстати, сами платы можно вполне назвать верхним каскадом иерархии фабрики Клоза.</div>
+</div>
+<div class="line-block">
+<div class="line">Остался только вопрос по ячейкам. Ну и перекладывали бы эти ASICи пакеты сразу, зачем их ещё нарезать?</div>
+<div class="line">Здесь можно провести аналогию с &lt;a href=»<a class="reference external" href="http://lookmeup.linkmeup.ru/#term435">http://lookmeup.linkmeup.ru/#term435</a>»&gt;ECMP&lt;/a&gt;. Если кто-то когда-либо настраивал попакетную балансировку между различными путями, то он, наверняка, помнит, сколько боли это доставляло. Неупорядоченная доставка пакетов, с которой с горем пополам справляется TCP, может основательно поломать IP-телефонию или видео, например.</div>
+<div class="line">Проблема в попакетной балансировке в том, что два пакета одного потока спокойно могут пойти разными путями. При этом один из них маленький и очень быстро долетит до получателя, а другой акселерат-переросток - застрянет в узком буфере. Вот они и разупорядочились.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="https://fs.linkmeup.ru/images/articles/buffers/fabric_cells.png" src="https://fs.linkmeup.ru/images/articles/buffers/fabric_cells.png" />
+</div>
+</div></blockquote>
+<p>То же происходит и на фабрике.</p>
+<p>Неплохой метод борьбы с этим - попоточная балансировка - вычисляется хэш по кортежу значений (SMAC, DMAC, SIP, DIP, Protocol, SPort, DPort, MPLS-метка итд.) и все пакеты одного потока начинают передаваться одним путём.</p>
+<p>Но это работает неидеально. Зачастую один очень жирный поток может нагрузить один линк в то время, как другие будут простаивать. И с этим можно смириться на сети оператора, но нельзя в пределах этого синего ящика.</p>
+<div class="line-block">
+<div class="line">Элегантное решение выглядит следующим образом:</div>
+<div class="line">Пакеты нарезаются на ячейки одинакового маленького размера.</div>
+<div class="line">Ячейки балансируются поячеечно. То есть одна ячейка сюда, другая - туда, третья - в следующий линк итд.</div>
+<div class="line">Каждая ячейка пронумерована, поэтому, когда она приходит на нужный FE - легко собирается обратно в целостный пакет.</div>
+<div class="line">Поскольку расстояние от входа до выхода примерно одинаковое, размеры ячеек одинаковые, время их доставки тоже примерно одинаковое.</div>
+</div>
+<p>Идея Чарльза Клоза, которая сначала была реализована на телефонных станциях, затем была заимствована в Ethernet-коммутаторы и далее маршрутизаторы, ныне <a class="reference external" href="https://linkmeup.ru/blog/480.html">нашла своё место в сетях ЦОДов</a>, заменив собой классическую трёхуровневую модель.</p>
+<p>Так выглядят фабрики коммутации</p>
+<blockquote>
+<div><div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/pr/ir/nq/prirnqsuehzu_07tllnmzr71cgy.jpeg"><img alt="https://habrastorage.org/webt/pr/ir/nq/prirnqsuehzu_07tllnmzr71cgy.jpeg" src="https://habrastorage.org/webt/pr/ir/nq/prirnqsuehzu_07tllnmzr71cgy.jpeg" style="width: 1000px;" /></a>
+<p class="caption"><span class="caption-text">Huawei NE40E-X16</span><a class="headerlink" href="#id3" title="Постоянная ссылка на рисунок">¶</a></p>
+</div>
+</div></blockquote>
+<p>Часто фабрика совмещается с управляющим модулем в одном слоту для экономии пространства в шасси и оптимизации вентиляции.</p>
+<blockquote>
+<div><div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/zt/ie/dk/ztiedk80tos_jpvas5d1snthzhe.png"><img alt="https://habrastorage.org/webt/zt/ie/dk/ztiedk80tos_jpvas5d1snthzhe.png" src="https://habrastorage.org/webt/zt/ie/dk/ztiedk80tos_jpvas5d1snthzhe.png" style="width: 1000px;" /></a>
+<p class="caption"><span class="caption-text">Juniper</span><a class="headerlink" href="#id4" title="Постоянная ссылка на рисунок">¶</a></p>
+</div>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/5k/y7/aw/5ky7awjkxlus359wp8yvvwn3ej4.png"><img alt="https://habrastorage.org/webt/5k/y7/aw/5ky7awjkxlus359wp8yvvwn3ej4.png" src="https://habrastorage.org/webt/5k/y7/aw/5ky7awjkxlus359wp8yvvwn3ej4.png" style="width: 1000px;" /></a>
+<p class="caption"><span class="caption-text">Huawei NE40E-X8</span><a class="headerlink" href="#id5" title="Постоянная ссылка на рисунок">¶</a></p>
+</div>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

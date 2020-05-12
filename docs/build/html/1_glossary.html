@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Терминология &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Терминология</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Терминология</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/1_glossary.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>Терминология<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Задача этого параграфа не объять все непонятные слова, употребляемые в статье, а лишь внести некую ясность в неразбериху русско-английских терминов.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Чип коммутации</strong>, <strong>сетевой процессор</strong>, <strong>(Packet) Forwarding Engine</strong>, <strong>PFE</strong> - микросхема, способная коммутировать пакет из входа в нужный выход с нужным набором заголовков.</p></li>
+<li><p><strong>Pins</strong>, <strong>пины</strong>, <strong>ножки</strong> - металлические контакты на микросхеме для соединения с основанием.</p></li>
+<li><p><strong>Data Path</strong> - путь внутри устройства (или чипа), по которому передвигается пользовательский трафик.</p></li>
+<li><p><strong>Lookup</strong> или <strong>лукап</strong> или <strong>поиск</strong> - поиск адресата в таблицах (FIB, LFIB, ARP Adjacencies, IPv6 ND Table итд.)</p></li>
+<li><p><strong>Pipeline</strong> или <strong>конвейер</strong> - набор действий, которые происходят с пакетом по мере его продвижения от входа в чип до выхода из него.</p></li>
+<li><p><strong>Single-chip</strong>, <strong>одночиповый</strong> - устройство, внутри которого только один чип.</p></li>
+<li><p><strong>Fixed</strong>, <strong>фиксированный</strong>, <strong>pizza-box</strong> - немодульный коммутатор. Обычно внутри него нет фабрик коммутации. Часто эти термины используются как синоним Single-chip, хотя это не совсем верно - внутри может стоять два (back-to-back) чипа или даже больше.</p></li>
+<li><p><strong>Сериализация/Десериализация</strong> - процесс перевода данных из параллельного низкоскоростного интерфейса (МГц) в последовательный высокоскоростной (ГГц) и наоборот. Например, из чипа в интерфейс или из чипа в фабрику.</p></li>
+<li><p><strong>Память</strong> - физическая микросхема для хранения.</p></li>
+<li><p><strong>Буфер</strong> - некий участок памяти, выделенный для хранения пакетов. <em>Здесь и далее в производных словах, таких как «буферов», ударение на «У»</em>.</p></li>
+<li><p><strong>Очередь</strong> - абстракция над буфером, позволяющая <strong>виртуально</strong> выстраивать пакеты в упорядоченную очередь. Фактически в памяти они, конечно, хранятся «как попало».</p></li>
+<li><p><strong>OCB</strong> - On-Chip Buffer - память, встроенная в чип.</p></li>
+<li><p><strong>Programmable ASIC</strong> - ASIC, логику работы которого можно изменить путём перепрошивки.</p></li>
+<li><p><strong>Programmable Pipeline</strong> - чип с возможностью для сторонних компаний программировать конкретные части ASIC в ограниченных пределах с помощью предоставляемого вендором компилятора.</p></li>
+<li><p><strong>Packaging</strong> - упаковка кремниевого кристала в корпус для предотвращения механических повреждений и коррозии.</p></li>
+<li><p><strong>Advanced Packaging</strong> - различные технологии, позволяющие внутри одного чипсета компоновать чипы различного вида и назначения. Например, совмещение ASIC и внешней памяти или ASIC и оптического трансивера.</p></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

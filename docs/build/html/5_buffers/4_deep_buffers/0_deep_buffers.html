@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Shallow vs Deep Buffers &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Shallow vs Deep Buffers</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Shallow vs Deep Buffers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/5_buffers/4_deep_buffers/0_deep_buffers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="shallow-vs-deep-buffers">
+<h1>Shallow vs Deep Buffers<a class="headerlink" href="#shallow-vs-deep-buffers" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="line-block">
+<div class="line">Буферы - это то место, где пакеты можно похранить, вкачав в них смертельную порцию задержки.</div>
+<div class="line">Как сказали в <a class="reference external" href="https://www.youtube.com/watch?v=Ti3t9OAZL3g">видео Packet Pushers</a> - буферы - это религия. Хотя, скорее всего, неортодоксальная, а возможно даже секта.</div>
+</div>
+<p>Чуть позже мы поговорим о том, что такое хорошо, а что такое плохо. А пока посмотрим на реализации.</p>
+<p><strong>Shallow</strong> - неглубокие - это буферы размером до 100МБ. Обычно это встроенная в кристалл <strong>on-chip</strong> память - <strong>OCB</strong> - On-Chip Buffer.
+<strong>Deep</strong> - счёт уже идёт на гигабайты. Обычно <strong>off-chip</strong> и подключается к чипу по отдельной шине.
+И нет ничего посередине.</p>
+<div class="line-block">
+<div class="line">За последние лет десять производительность чипов выросла на порядки, трафика они теперь перемалывают терабиты в секунду вместо единиц гигабит. А размер памяти не то что не поспевает за этим ростом, он фактически почти стоит на месте.</div>
+<div class="line">Давайте грубо прикинем: если для гигабитного порта буфер размером 16 мегабайт мог абсорбировать всплеск трафика длительностью примерно 100 мс, то для 100Гб/с - всего лишь 1мс. И это только один порт, фактически же плотность портов тоже растёт и максимальная комплектация для одночипового устройства сегодня - 64 порта 400Гб/с - или 25,6 Тб/с полосы пропускания.</div>
+<div class="line">Используя только 64 МБ буфер, такой чип сможет хранить трафик 0.000005 c или 5 мкс.</div>
+</div>
+<p>Такие буферы порой даже называют <a class="reference external" href="https://conferences.sigcomm.org/events/apnet2017/papers/bcc-bai.pdf">Extremely shallow buffers</a>.</p>
+<div class="line-block">
+<div class="line">Их воистину миниатюрный объём обусловлен в первую очередь тем, что они в прямом смысле встроены в чип. Такая память является составной частью микросхемы, и каждый дополнительный мегабайт, разумеется, будет обходиться в лишнюю тысячу долларов, больший размер и тепловыделение. Для справки Broadcom Trident 4 содержит 21 миллиард транзисторов, изготовленных по 7нм техпроцессу (это меньше размера капсида любого существующего вируса) на нескольких квадратных сантиметрах.</div>
+<div class="line">Логично вытекающим следствием является скорость работы с этой памятью - она должна соответствовать производительности чипа.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/trident4_memory.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/trident4_memory.png" src="https://fs.linkmeup.ru/images/articles/buffers/trident4_memory.png" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
+<p>Очевидно, что не для всех задач такие маленькие буферы подходят. В частности модульные коробки с VOQ явно не могут позволить себе дробить 64 Мб на несколько тысяч очередей (<em>на самом деле могут</em>).</p>
+<div class="line-block">
+<div class="line">Поэтому рынок предлагает решения с большой внешней памятью (Deep Buffers), размер которой начинается от 1ГБ (обычно от 4ГБ).</div>
+<div class="line">Согласно <a class="reference external" href="https://people.ucsc.edu/~warner/buffer.html">этой таблице</a> существуют коммутаторы (Arista 7280QR-C48) с фантастическими 32-хгигабайтовыми буферами - это уже все сезоны Рика и Морти в неплохом качестве. Но это уже история про | VOQ - всё-таки это память не одного чипа. На моём первом ПК такого объёма был жёсткий диск.</div>
+</div>
+<div class="line-block">
+<div class="line">Как такая память реализована зависит уже от чипа и коробки.</div>
+<div class="line">Например, Broadcom <strong>Jericho+</strong> сгружает пакеты во внешнюю память в размере 4ГБ. Это обычная широко известная <strong>GDDR5</strong>, использующаяся в видеокартах.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/jericho_deep_beffers.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/jericho_deep_beffers.png" src="https://fs.linkmeup.ru/images/articles/buffers/jericho_deep_beffers.png" style="width: 500px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://xrdocs.io/ncs5500/blogs/2018-05-07-ncs-5500-buffering-architecture/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p><strong>Jericho2</strong> несёт на борту новейшую память <strong>HBM2</strong> - High Bandwidth Memory - размером 8ГБ.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/jericho2_deep_beffers.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/jericho2_deep_beffers.png" src="https://fs.linkmeup.ru/images/articles/buffers/jericho2_deep_beffers.png" style="width: 400px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://www.broadcom.com/products/ethernet-connectivity/switching/stratadnx/bcm88690">Источник</a></p>
+</div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png" src="https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png" style="width: 800px;" /></a>
+</div>
+</div></blockquote>
+<dl>
+<dt>А вот и фото Jericho2:</dt><dd><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/hbm_photo.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/hbm_photo.png" src="https://fs.linkmeup.ru/images/articles/buffers/hbm_photo.png" style="width: 400px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://people.ucsc.edu/~warner/Bufs/CSG-DNX-Switching-J2%20Feb%2016%202018.pdf">Источник</a></p>
+</div>
+</div>
+</dd>
+</dl>
+<p>Juniper PTX и QFX10000 используют чип <strong>Q5</strong> собственного производства с внешней памятью - <strong>HMC</strong> - Hybrid Memory Cube - в размере 4ГБ.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/juniper_hmc.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/juniper_hmc.png" src="https://fs.linkmeup.ru/images/articles/buffers/juniper_hmc.png" style="width: 500px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://forums.juniper.net/t5/Enterprise-Cloud-and/Not-all-deep-buffer-switches-are-created-equal/ba-p/318393">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<p>А вот так выглядит сетевой процессор Cisco с внешней памятью:</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cisco_npu.jpg"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cisco_npu.jpg" src="https://fs.linkmeup.ru/images/articles/buffers/cisco_npu.jpg" style="width: 400px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="https://servernews.ru/958639">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Перечислять можно и дальше.</div>
+<div class="line">Что здесь важно отметить, что внешняя память тоже не даётся бесплатно. Во-первых, цена таких решений значительно выше. Во-вторых, пропускная способность обычно ниже. И основное ограничение - канал между чипом коммутации и чипом памяти. Для производимых массово чипов, вроде GDDR5 полоса не превышает 900ГБ в режиме half-duplex. Но это чип, явно не заточенный под задачи сетевых сервисов.</div>
+</div>
+<p>Кастомный джуниперовский HMC <a class="reference external" href="https://forums.juniper.net/t5/Enterprise-Cloud-and/Not-all-deep-buffer-switches-are-created-equal/ba-p/318393">обещает</a> 1,25 Тб/с в обоих направлениях.</p>
+<p>Если верить <a class="reference external" href="https://en.wikipedia.org/wiki/High_Bandwidth_Memory#HBM2">вики</a>, то HBM 2-го поколения, используемый в последнем чипе Broadcom Jericho2, выдаёт порядка 2Тб/с.</p>
+<p>Но это всё ещё далеко от реальной производительности сетевого ASIC. Фактически шины до этой внешней памяти является узким местом, которое и определяет производительность чипа.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Когда-то мир был лучше и было строгое разделение - Shallow Buffer - это встроенная On Chip память, Deep Buffer - внешняя.</div>
+<div class="line">С развитием WLP ситуация начинает меняться. Память HBM становится co-packaged в один чип вместе с комутационным асиком. TSV и 3D Advanced Packaging значительно увеличивают пропускную способность. И нередко в перезентациях вендорово можно увидеть «Deep Buffer» и «On Chip» в одной фразе.</div>
+<div class="line">Тут нужно быть осторожным, поскольку шина между асиком и памятью, пусть даже они расположены рядышком на одном интерпозере под общей крышкой, всё ещё является узким местом и ограничивает максимальную пропускную способность.</div>
+</div>
+</div></blockquote>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1_hybrid_buffering.html">Hybrid Buffering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_true_evil.html">Большие буферы - добро или зло?</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

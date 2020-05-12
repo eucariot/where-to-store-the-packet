@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="ru" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="ru" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>TCAM - Ternary Content-Addressable Memory &mdash; документация Где сохранить пакет? 1.0</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Где сохранить пакет?
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">TCAM - Ternary Content-Addressable Memory</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Где сохранить пакет?</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>TCAM - Ternary Content-Addressable Memory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/3_chipset_types/7_memory/3_tcam.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tcam-ternary-content-addressable-memory">
+<h1>TCAM - Ternary Content-Addressable Memory<a class="headerlink" href="#tcam-ternary-content-addressable-memory" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="line-block">
+<div class="line">Возвращаемся к вопросу, что не так с IP.</div>
+<div class="line">Если мы возьмём описанный выше CAM, то на любой <a class="reference external" href="http://lookmeup.linkmeup.ru/#term53">DIP</a> он очень редко сможет вернуть 1 во всех битах.</div>
+<div class="line">Дело в том, что DIP - это всегда один единственный адрес, а маршруты в таблице маршрутизации - это подсеть или даже агрегация более мелких маршрутов. Поэтому полного совпадения быть почти не может - кроме случая, когда есть маршрут /32.</div>
+<div class="line">Перед разработчиками чипов стояло два вопроса:</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>Как это в принципе реализовать?</p></li>
+<li><p>Как из нескольких подходящих маршрутов выбрать лучший (с длиннейшей маской)?</p></li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="https://habrastorage.org/webt/q5/gk/qx/q5gkqx5u4xfnyuc7jrwo9xiqpei.png"><img alt="https://habrastorage.org/webt/q5/gk/qx/q5gkqx5u4xfnyuc7jrwo9xiqpei.png" src="https://habrastorage.org/webt/q5/gk/qx/q5gkqx5u4xfnyuc7jrwo9xiqpei.png" style="width: 1000px;" /></a>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Ответом стал TCAM, в котором <strong>«T»</strong> означает «троичный»». Помимо <strong>0</strong> и <strong>1</strong> вводится ещё одно значение <strong>Х</strong> - «не важно» (CAM иногда называют BCAM - Binary, поскольку там значения два - 0 и 1).</div>
+<div class="line">Тогда результатом поиска нужной записи в таблице коммутации будет содержимое той ячейки, где самая длинная цепочка 1 и самая короткая «не важно».</div>
+<div class="line">Например, пакет адресован на DIP 10.10.10.10.</div>
+<div class="line">В Таблице Маршрутизации у нас следующие маршруты:</div>
+</div>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">0</span>.0.0.0/0
+<span class="m">10</span>.10.10.8/29
+<span class="m">10</span>.10.0.0/16
+<span class="m">10</span>.8.0.0/13
+Другие
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">В сравнивающие элементы TCAM записываются биты маршрута, если в маске стоит 1, и «не важно», если 0.</div>
+<div class="line">При поиске нужной записи TCAM, как и CAM, прогоняет искомое значение одновременно по всем ячейкам. Результатом будет последовательность 0, 1 и «не важно».</div>
+<div class="line">Только те записи, которые вернули последовательность единиц, за которыми следуют «не важно» участвуют в следующем этапе селекции.</div>
+<div class="line">Далее из всех результатов выбирается тот, где самая длинная последовательность единиц - так реализуется правило Longest prefix match.</div>
+<div class="line">Очевидно, что мы-то своим зорким взглядом, сразу увидели, что это будет маршрут 10.10.10.8/29.</div>
+</div>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://i0.wp.com/thenetworksherpa.com/wp-content/uploads/2012/07/TCAM_2.png?w=528&quot;&gt;"><img alt="https://i0.wp.com/thenetworksherpa.com/wp-content/uploads/2012/07/TCAM_2.png?w=528&quot;&gt;" src="https://i0.wp.com/thenetworksherpa.com/wp-content/uploads/2012/07/TCAM_2.png?w=528&quot;&gt;" style="width: 1000px;" /></a>
+<div class="legend">
+<p><a class="reference external" href="http://thenetworksherpa.com/tcam-in-the-forwarding-engine/">Источник</a></p>
+</div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Решение на грани гениальности, за которое пришлось заплатить большую цену. Из-за очень высокой плотности транзисторов (у каждой ячейки их свой набор, а ячеек должны быть миллионы) они греются не меньше любого CPU - нужно решать вопрос отвода тепла.</div>
+<div class="line">Кроме того, их производство стоит очень дорого, и не будет лукавством сказать, что стоимость сетевого оборудования и раньше и сейчас определяется именно наличием и объёмом TCAM.</div>
+</div>
+<div class="line-block">
+<div class="line">Внимательный читатель обратил внимание на вопрос хэш-функций - ведь она преобразует изначальный аргумент во что-то совершенно непохожее на исходник, как же мы будем сравнивать 0, 1 и длины? Ответ: хэш функция здесь не используется. Описанный выше алгоритм - это сильное упрощения реальной процедуры, за деталями этого любознательного читателя отправлю к той же книге <a class="reference external" href="https://www.juniper.net/uk/en/training/jnbooks/distinguished-engineering/hardware-defined-networking/">Hardware Defined Networking</a>.</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, eucariot
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

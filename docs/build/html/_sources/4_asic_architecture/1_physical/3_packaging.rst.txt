@@ -1,0 +1,170 @@
+Packaging и Advanced Packaging
+==============================
+
+**Packaging** (корпусирование) - это процесс упаковки кристалла в корпус, который защитит его от физических повреждений и коррозии.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/packaging_fanout.png           
+           :width: 800
+           :align: center
+
+           Корпусированный набор чипов. 
+
+           `Источник <http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf>`_
+
+Я честно предпринял попытку разобраться в этом вопросе, но уже на втором часе чтения стало понятно, что, если хоть немного глубже общих понятий погружаться, то это будет требовать ещё одной статьи такого же размера, чтобы не прослыть дилетантом.
+
+Когда-то давно, внутри одной микросхемы на плате был один кристалл. 
+Даже не так - когда-то давно в микросхеме было несколько полупроводниковых элементов.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/first_ic.jpg           
+           :width: 600
+           :align: center
+
+           Прототип первой интегральной схемы. Джэк Килби. 
+
+           `Источник <https://jessalapulapu.wordpress.com/2015/07/29/history-of-transistors-2/amp/>`_
+
+Нужно две микросхемы - ставим их рядом, соединяем дорожками.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/ics.jpg           
+           :width: 600
+           :align: center
+
+           ..
+
+           `Источник <https://ru.wikipedia.org/wiki/Печатная_плата>`_
+
+Нужно много-много микросхем - делаем большие платы или собираем платы в несколько слоёв.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/2_layers.jpg           
+           :width: 800
+           :align: center
+
+Со временем транзисторы становились меньше, а микросхемы сложнее - внутри одного кристалла могли совмещаться несколько логических блоков - это были первые SoC - System On Chip - ЦПУ+Память+какие-нибудь специфические задачи. Но сильно много туда всё равно не засунешь.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/soc.jpg           
+           :width: 600
+           :align: center
+
+           SoC Apple A6. 
+
+           `Источник <https://arstechnica.com/gadgets/2013/04/the-pc-inside-your-phone-a-guide-to-the-system-on-a-chip/2/>`_
+
+Потом научились, нарезав вафли на отдельные кристаллы, каждый из них запаковывать в отдельный пластиковый пакет, ставить один на другой и корпусировать вместе.
+Толщина таких бутербродов получалась большой - заметно больше, чем толщина ядра. 
+
+Что сделало возможными семимиллиметровые телефоны - так это `Wafer-Level Packaging <https://en.wikipedia.org/wiki/Wafer-level_packaging>`_ (**WLP**) или ещё это называют **Advanced Packaging** - технологии, позволяющие на одной вафле делать несколько микросхем и связывать их друг с другом.
+Сюда относятся: 2D, `2.5D <https://semiengineering.com/knowledge_centers/packaging/advanced-packaging/2-5d-ic/>`_, `3D <https://semiengineering.com/knowledge_centers/packaging/advanced-packaging/3d-ics/>`_, `Fan-Out <https://semiengineering.com/knowledge_centers/packaging/advanced-packaging/fan-outs/>`_, 2.1D итд.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/chip_diversity.png           
+           :width: 800
+           :align: center
+
+           Неполное многообразие способов компоновки. 
+
+           `Источник <http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf>`_
+
+Каждый отдельный чип называется **чиплетом** (**chiplet**). 
+Отличаются технологии Advanced Packaging'а друг от друга расположением чиплетов (рядом или один на другом), наличием и отсутствием `интерпозера <https://en.wikipedia.org/wiki/Interposer>`_, материалом интерпозера (кремний, стекло, органика), видом электрических связей между кристаллами (металлические дорожки или `TSV <https://en.wikipedia.org/wiki/Through-silicon_via>`_) и массой других.
+Суть их всех в том, что такая более плотная компоновка позволяет уменьшить размер, увеличить количество шин передачи данных, а соответственно и пропускную способность, значительно сократить энергопотребление и тепловыделение, отказавшись от длинных металлических дорожек.
+
+Зачем я вообще в это решил копнуть? Во-первых, теперь немного понятнее становится что такое co-packged optics из предыдущего параграфа - это чиплет, реализующий оптический интерфейс, упакованный по одной из этих схем внутрь чипсета с ASIC'ом.
+А, во-вторых, дальше я буду рассказывать о памяти и буферах. Также я скажу о том, что каждый коммутационный ASIC обладает небольшим объёмом встроенной памяти - On-Chip Buffer. 
+Она является составной частью асика коммутации.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/buffer_memory.png           
+           :width: 600
+           :align: center
+
+Однако в некоторых случаях в помощь к ней добавляют объёмную внешнюю память, в которой пакеты будут храниться, если они не помещаются во встроенную. И пока это была какая-нибудь GDDR5, вынесенная отдельно на печатной плате в виде самостоятельного чипа, всё было понятно.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/gddr5.jpg           
+           :width: 540
+           :align: center
+
+           Своего родного сетевого не нашлось, но вот тут карточка от Энвидии с вынесенными GDDR5.
+
+Но сегодня, с появлением WLP, когда под одной крышкой собраны и логика и память, границы начинают размываться. Некоторые вендоры спекулируют тем, что внешняя память co-packaged с коммутационным ASIC'ом, и утверждают, что она On-Chip.
+
+Так, например, выглядит 2.5D корпусирование, где один чиплет соединён с другим через кремниевый интерпозер:
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/25d.png           
+           :width: 800
+           :align: center
+
+           ..
+
+           `Источник <http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf>`_
+
+2.5D - это развитие классического подхода 2D. Оно всё ещё требует дорогостоящего выхода за пределы чиплета и прохода по длинным металлическим дорожкам. И кроме того обладает сравнительно невысокой пропускной способностью, ограничивающей максимальную скорость, на которой может работать чип в условиях, близких к перегрузкам.
+
+Другой вариант - это уже 3D WLP:
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/3d_3d.jpg           
+           :width: 600
+           :align: center
+
+           Ну красивая же картинка? Я просто не удержался от того, чтобы вставить её. 
+
+           `Источник <https://habr.com/ru/post/379709/>`_
+
+Вот "более настоящая" схема устройства чипа Broadcom Jericho2. Здесь несколько чиплетов памяти HBM стекированы один на другой по технологии 3D, а сам чип коммутации с этим блоком внешней памяти взаимодействует через интерпозер.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/chipset_die.png           
+           :width: 800
+           :align: center
+
+А вот совсем уж настоящее фото чипсета Juniper ZX EXPRESS, совмещающего память и ASIC под одной крышкой:
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/zx_asic.png           
+           :width: 500
+           :align: center
+
+           ..
+
+           `Источник <https://senetsy.ru/upload/juniper-summit-2019/New_in_Routing_and_%20Switching_Andrey_Pinaev_Juniper.pdf>`_
+
+**HBM - High Bandwidth Memory** - как раз и является High Bandwidth благодаря очень широким шинам взаимодействия между плотно скомпонованными чиплетами.
+
+Расположенные друг над другом они соединены через **TSV** - **Through-Silicon Via** - это микроскопические проходные отверстия в кристаллах, залитые металлом (например, вольфрамом), которые позволяют чипам общаться друг с другом. Они значительно короче линий в интерпозере, что позволяет их сделать гораздо более эффективными.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/tsvs.png           
+           :width: 600
+           :align: center
+
+           TSV. 
+
+           `Источник <http://chipworksrealchips.blogspot.com/2014/10/?m=1>`_
+
+HBM весьма уверенно пробивает себе дорогу сегодня в мир Deep-Buffer!!! коробок.
+
+Кстати по такой же 3D-технологии корпусирования была создана память **HMC** - **Hybrid Memory Cube**. Это бутерброд из склееных друг с другом плашек DRAM, пронизанных TSV.
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/hmc.png           
+           :width: 800
+           :align: center
+
+           ..
+
+           `Источник <https://habr.com/ru/post/333556/?fl=ru>`_
+
+HMC - это коммерческая память производства Micron, от которой ныне отказались в пользу HBM и GDDR6.
+
+Считать ли такую компоновку действительно On-Chip или нет - вопрос открытый, но складывается мнение, что в будущем необходимая от ASIC'а скорость коммутации будет расти всё равно быстрее, чем пропускная способность интерфейса до пусть даже лежащего плотно на ней чиплета HBM.
+
+| В чуть более узком, коммутационном смысле, под чиплетами могут иметься в виду составные части сетевых чипсетов, в которых высокая пропускная способность достигается не более производительным кристаллом, а набором нескольких менее производительных чиплетов, соединённых друг с другом через внутреннюю фабрику. 
+| Бродком, кажется, считает это малодушием, продолжая изготавливать свои ультра-производительные чипы на монолитном кристалле. 
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/bcm_vs_chiplets.jpg           
+           :width: 600
+           :align: center
+
+           ..
+
+           `Источник <https://www.nextplatform.com/2019/12/12/broadcom-launches-another-tomahawk-into-the-datacenter/>`_
+
+**Дальнейшее чтиво:**
+
+    * `Understanding chiplet in one article <https://www.mccoycomponents.com/blog/view/understanding-chiplet-in-one-article>`_
+    * `Advanced packaging: five trends to watch in 2017 <https://beta.electronicproducts.com/Packaging_and_Hardware/Device_Packaging/Advanced_packaging_five_trends_to_watch_in_2017.aspx#>`_
+    * `Fan Out – Simple to Complex <http://semicontaiwan.org/zh/sites/semicontaiwan.org/files/data16/docs/6.%20ASE_John%20Hunt.pdf>`_
+

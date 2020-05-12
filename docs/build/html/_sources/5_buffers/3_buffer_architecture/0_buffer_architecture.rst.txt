@@ -1,0 +1,34 @@
+Архитектура буферов
+===================
+
+И вот тут на сцену выходит TM - Traffic Manager, который реализует функции QoS (и некоторые другие).
+Он может быть частью чипа коммутации, а может быть отдельной микросхемой - для нас сейчас важно то, что он заправляет буферами.
+
+Буфер - это с некоторыми оговорками обычная память, используемая в компьютерах. В ней в определённой ячейке хранится пакет, который чип может извлечь, обратившись по адресу. 
+
+Любой сетевой ASIC или NP обладает некоторым объёмом встроенной (on-chip) памяти (порядка десятков МБ).
+Так называемые Deep-Buffer свитчи имеют ещё внешнюю (off-chip) память, исчисляемую уже гигабайтами.
+И той и другой управляет модуль чипа - MMU.
+
+В целом для нас пока местонахождение не имеет значения - взглянем на это попозже. Важно то, как имеющейся памятью чип распоряжается, а именно, где и какие очереди он создаёт и какие `AQM <https://en.wikipedia.org/wiki/Active_queue_management>`_ использует. 
+
+И тут практикуют:
+
+.. toctree::
+   :maxdepth: 2
+   
+   1_crossbar.rst
+   2_shared_buffer.rst
+   3_oq.rst
+   4_iq.rst
+   5_cioq.rst
+   6_voq.rst
+
+**Дальнейшее чтиво:**
+
+    * `An Update on Router Buffering <https://people.ucsc.edu/~warner/Bufs/Buffering-WP_August_2017.pdf>`_
+    * `What is VOQ and why you should care <https://forums.juniper.net/t5/forums/recentpostspage/post-type/message/category-id/Blogs/user-id/101479?>`_
+    * `Strategies of packet buffering inside Routers <https://archive.nanog.org/sites/default/files/wednesday_tutorial_szarecki_packet-buffering.pdf>`_
+    * `Understanding CoS Virtual Output Queues (VOQs) on QFX10000 Switches <https://www.juniper.net/documentation/en_US/junos/topics/concept/cos-qfx-series-voq-understanding.html>`_
+    * `High Performance Switches and Routers <https://books.google.ru/books?id=kzstoFdvZ2sC&pg=PR8&lpg=PR8&dq=shared+memory+vs+voq&source=bl&ots=mTy-1ifsRK&sig=ACfU3U0DHx37_i_oDKvDJTEh72g6pSW-Ng&hl=ru&sa=X&ved=2ahUKEwjnx9el0LPnAhWHAhAIHUF6CeIQ6AEwCHoECAgQAQ#v=onepage&q=shared%20memory%20vs%20voq&f=false>`_ - если у вас есть лишних 14 к₽.
+
