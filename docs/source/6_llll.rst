@@ -9,9 +9,9 @@ Low-latency lossless сети
 | Но что если нам не отбрасывать пакет, а каким-то другим способом сообщить отправителю, что нужно замедлиться? 
 | Здесь есть несколько конкурирующих подходов.
 
-| ECN-Based
-| Bandwidth-Delay Product Based
-| RTT-BASED
+  * `ECN-Based`_
+  * `Bandwidth-Delay Product Based`_
+  * `RTT-BASED`_
 
 
 ECN-Based

@@ -14,8 +14,12 @@
 
 И тут практикуют:
 
-.. toctree::
-   :maxdepth: 2
+  * `Crossbar`_
+  * `Shared Buffer`_
+  * `Output Queueing`_
+  * `Input Queuing`_
+  * `Combined Input and Output Queueing`_
+  * `Virtual Output Queueing`_
    
 ====
 

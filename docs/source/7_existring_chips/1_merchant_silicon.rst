@@ -39,13 +39,13 @@ Broadcom
 
 Почти два часа видео весьма технического склада:
 
-    * `Introduction to Broadcom's Switch Portfolio <https://www.youtube.com/watch?v=t_fwyKs1wJ0&>`_
-    * `Broadcom Trident4: Disrupting the Enterprise Data Center & Campus <https://www.youtube.com/watch?v=2HvxxK39BXM>`_
-    * `Broadcom Tomahawk4: Industry's Highest Bandwidth Chip <https://www.youtube.com/watch?v=B-COGMbaUg4>`_
-    * `Jericho2: Driving Merchant Silicon Revolution <https://www.youtube.com/watch?v=JUgyaSoErlQ>`_
-    * *Хотел бы я, пожалуй, быть таким седовласым дедком, бегущим по лезвию современных технологий.*
+  * `Introduction to Broadcom's Switch Portfolio <https://www.youtube.com/watch?v=t_fwyKs1wJ0&>`_
+  * `Broadcom Trident4: Disrupting the Enterprise Data Center & Campus <https://www.youtube.com/watch?v=2HvxxK39BXM>`_
+  * `Broadcom Tomahawk4: Industry's Highest Bandwidth Chip <https://www.youtube.com/watch?v=B-COGMbaUg4>`_
+  * `Jericho2: Driving Merchant Silicon Revolution <https://www.youtube.com/watch?v=JUgyaSoErlQ>`_
+  * *Хотел бы я, пожалуй, быть таким седовласым дедком, бегущим по лезвию современных технологий.*
 
-Кстати, будут у нас в гостях!
+  .. hint:: Кстати, будут у нас в гостях!
 
 Mellanox
 --------
@@ -66,8 +66,9 @@ Mellanox
 | В их пользу говорит то, что Mellanox - это whitebox-коммутаторы, на которое можно устанавливать сторонние операционные системы. И тем самым он участвует в конкурентной борьбе и способствует снижению цен, гонке скоростей и открытости технологий. Мимими.
 | И кроме того, это так называемая Fabricless компания, которая не имеет заводов, а заказывает изготовление чипов на стороне.
 
-| К слову, в 2019-м Мелланокс был куплен Nvidia.
-| Кстати, `были у нас в гостях <https://linkmeup.ru/blog/405.html>`_.
+  .. note:: К слову, в 2019-м Мелланокс был куплен Nvidia.
+
+  .. hint:: Кстати, `были у нас в гостях <https://linkmeup.ru/blog/405.html>`_.
 
 Barefoot
 --------
@@ -86,8 +87,9 @@ Barefoot
 
 Но сегодня программируемым конвейером хвастаются со сцен своих маркетинговых конференций уже почти все.
 
-| К слову, в 2019-м Барефут был куплен Intel'ом.
-| Кстати, `были у нас в гостях <https://linkmeup.ru/blog/452.html>`_.
+  .. note:: К слову, в 2019-м Барефут был куплен Intel'ом.
+  
+  .. hint:: Кстати, `были у нас в гостях <https://linkmeup.ru/blog/452.html>`_.
 
 Marvell
 -------

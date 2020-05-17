@@ -20,7 +20,7 @@ CPU — Central Processing Unit
 | Например, абсолютно все рутеры Mikrotik используют CPU для маршрутизации пакетов.
 | Иными словами CPU годится там, где не гонимся за ультраскоростями, а важен широкий набор функций и невысокая цена.
 
-    Впрочем, не без исключений: бывают, что и большие штуки коммутируют в CPU.
+    .. note:: Впрочем, не без исключений: бывают, что и большие штуки коммутируют в CPU.
 
 | **Важное замечание**: CPU является необходимой частью любого сетевого устройства, потому что берёт на себя задачи Control Plane. А это автоматически означает, что ему придётся работать с протокольным трафиком: OSPF, BGP, LDP, LLDP итд. Кроме того, есть exception трафик - когда у пакета TTL истёк или когда у него стоит бит Router Alert. Ещё CPU нужно самому генерировать трафик тех же протоколов - Self-generated.
 | Можно ли считать это участием в коммутации? Скорее да, чем нет.
@@ -38,7 +38,7 @@ CPU — Central Processing Unit
 И давайте ещё прикинем.
 Выдержка с сайта про VPP:
 
-    Recent testing of FD.io release 17.04 shows impressive gains in performance on Intel’s newest platform when switching and routing layer 2⁄3 traffic. With the prior generation Intel® Xeon® Processor E7-8890v3, FD.io testing showed aggregate forwarding rate of 480 Gbps (200 Mpps) for 4-Socket machine (using 4 of E7-8890v3 CPU configuration); however, the same FD.io tests run on two 2-Socket blades (e.g. a modern 2RU server) with the new Intel® Xeon® Platinum 8168 CPUs (using four of 8168 CPUs in two by two-socket configuration), within the same power budget, show increase of forwarding rate to 948 Gbps (400 Mpps) benefiting from the PCIe bandwidth increase of the new CPUs, and the overall decrease in cycles-per-packet due to CPU micro-architecture improvements.
+    .. tip:: Recent testing of FD.io release 17.04 shows impressive gains in performance on Intel’s newest platform when switching and routing layer 2⁄3 traffic. With the prior generation Intel® Xeon® Processor E7-8890v3, FD.io testing showed aggregate forwarding rate of 480 Gbps (200 Mpps) for 4-Socket machine (using 4 of E7-8890v3 CPU configuration); however, the same FD.io tests run on two 2-Socket blades (e.g. a modern 2RU server) with the new Intel® Xeon® Platinum 8168 CPUs (using four of 8168 CPUs in two by two-socket configuration), within the same power budget, show increase of forwarding rate to 948 Gbps (400 Mpps) benefiting from the PCIe bandwidth increase of the new CPUs, and the overall decrease in cycles-per-packet due to CPU micro-architecture improvements.
 
 | Xeon E7-8890v3: Рекомендуемая цена $7174.
 | 4 проца по 18 ядер = 72 ядра = 480 Gbps (200 Mpps)
@@ -69,8 +69,8 @@ ASIC — Application Specific Integrated Circuit
 
 Область применения: почти любые коммутаторы и многие маршрутизаторы.
 
-    | Впрочем, не без исключений: Juniper в своей линейке маршрутизаторов MX многие годы использует `ASIC Trio <https://habr.com/post/307696/>`_.
-    | Который, кстати, согласно книге об MX является на самом деле набором ASIC'ов:
+    .. note:: | Впрочем, не без исключений: Juniper в своей линейке маршрутизаторов MX многие годы использует `ASIC Trio <https://habr.com/post/307696/>`_.
+              | Который, кстати, согласно книге об MX является на самом деле набором ASIC'ов:
     
     PFEs are made of several ASICs, which may be grouped into four categories:
 
@@ -106,7 +106,7 @@ FPGA — Field Programmable Gate Array
 
 Область применения: POC или низкоскоростные решения для энтерпрайз-сегмента. 
 
-    Впрочем, не без исключений: собеседовался я как-то раз в контору, в которой модульную коробку для операторов собирали полностью на FPGA, включая фабрику.
+    .. note:: Впрочем, не без исключений: собеседовался я как-то раз в контору, в которой модульную коробку для операторов собирали полностью на FPGA, включая фабрику.
 
     У этого даже есть основания: задолго до появления Programmable ASIC'ов на FPGA можно было делать любую обработку пакетов. И даже через несколько лет после производства плисину легко перепрошить и получить поддержку новой функции.
     
@@ -140,7 +140,7 @@ NP или **NPU** - Network Processor Unit.
 
 Область применения: маршрутизаторы агрегации и ядра. 
 
-    Впрочем, не без исключений: например Smart-NIC Netronome в начале своего пути `использовал Intel IXP <https://www.netronome.com/timeline/>`_.
+    .. note:: Впрочем, не без исключений: например Smart-NIC Netronome в начале своего пути `использовал Intel IXP <https://www.netronome.com/timeline/>`_.
 
 ====
 
