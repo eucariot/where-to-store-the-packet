@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Путь пакета &mdash; документация Где сохранить пакет? 1.0</title>
+  <title>8. Путь пакета &mdash; документация Где сохранить пакет? 1.0</title>
   
 
   
@@ -81,7 +81,7 @@
             
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Путь пакета</a><ul>
+<li><a class="reference internal" href="#">8. Путь пакета</a><ul>
 <li><a class="reference internal" href="#id2">Одночиповое устройство</a></li>
 <li><a class="reference internal" href="#id3">Многочиповое устройство</a></li>
 <li><a class="reference internal" href="#id4">Модульное устройство</a></li>
@@ -137,7 +137,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Путь пакета</li>
+      <li>8. Путь пакета</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,7 +157,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="id1">
-<h1>Путь пакета<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<h1>8. Путь пакета<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
 <p>Ну что же, кажется мы добрались до того момента, когда можно взглянуть на длинную и нелегкую жизнь, что предстоит прожить сигналу, несущему пакету.</p>
 <div class="section" id="id2">
 <h2>Одночиповое устройство<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
@@ -350,13 +350,14 @@
 <li><p>Virtual Router Redundancy Protocol (VRRP)</p></li>
 </ul>
 </div></blockquote>
-<dl>
-<dt>..note:: | История выше отсылает нас к длинным пингам. Иногда инженер проверяет RTT своей сети путём пинга с одного маршрутизатора на другой. Видит вариацию в десятки и сотни мс и, начиная переживать, открывает запросы вендору. Пугаться тут нечего. Обычно ICMP обрабатывается на CPU. И именно занятостью процессора определяется время ответа. При этом корреляция с реальным RTT сети практически нулевая, потому что транзитный трафик на CPU не обрабатывается.</dt><dd><div class="line-block">
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<div class="line-block">
+<div class="line">История выше отсылает нас к длинным пингам. Иногда инженер проверяет RTT своей сети путём пинга с одного маршрутизатора на другой. Видит вариацию в десятки и сотни мс и, начиная переживать, открывает запросы вендору. Пугаться тут нечего. Обычно ICMP обрабатывается на CPU. И именно занятостью процессора определяется время ответа. При этом корреляция с реальным RTT сети практически нулевая, потому что транзитный трафик на CPU не обрабатывается.</div>
 <div class="line">Некоторые современные сетевые устройства могут обрабатывать ICMP-запросы и формировать ICMP-ответы на чипе (NP, ASIC, FPGA), минуя долгий путь до CPU. И вот в этом случае циферки в ping будут адекватны реальности. Но я бы всё же на это не полагался</div>
 <div class="line">Кроме того, есть технологии мониторинга качества сети (<a class="reference external" href="http://blog.sbolshakov.ru/12-ethernet-oam/">OAM</a>), работающие аппаратно, например <a class="reference external" href="https://www.cisco.com/c/en/us/td/docs/net_mgmt/prime/network/3-9/reference/guide/PrimeNetwork39_RefGuide/cfm_chapter.pdf">CFM</a>.</div>
 </div>
-</dd>
-</dl>
+</div>
 </div></blockquote>
 </div>
 </div>

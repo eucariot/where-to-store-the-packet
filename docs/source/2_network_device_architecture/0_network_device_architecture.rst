@@ -1,5 +1,5 @@
-Архитектура сетевых устройств
-=============================
+2. Архитектура сетевых устройств
+================================
 
 | Итак, что такое сетевое устройство?
 | Будь то коммутатор, маршрутизатор, файрвол, балансировщик, программный или аппаратный, его задача - доставить пакет со входа на правильный выход, и состоит оно из следующих частей:
@@ -34,6 +34,18 @@
 
     .. figure:: https://fs.linkmeup.ru/images/articles/buffers/device_architecture_variant.png
            :align: center
+
+           Single-chip устройство
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/mlnx_sn2700.jpg
+           :align: center
+
+           Single-chip коммутатор Mellanox SN2700 на чипе Spectrum
+
+    .. figure:: https://fs.linkmeup.ru/images/articles/buffers/go_barefoot.png
+           :align: center
+
+           Single-ship коммутатор на базе чипа Barefoot Tophino.
 
 На этом этапе важно понять принципиальную разницу между плоскостями внутри устройства:
 
