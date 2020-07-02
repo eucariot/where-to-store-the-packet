@@ -35,7 +35,8 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Алфавитный указатель" href="genindex.html" />
-    <link rel="search" title="Поиск" href="search.html" /> 
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="0. Введение" href="0_intro.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -79,11 +80,20 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Где сохранить пакет?</a></li>
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="0_intro.html">0. Введение</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_glossary.html">1. Терминология</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_network_device_architecture/0_network_device_architecture.html">2. Архитектура сетевых устройств</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_chipset_types/0_chipset_types.html">3. Типов-Чипов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_asic_architecture/0_asic_architecture.html">4. Архитектура сетевых ASIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_buffers/0_buffers.html">5. Память и буферы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_llll.html">6. Low-latency lossless сети</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_existring_chips/0_existring_chips.html">7. Существующие чипы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="8_packetlife.html">8. Путь пакета</a></li>
+<li class="toctree-l1"><a class="reference internal" href="9_outro.html">9. Заключение</a></li>
 </ul>
-</div>
+
             
           
         </div>
@@ -148,19 +158,178 @@
             
   <div class="section" id="id1">
 <h1>Где сохранить пакет?<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Марат Сибгатулин aka <a class="reference external" href="https://www.linkedin.com/in/marat-sibgatulin/">eucariot</a>.</p>
 <p>«Где сохранить пакет» - книга о том, как устроена аппаратура для передачи данных в современных сетях - о чипах и о памяти.
 Доставка пакета от отправителя к получателю - это его последовательная передача от одного маршрутизатора к другому. Каждый узел должен самостоятельно принять решение, как поступить с этим пакетом.</p>
 <p>Он должен также принять во внимание загрузку линии и не отправлять пакет, если он будет отброшен.
 А значит он должен его хранить, пока принимает решение и пока не освободится линия.</p>
 <p>В этой книге мы поговорим про архитектуру сетевых устройств и чипов, из которых они собраны, о том, что происходит с пакетом с момента, как он попадает на входной интерфейс устройства и до момента, когда он его покидает.</p>
-<p>Вторая часть будет посвящена архитектурам памяти и всевозможным ухищрениям, призванным выжать из сети максимальную полосу при минимальных задержках и потерях.</p>
+<p>Вторая половина (начиная с 5-й главы) будет посвящена архитектурам памяти и всевозможным ухищрениям, призванным выжать из сети максимальную полосу при минимальных задержках и потерях.</p>
 <p>Книга является частью проекта <a class="reference external" href="https://linkmeup.ru/">linkmeup</a>, где группа отчаянных энтузиастов пишет статьи и подкасты.</p>
-<div class="toctree-wrapper compound">
+<p>Есть два цикла статей:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://linkmeup.ru/sdsm">СДСМ</a> - Сети Для Самых Маленьких</p></li>
+<li><p><a class="reference external" href="https://linkmeup.ru/adsm/">АДСМ</a> - Автоматизация Для Самых Маленьких</p></li>
+</ul>
+<dl>
+<dt>И несколько подкастов:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://linkmeup.ru/podcasts/">telecom</a> - подкасты про всё те же сети. Раз в месяц мы болтаем с каким-нибудь крутым экспертом на интересную нам тему. А 25-го числа выкладываем в самый всеобщий доступ.</p></li>
+</ul>
+<p>В телеком выпуске у нас уже побывали:
+<a class="reference external" href="https://linkmeup.ru/blog/405.html">Mellanox Technologies</a>, <a class="reference external" href="https://linkmeup.ru/blog/394.html">Microsoft</a>, <a class="reference external" href="https://linkmeup.ru/blog/390.html">Arista</a>, <a class="reference external" href="https://linkmeup.ru/blog/124.html">Cisco</a>, <a class="reference external" href="https://linkmeup.ru/blog/71.html">Huawei</a>, <a class="reference external" href="https://linkmeup.ru/blog/233.html">Элтекс</a>, <a class="reference external" href="https://linkmeup.ru/blog/125.html">D-Link</a>, <a class="reference external" href="https://linkmeup.ru/blog/128.html">Ericcson</a> и ещё много кто, да не обидятся неупомянутые, ибо несть им числа.</p>
+<ul>
+<li><p><a class="reference external" href="https://linkmeup.ru/tag/sysadmins/">sysadmins</a> - ветвление по админо-девопсо-эсарйешно-эникейной линии.</p></li>
+<li><p>В рамках эксперимента у нас работает <strong>бар «256-й TTL»</strong>:</p>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://linkmeup.ru/tag/поccieлки/">Поссиелки</a>  - за виртуальной пинтой допрашиваем обладателей активных экспертных сертификатов (не только циско).</div>
+<div class="line"><a class="reference external" href="https://linkmeup.ru/tag/по'уехавшие/">По’уехавшие</a> - истории эмигрантов и экспатов о том, где жить хорошо - а там, наверно, хорошо - ведь они там остались.</div>
+<div class="line"><a class="reference external" href="https://linkmeup.ru/tag/шоты/">Шоты</a> - короткие интервью с разными людьми на узкие темы, например, перед или по следам доклада.</div>
+<div class="line">По каким дням и в какие часы он работает - никто не знает. Заходите - вдруг вам повезёт и будет открыто.</div>
 </div>
-<p>Вы можете поддержать костёр энтузиазма подкинув угля через <a class="reference external" href="https://www.patreon.com/linkmeup?ty=h">Патреон</a>. или <a class="reference external" href="https://linkmeup.ru/page/donate/">другим удобным способом</a>.</p>
+</li>
+<li><p>В 2018-м мы провели уникальную для нашей сферы сессию <a class="reference external" href="https://linkmeup.ru/tag/собес/">онлайн-собеседований</a> в крупные компании.</p></li>
+<li><p>И тогда же, допросив захваченного в плен <a class="reference external" href="https://linkmeup.ru/tag/hr/">HR</a>, выяснили дела в тылу противника.</p></li>
+</ul>
+</dd>
+</dl>
+<p>По любым вопросам можно писать на <a class="reference external" href="mailto:info&#37;&#52;&#48;linkmeup&#46;ru">info<span>&#64;</span>linkmeup<span>&#46;</span>ru</a></p>
+<p>Вы можете поддержать костёр энтузиазма подкинув угля через <a class="reference external" href="https://www.patreon.com/linkmeup?ty=h">Патреон</a> или <a class="reference external" href="https://linkmeup.ru/page/donate/">другим удобным способом</a>.</p>
 <blockquote>
 <div><a class="reference external image-reference" href="https://www.patreon.com/linkmeup?ty=h"><img alt="https://fs.linkmeup.ru/images/patreon.jpg" class="align-center" src="https://fs.linkmeup.ru/images/patreon.jpg" style="width: 400px;" /></a>
 </div></blockquote>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="0_intro.html">0. Введение</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_glossary.html">1. Терминология</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_network_device_architecture/0_network_device_architecture.html">2. Архитектура сетевых устройств</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2_network_device_architecture/1_planes.html">Уровни и плоскости</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/1_planes.html#forwarding-data-plane">Forwarding/Data Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/1_planes.html#control-plane">Control Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/1_planes.html#management-plane">Management Plane</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2_network_device_architecture/2_chassis.html">Архитектура модульных устройств</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/2_chassis.html#id2">Общая шина</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/2_chassis.html#id3">Управляющий модуль</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/2_chassis.html#id4">Интерфейсный модуль или линейная карта</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_network_device_architecture/2_chassis.html#id6">Фабрика коммутации</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_chipset_types/0_chipset_types.html">3. Типов-Чипов</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3_chipset_types/1_logic.html">Чипы коммутации</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/1_logic.html#cpu-central-processing-unit">CPU — Central Processing Unit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/1_logic.html#asic-application-specific-integrated-circuit">ASIC — Application Specific Integrated Circuit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/1_logic.html#fpga-field-programmable-gate-array">FPGA — Field Programmable Gate Array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/1_logic.html#np-network-processor">NP - Network Processor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/1_logic.html#programmable-asic">Programmable ASIC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3_chipset_types/2_dc_chipsets.html">Чипы для датацентровых коммутаторов</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_chipset_types/3_memory.html">Чипы памяти</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/3_memory.html#ram-random-access-memory">RAM - Random Access Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/3_memory.html#cam-content-addressable-memory">CAM - Content-Addressable Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/3_memory.html#tcam-ternary-content-addressable-memory">TCAM - Ternary Content-Addressable Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3_chipset_types/3_memory.html#id9">Алгоритмический поиск</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_asic_architecture/0_asic_architecture.html">4. Архитектура сетевых ASIC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4_asic_architecture/1_physical.html">Физическое устройство</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/1_physical.html#serdes">SerDes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/1_physical.html#phy">PHY</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/1_physical.html#packaging-advanced-packaging">Packaging и Advanced Packaging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4_asic_architecture/2_logical.html">Логическое устройство</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/2_logical.html#parser">Parser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/2_logical.html#pre-ingress-processing">Pre-Ingress processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/2_logical.html#ingress-match-action">Ingress Match-Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/2_logical.html#traffic-manager-mmu">Traffic Manager + MMU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/2_logical.html#egress-match-action">Egress Match-Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/2_logical.html#deparser">Deparser</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4_asic_architecture/3_pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4_asic_architecture/3_pipeline.html#programmable-pipeline">Programmable Pipeline</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_buffers/0_buffers.html">5. Память и буферы</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/1_sfvsct.html">Store-and-Forward vs Cut-Through</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/2_congestions.html">Перегрузки: причины и места</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/2_congestions.html#id2">Причины перегрузок</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/2_congestions.html#id3">Места возникновения перегрузок</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/3_buffer_architecture.html">Архитектура буферов</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/3_buffer_architecture.html#crossbar">Crossbar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/3_buffer_architecture.html#shared-buffer">Shared Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/3_buffer_architecture.html#output-queueing">Output Queueing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/3_buffer_architecture.html#input-queuing">Input Queuing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/3_buffer_architecture.html#combined-input-and-output-queueing">Combined Input and Output Queueing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/3_buffer_architecture.html#virtual-output-queueing">Virtual Output Queueing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5_buffers/4_deep_buffers.html">Shallow vs Deep Buffers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/4_deep_buffers.html#hybrid-buffering">Hybrid Buffering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_buffers/4_deep_buffers.html#id10">Большие буферы - добро или зло?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_llll.html">6. Low-latency lossless сети</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6_llll.html#ecn-based">ECN-Based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_llll.html#bandwidth-delay-product-based">Bandwidth-Delay Product Based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_llll.html#rtt-based">RTT-BASED</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_existring_chips/0_existring_chips.html">7. Существующие чипы</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html">Commodity/Merchant Silicon</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html#broadcom">Broadcom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html#mellanox">Mellanox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html#barefoot">Barefoot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html#marvell">Marvell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html#innovium">Innovium</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/1_merchant_silicon.html#id6">Другие</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7_existring_chips/2_custom_silicon.html">Custom silicon</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/2_custom_silicon.html#juniper">Juniper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/2_custom_silicon.html#huawei">Huawei</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/2_custom_silicon.html#cisco">Cisco</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/2_custom_silicon.html#id5">Отечественная микроэлектроника</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7_existring_chips/3_merchant_vs_custom.html">Merchant vs Custom</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/3_merchant_vs_custom.html#id1">За</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_existring_chips/3_merchant_vs_custom.html#id2">Против</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_packetlife.html">8. Путь пакета</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8_packetlife.html#id2">Одночиповое устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8_packetlife.html#id3">Многочиповое устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8_packetlife.html#id4">Модульное устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8_packetlife.html#id5">Локальные пакеты</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8_packetlife.html#id6">Входящие</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8_packetlife.html#id7">Исходящие</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_outro.html">9. Заключение</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9_outro.html#id4">Полезные ссылки</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9_outro.html#id7">Спасибы</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -168,6 +337,13 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="0_intro.html" class="btn btn-neutral float-right" title="0. Введение" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
