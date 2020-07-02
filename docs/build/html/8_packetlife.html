@@ -35,7 +35,9 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Алфавитный указатель" href="genindex.html" />
-    <link rel="search" title="Поиск" href="search.html" /> 
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="9. Заключение" href="9_outro.html" />
+    <link rel="prev" title="Merchant vs Custom" href="7_existring_chips/3_merchant_vs_custom.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -79,21 +81,30 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">8. Путь пакета</a><ul>
-<li><a class="reference internal" href="#id2">Одночиповое устройство</a></li>
-<li><a class="reference internal" href="#id3">Многочиповое устройство</a></li>
-<li><a class="reference internal" href="#id4">Модульное устройство</a></li>
-<li><a class="reference internal" href="#id5">Локальные пакеты</a><ul>
-<li><a class="reference internal" href="#id6">Входящие</a></li>
-<li><a class="reference internal" href="#id7">Исходящие</a></li>
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_intro.html">0. Введение</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_glossary.html">1. Терминология</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_network_device_architecture/0_network_device_architecture.html">2. Архитектура сетевых устройств</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_chipset_types/0_chipset_types.html">3. Типов-Чипов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_asic_architecture/0_asic_architecture.html">4. Архитектура сетевых ASIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_buffers/0_buffers.html">5. Память и буферы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_llll.html">6. Low-latency lossless сети</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_existring_chips/0_existring_chips.html">7. Существующие чипы</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Путь пакета</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Одночиповое устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Многочиповое устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">Модульное устройство</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">Локальные пакеты</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Входящие</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Исходящие</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="9_outro.html">9. Заключение</a></li>
 </ul>
-</div>
+
             
           
         </div>
@@ -200,7 +211,7 @@
 <div><ul>
 <li><p>Уменьшение TTL/Hop Limit на 1 и проверка, не равен ли он 0. Если равен - то запрос на CPU для генерации <em>ICMP TTL Expired in Transit</em>.</p></li>
 <li><p>Проверка по ACL - можно ли вообще передавать этот трафик.</p></li>
-<li><p>Приняните решения о назначении пакета на основе Dst IP или верхней MPLS-метки.</p>
+<li><p>Принятие решения о назначении пакета на основе Dst IP или верхней MPLS-метки.</p>
 <p>Входной тракт чипа коммутации здесь делает лукап в FIB в попытке найти маршрут, соответствующий данному IP-адресу (или в LFIB, для поиска LSP). Будь то поиск в TCAM или запрос в блок алгоритмического поиска результатом будет указатель в RAM, где хранится искомая запись с набором инструкций.</p>
 <p>Чип из RAM получает этот набор инструкций: выходной интерфейс, NextHop, инкапсуляции, выходной стек меток итд.
 При необходимости осуществляется рекурсивный лукап.
@@ -368,6 +379,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="9_outro.html" class="btn btn-neutral float-right" title="9. Заключение" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="7_existring_chips/3_merchant_vs_custom.html" class="btn btn-neutral float-left" title="Merchant vs Custom" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
