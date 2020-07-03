@@ -35,7 +35,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
-    <link rel="search" title="Поиск" href="../search.html" /> 
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="Shallow vs Deep Buffers" href="4_deep_buffers.html" />
+    <link rel="prev" title="Перегрузки: причины и места" href="2_congestions.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -79,25 +81,40 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Архитектура буферов</a><ul>
-<li><a class="reference internal" href="#crossbar">Crossbar</a></li>
-<li><a class="reference internal" href="#shared-buffer">Shared Buffer</a><ul>
-<li><a class="reference internal" href="#dedicated-shared">Dedicated + Shared</a></li>
-<li><a class="reference internal" href="#headroom-buffers">Headroom buffers</a></li>
-<li><a class="reference internal" href="#admission-control">Admission Control</a></li>
-<li><a class="reference internal" href="#alpha">Alpha</a></li>
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../0_intro.html">0. Введение</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_glossary.html">1. Терминология</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2_network_device_architecture/0_network_device_architecture.html">2. Архитектура сетевых устройств</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3_chipset_types/0_chipset_types.html">3. Типов-Чипов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4_asic_architecture/0_asic_architecture.html">4. Архитектура сетевых ASIC</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="0_buffers.html">5. Память и буферы</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_sfvsct.html">Store-and-Forward vs Cut-Through</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_congestions.html">Перегрузки: причины и места</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Архитектура буферов</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#crossbar">Crossbar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shared-buffer">Shared Buffer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dedicated-shared">Dedicated + Shared</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#headroom-buffers">Headroom buffers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#admission-control">Admission Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alpha">Alpha</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#output-queueing">Output Queueing</a></li>
-<li><a class="reference internal" href="#input-queuing">Input Queuing</a></li>
-<li><a class="reference internal" href="#combined-input-and-output-queueing">Combined Input and Output Queueing</a></li>
-<li><a class="reference internal" href="#virtual-output-queueing">Virtual Output Queueing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-queueing">Output Queueing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-queuing">Input Queuing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#combined-input-and-output-queueing">Combined Input and Output Queueing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-output-queueing">Virtual Output Queueing</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="4_deep_buffers.html">Shallow vs Deep Buffers</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../6_llll.html">6. Low-latency lossless сети</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../7_existring_chips/0_existring_chips.html">7. Существующие чипы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../8_packetlife.html">8. Путь пакета</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../9_outro.html">9. Заключение</a></li>
+</ul>
+
             
           
         </div>
@@ -140,6 +157,8 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="0_buffers.html">5. Память и буферы</a> &raquo;</li>
         
       <li>Архитектура буферов</li>
     
@@ -440,7 +459,13 @@
 <div class="line">Собственно из-за распределённого характера этой виртуальной очереди от арбитра и здесь избавиться не получится - разным входным чипам всё же нужно знать, состояние выходной очереди. Поэтому даже несмотря на то, что выходная очередь - это FIFO, выходной чип всё ещё должен давать добро на отправку трафика.</div>
 </div>
 <p>Кстати, что касается трафика, который должен вернуться в интерфейс той же карты, на которую он пришёл изначально, то здесь никаких исключений - он томится в VOQ, пока чип не даст добро переложить его в выходную очередь. С тем только отличием, что пакет не будет отправляться на фабрику. Поэтому перед лицом перегрузок все равны.</p>
-<p>На сегодняшний день подавляющее большинство модульных сетевых устройств используют архитектуру VOQ.</p>
+<p>На сегодняшний день End-to-End VOQ является наиболее прогрессивной технологией, но говорить о её безоговорочной победе пока не приходится.
+Картинка с NANOG65 (2015):</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/queuing_arch.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/queuing_arch.png" src="https://fs.linkmeup.ru/images/articles/buffers/queuing_arch.png" style="width: 400px;" /></a>
+</div>
+</div></blockquote>
 <p><strong>Дальнейшее чтиво:</strong></p>
 <blockquote>
 <div><ul class="simple">
@@ -459,6 +484,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="4_deep_buffers.html" class="btn btn-neutral float-right" title="Shallow vs Deep Buffers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="2_congestions.html" class="btn btn-neutral float-left" title="Перегрузки: причины и места" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
