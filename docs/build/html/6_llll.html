@@ -35,7 +35,9 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Алфавитный указатель" href="genindex.html" />
-    <link rel="search" title="Поиск" href="search.html" /> 
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="7. Существующие чипы" href="7_existring_chips/0_existring_chips.html" />
+    <link rel="prev" title="Shallow vs Deep Buffers" href="5_buffers/4_deep_buffers.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -79,16 +81,25 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">6. Low-latency lossless сети</a><ul>
-<li><a class="reference internal" href="#ecn-based">ECN-Based</a></li>
-<li><a class="reference internal" href="#bandwidth-delay-product-based">Bandwidth-Delay Product Based</a></li>
-<li><a class="reference internal" href="#rtt-based">RTT-BASED</a></li>
+              <p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_intro.html">0. Введение</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_glossary.html">1. Терминология</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_network_device_architecture/0_network_device_architecture.html">2. Архитектура сетевых устройств</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_chipset_types/0_chipset_types.html">3. Типов-Чипов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_asic_architecture/0_asic_architecture.html">4. Архитектура сетевых ASIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_buffers/0_buffers.html">5. Память и буферы</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Low-latency lossless сети</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ecn-based">ECN-Based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bandwidth-delay-product-based">Bandwidth-Delay Product Based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rtt-based">RTT-BASED</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="7_existring_chips/0_existring_chips.html">7. Существующие чипы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="8_packetlife.html">8. Путь пакета</a></li>
+<li class="toctree-l1"><a class="reference internal" href="9_outro.html">9. Заключение</a></li>
 </ul>
-</div>
+
             
           
         </div>
@@ -171,7 +182,7 @@
 </div></blockquote>
 <div class="section" id="ecn-based">
 <h2>ECN-Based<a class="headerlink" href="#ecn-based" title="Ссылка на этот заголовок">¶</a></h2>
-<p>Транзитное устройство, говтовящееся испытать перегрузку, явным образом сообщает отправителям о том, что нужно охладить свою страсть.</p>
+<p>Транзитное устройство, готовящееся испытать перегрузку, явным образом сообщает отправителям о том, что нужно охладить свою страсть.</p>
 <p>Прозорливые инженеры заложили в IP целых 8 бит под QoS, и только 6 мы задействовали под DSCP, а 2 бита были зарезервированы для целей <strong>ECN - Explicit Congestion Notification</strong>.</p>
 <p>Надолго забытый механизм сегодня извлекают из ящика стола, сдувают с него пыль, и вставляют в шкатулку, на которой нацарапано или <a class="reference external" href="https://tools.ietf.org/html/rfc8257">DCTCP</a></p>
 <div class="line-block">
@@ -205,6 +216,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="7_existring_chips/0_existring_chips.html" class="btn btn-neutral float-right" title="7. Существующие чипы" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="5_buffers/4_deep_buffers.html" class="btn btn-neutral float-left" title="Shallow vs Deep Buffers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

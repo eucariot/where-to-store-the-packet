@@ -104,6 +104,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#input-queuing">Input Queuing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#combined-input-and-output-queueing">Combined Input and Output Queueing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#virtual-output-queueing">Virtual Output Queueing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#combined-input-and-output-queueing-w-virtual-output-queueing">Combined Input and Output Queueing w/ Virtual Output Queueing</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="4_deep_buffers.html">Shallow vs Deep Buffers</a></li>
@@ -459,6 +460,21 @@
 <div class="line">Собственно из-за распределённого характера этой виртуальной очереди от арбитра и здесь избавиться не получится - разным входным чипам всё же нужно знать, состояние выходной очереди. Поэтому даже несмотря на то, что выходная очередь - это FIFO, выходной чип всё ещё должен давать добро на отправку трафика.</div>
 </div>
 <p>Кстати, что касается трафика, который должен вернуться в интерфейс той же карты, на которую он пришёл изначально, то здесь никаких исключений - он томится в VOQ, пока чип не даст добро переложить его в выходную очередь. С тем только отличием, что пакет не будет отправляться на фабрику. Поэтому перед лицом перегрузок все равны.</p>
+</div>
+<div class="section" id="combined-input-and-output-queueing-w-virtual-output-queueing">
+<h2>Combined Input and Output Queueing w/ Virtual Output Queueing<a class="headerlink" href="#combined-input-and-output-queueing-w-virtual-output-queueing" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Как сделать еще сложнее? Совместить обе вышепреведённые техники буферизации.
+VoQ применяется на фабрике, то есть только для виртуальных портов подключающих Switch Fabric к Egress Line Card NPU, таких портов в сторону NPU относительно немного и виртуальная очередь (VoQ) всё так же находится на Ingress Line Card.</p>
+<p>Таким образом у каждого Ingress NPU есть виртуальные очереди для каждого из Egress NPU, таких очередей может быть несколько.</p>
+<p>После того как трафик прошёл через фабрику минуя fabric VoQ, пакет в любом случае попадёт в очередь на исходящем интерфейсе (Egress Interface Output Queue) и или задержится там если в данный момент интерфейс перегружен, или сбросится если очередь заполнена полностью, или отправится дальше в исходящий интерфейс.</p>
+<p>Данная техника не подвержена HoLB эффекту в той же мере что и классическая CIOQ, однако в случае когда трафик идёт на два разных исходящих интерфейса за одним NPU в случае затора на порту фабрики проблема HoLB всё таки может присутствовать.</p>
+<p>CIOQ w/ VoQ fabric масштабируется гораздо лучше чем E2E VoQ из-за меньшего количества интерфейсов, а следовательно и очередей, поэтому подходит для PE, BNG и другого оборудования с большим количеством интерфейсов.
+Однако, недостаток двойной буферизации никуда не делся, как и недостаток размещения памяти в двух местах и как следствие бОльшего потребления энергии.</p>
+<blockquote>
+<div><div class="figure align-center">
+<a class="reference internal image-reference" href="https://fs.linkmeup.ru/images/articles/buffers/cioqwvoq.png"><img alt="https://fs.linkmeup.ru/images/articles/buffers/cioqwvoq.png" src="https://fs.linkmeup.ru/images/articles/buffers/cioqwvoq.png" style="width: 500px;" /></a>
+</div>
+</div></blockquote>
 <p>На сегодняшний день End-to-End VOQ является наиболее прогрессивной технологией, но говорить о её безоговорочной победе пока не приходится.
 Картинка с NANOG65 (2015):</p>
 <blockquote>
